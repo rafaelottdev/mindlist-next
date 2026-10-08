@@ -1,5 +1,5 @@
-import Authentication from "@/components/Authentication/Authentication"
+import Account from "@/components/Account/Account"
 
 export default function Home() {
-  return <Authentication />
+  return <Account />
 }

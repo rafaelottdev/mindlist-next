@@ -9,24 +9,40 @@
   @include flex-center
 
 .auth-section__border
-  padding: 30px 40px
+  padding: 30px
 
   border: 1px solid $primary-color
   border-radius: 30px
 
 .auth-section__container
-  display: grid
-  grid-template-columns: 290px 1fr
-  gap: 13px
+  width: 1000px
+  height: 450px
+  position: relative
+
+  // display: grid
+  // grid-template-columns: 350px 650px
+  display: flex
 
 .auth-section__wrapp-cover
-  width: 500px
-  height: 350px
+  width: 650px
+  height: 450px
+
+  position: absolute
+  left: 350px
+  z-index: 2
 
   border-top-right-radius: 20px
   border-bottom-right-radius: 20px
   overflow: hidden
 
+  transition: .5s
+
   img
     width: 100%
     height: 100%
+
+// Interactive Styles
+
+.move
+  left: 0px
+  border-radius: 20px 0 0 20px
