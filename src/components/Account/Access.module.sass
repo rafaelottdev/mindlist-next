@@ -1,0 +1,139 @@
+@use "@/styles/abstracts/variables" as *
+@use "@/styles/abstracts/mixins" as *
+  
+.access-container
+  width: 350px
+  height: 450px
+
+  position: absolute
+  left: 0
+  z-index: 1
+  
+  @include flex-center
+  flex-direction: column
+
+  border-radius: 20px 0 0 20px
+  background: linear-gradient(-146.449deg, #152484 12%, #263FEA 100%)
+
+  transition: .3s
+
+.access-container--register
+  z-index: 0
+
+.access-container__title
+  margin-bottom: 20px
+
+  font-size: 32px
+  font-family: $baloo-extrabold
+  text-transform: uppercase
+  letter-spacing: 1px
+  color: white
+
+.access-container__form
+
+.access-container__input-container
+  margin-bottom: 30px
+
+.access-container__input-wrapper
+  display: flex
+  flex-direction: column
+
+  color: white
+
+  &:first-child
+    margin-bottom: 20px
+
+  label
+    margin-bottom: 3px
+    font-family: $baloo-medium
+    font-size: 14px
+    letter-spacing: .5px
+
+  input
+    width: 280px
+    height: 35px
+
+    padding: 0 5px
+
+    font-family: $baloo-medium
+    font-size: 16px
+
+    border-radius: 5px
+    color: $blue-100
+    background-color: $primary-color
+
+.access-container__input-wrapper--register
+  margin-bottom: 20px
+
+.access-container__password-input-wrapper
+  width: 280px
+  position: relative
+
+  input
+    padding-right: 40px
+
+  button
+    width: 35px
+    height: 35px
+
+    @include flex-center
+
+    position: absolute
+    top: 50%
+    right: 0
+    transform: translateY(-50%)
+
+    cursor: pointer
+    background: transparent
+
+    svg
+      font-size: 16px
+      fill: $blue-100
+
+.access-container__button-container
+  display: flex
+  justify-content: space-between
+
+  button
+    @include flex-center
+
+    font-family: $baloo-medium
+    font-size: 16px
+    border-radius: 5px
+    color: $blue-100
+    background-color: $primary-color
+
+    cursor: pointer
+
+    transition: .3s
+
+    &:hover
+      color: $primary-color
+      background-color: $blue-200
+
+.access-container__submit-button
+  width: 70px
+  height: 30px
+
+.access-container__register-button
+  width: 105px
+  height: 30px
+
+  gap: 3px
+
+  svg
+    font-size: 16px
+
+.access-container__register-button--register
+  width: 80px
+  height: 30px
+
+  svg
+    transform: rotate(180deg)
+
+// Interactive Styles
+
+.hide
+  left: 650px
+  z-index: 0
+  border-radius: 0 20px 20px 0
