@@ -46,16 +46,16 @@
   label
     margin-bottom: 3px
     font-family: $baloo-medium
-    font-size: 14px
+    font-size: 16px
     letter-spacing: .5px
 
   input
-    width: 280px
+    width: 300px
     height: 35px
 
     padding: 0 5px
 
-    font-family: $baloo-medium
+    font-family: $baloo-semibold
     font-size: 16px
 
     border-radius: 5px
@@ -66,7 +66,7 @@
   margin-bottom: 20px
 
 .access-container__password-input-wrapper
-  width: 280px
+  width: 300px
   position: relative
 
   input
@@ -87,7 +87,7 @@
     background: transparent
 
     svg
-      font-size: 16px
+      font-size: 18px
       fill: $blue-100
 
 .access-container__button-container
@@ -97,19 +97,24 @@
   button
     @include flex-center
 
-    font-family: $baloo-medium
+    font-family: $baloo-semibold
     font-size: 16px
+    letter-spacing: .5px
+
     border-radius: 5px
-    color: $blue-100
-    background-color: $primary-color
+    color: $primary-color
+    background-color: transparent
+    border: 1px solid white
 
     cursor: pointer
 
     transition: .3s
 
     &:hover
-      color: $primary-color
-      background-color: $blue-200
+      transform: scale(.93)
+      border: none
+      color: $blue-100
+      background-color: white
 
 .access-container__submit-button
   width: 70px
@@ -122,7 +127,7 @@
   gap: 3px
 
   svg
-    font-size: 16px
+    font-size: 18px
 
 .access-container__register-button--register
   width: 80px

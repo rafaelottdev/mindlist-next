@@ -1,4 +1,4 @@
-import { AiFillEyeInvisible } from "react-icons/ai" // AiFillEye
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"
 import { HiLogout } from "react-icons/hi"
 
 import styles from "../Access.module.sass"
@@ -6,9 +6,16 @@ import styles from "../Access.module.sass"
 interface Login {
   isLogin: boolean
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>
+  showRegisterPassword: boolean
+  setShowRegisterPassword: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-function Register({ isLogin, setIsLogin }: Login) {
+function Register({
+  isLogin,
+  setIsLogin,
+  showRegisterPassword,
+  setShowRegisterPassword,
+}: Login) {
   return (
     <div
       className={`
@@ -19,11 +26,17 @@ function Register({ isLogin, setIsLogin }: Login) {
     >
       <h2 className={styles["access-container__title"]}>Cadastro</h2>
 
-      <form action="">
+      <form action="" autoComplete="off">
         <div className={styles["access-container__input-container"]}>
           <div className={styles["access-container__input-wrapper"]}>
             <label htmlFor="name">Nome</label>
-            <input type="text" name="name" id="name" />
+            <input
+              type="text"
+              name="name"
+              id="name"
+              minLength={5}
+              maxLength={30}
+            />
           </div>
 
           <div
@@ -33,17 +46,26 @@ function Register({ isLogin, setIsLogin }: Login) {
             `}
           >
             <label htmlFor="email">Email</label>
-            <input type="email" name="email" id="email" />
+            <input type="email" name="email" id="email" maxLength={50} />
           </div>
 
           <div className={styles["access-container__input-wrapper"]}>
             <label htmlFor="password">Senha</label>
 
             <div className={styles["access-container__password-input-wrapper"]}>
-              <input type="password" name="password" id="password" />
+              <input
+                type={showRegisterPassword ? "text" : "password"}
+                name="password"
+                id="password"
+                minLength={8}
+                maxLength={10}
+              />
 
-              <button type="button">
-                <AiFillEyeInvisible />
+              <button
+                type="button"
+                onClick={() => setShowRegisterPassword((prev) => !prev)}
+              >
+                {showRegisterPassword ? <AiFillEye /> : <AiFillEyeInvisible />}
               </button>
             </div>
           </div>
