@@ -8,14 +8,28 @@ import Login from "./Login/Login"
 import Register from "./Register/Register"
 
 function Authentication() {
-  const [isLogin, setIsLogin] = useState(true)
+  const [isLogin, setIsLogin] = useState<boolean>(true)
+  const [showLoginPassword, setShowLoginPassword] = useState<boolean>(false)
+  const [showRegisterPassword, setShowRegisterPassword] =
+    useState<boolean>(false)
 
   return (
     <section className={styles["auth-section"]}>
       <div className={styles["auth-section__border"]}>
         <div className={styles["auth-section__container"]}>
-          <Login isLogin={isLogin} setIsLogin={setIsLogin} />
-          <Register isLogin={isLogin} setIsLogin={setIsLogin} />
+          <Login
+            isLogin={isLogin}
+            setIsLogin={setIsLogin}
+            showLoginPassword={showLoginPassword}
+            setShowLoginPassword={setShowLoginPassword}
+          />
+
+          <Register
+            isLogin={isLogin}
+            setIsLogin={setIsLogin}
+            showRegisterPassword={showRegisterPassword}
+            setShowRegisterPassword={setShowRegisterPassword}
+          />
 
           <div
             className={`
