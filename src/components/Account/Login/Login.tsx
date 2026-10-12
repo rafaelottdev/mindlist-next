@@ -1,6 +1,10 @@
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"
 import { HiLogout } from "react-icons/hi"
-
+import { validateUser } from "@/lib/actions/validateUser"
+import { formLoginSchema } from "@/lib/schemas/formLoginSchema"
+import type { FormLoginType } from "@/types/FormLoginType"
 import styles from "../Access.module.sass"
 
 interface LoginProps {
@@ -16,6 +20,20 @@ function Login({
   showLoginPassword,
   setShowLoginPassword,
 }: LoginProps) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormLoginType>({
+    resolver: zodResolver(formLoginSchema),
+  })
+
+  async function onSubmit(authData: FormLoginType) {
+    const result = await validateUser(authData)
+
+    console.log(result)
+  }
+
   return (
     <div
       className={`
@@ -25,7 +43,7 @@ function Login({
     >
       <h2 className={styles["access-container__title"]}>Login</h2>
 
-      <form onSubmit={(e) => e.preventDefault()} autoComplete="off">
+      <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <div className={styles["access-container__input-container"]}>
           <div className={styles["access-container__input-wrapper"]}>
             <label htmlFor="email">Email</label>
@@ -33,9 +51,14 @@ function Login({
             <input
               type="email"
               id="email"
-              maxLength={50}
+              maxLength={150}
               className={`${styles["access-container__input"]}`}
+              {...register("email")}
             />
+
+            {errors.email && (
+              <p className={styles["error-form"]}>{errors.email.message}</p>
+            )}
           </div>
 
           <div className={styles["access-container__input-wrapper"]}>
@@ -48,6 +71,7 @@ function Login({
                 minLength={8}
                 maxLength={10}
                 className={`${styles["access-container__input"]}`}
+                {...register("password")}
               />
 
               <button
@@ -57,6 +81,10 @@ function Login({
                 {showLoginPassword ? <AiFillEye /> : <AiFillEyeInvisible />}
               </button>
             </div>
+
+            {errors.password && (
+              <p className={styles["error-form"]}>{errors.password.message}</p>
+            )}
           </div>
         </div>
 

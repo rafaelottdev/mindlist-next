@@ -1,9 +1,9 @@
 "use server"
 
-import type { FormAuthType } from "@/types/FormAuthType"
+import type { FormRegisterType } from "@/types/FormRegisterType"
 import { auth } from "../auth/server"
 
-export async function createUser(authData: FormAuthType) {
+export async function createUser(authData: FormRegisterType) {
   const { error } = await auth.signUp.email({
     name: authData.name,
     email: authData.email,
@@ -14,5 +14,5 @@ export async function createUser(authData: FormAuthType) {
     return { error: error.message }
   }
 
-  return "Conta criada com sucesso"
+  return "Conta criada com sucesso!"
 }

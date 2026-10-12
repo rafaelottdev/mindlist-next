@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-export const formAuthSchema = z.object({
+export const formRegisterSchema = z.object({
   name: z
     .string()
     .min(2, "O nome precisa ter no mínimo 2 caracteres")
