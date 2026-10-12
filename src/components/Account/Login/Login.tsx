@@ -1,7 +1,10 @@
-import { useRef } from "react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"
 import { HiLogout } from "react-icons/hi"
-import { validateEmail } from "@/lib/validateEmail"
+import { loginAction } from "@/lib/actions/loginAction"
+import { formLoginSchema } from "@/lib/schemas/formLoginSchema"
+import type { FormLoginType } from "@/types/FormLoginType"
 import styles from "../Access.module.sass"
 
 interface Login {
@@ -17,16 +20,18 @@ function Login({
   showLoginPassword,
   setShowLoginPassword,
 }: Login) {
-  const emailRef = useRef<HTMLInputElement>(null)
-  const passwordRef = useRef<HTMLInputElement>(null)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormLoginType>({
+    resolver: zodResolver(formLoginSchema),
+  })
 
-  function validateFields(e: React.MouseEvent<HTMLButtonElement>) {
-    e.preventDefault()
+  async function onSubmit(formData: FormLoginType) {
+    const result = await loginAction(formData)
 
-    const emailValue = emailRef.current?.value
-    // const passwordValue = passwordRef.current?.value
-
-    validateEmail(emailValue)
+    console.log(result)
   }
 
   return (
@@ -38,17 +43,23 @@ function Login({
     >
       <h2 className={styles["access-container__title"]}>Login</h2>
 
-      <form action="" autoComplete="off">
+      <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <div className={styles["access-container__input-container"]}>
           <div className={styles["access-container__input-wrapper"]}>
             <label htmlFor="email">Email</label>
             <input
               type="email"
-              name="email"
               id="email"
               maxLength={50}
-              ref={emailRef}
+              className={`${styles["access-container__input"]}`}
+              {...register("email")}
             />
+
+            {errors.email && (
+              <p className={styles["error-form-login"]}>
+                {errors.email.message}
+              </p>
+            )}
           </div>
 
           <div className={styles["access-container__input-wrapper"]}>
@@ -57,11 +68,11 @@ function Login({
             <div className={styles["access-container__password-input-wrapper"]}>
               <input
                 type={showLoginPassword ? "text" : "password"}
-                name="password"
                 id="password"
                 minLength={8}
                 maxLength={10}
-                ref={passwordRef}
+                className={`${styles["access-container__input"]}`}
+                {...register("password")}
               />
 
               <button
@@ -71,6 +82,12 @@ function Login({
                 {showLoginPassword ? <AiFillEye /> : <AiFillEyeInvisible />}
               </button>
             </div>
+
+            {errors.password && (
+              <p className={styles["error-form-login"]}>
+                {errors.password.message}
+              </p>
+            )}
           </div>
         </div>
 
@@ -78,9 +95,6 @@ function Login({
           <button
             type="submit"
             className={styles["access-container__submit-button"]}
-            onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-              validateFields(e)
-            }}
           >
             Entrar
           </button>
