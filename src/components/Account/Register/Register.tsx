@@ -3,8 +3,8 @@ import { useForm } from "react-hook-form"
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"
 import { HiLogout } from "react-icons/hi"
 import { createUser } from "@/lib/actions/createUser"
-import { formAuthSchema } from "@/lib/schemas/formAuthSchema"
-import type { FormAuthType } from "@/types/FormAuthType"
+import { formRegisterSchema } from "@/lib/schemas/formRegisterSchema"
+import type { FormRegisterType } from "@/types/FormRegisterType"
 import styles from "../Access.module.sass"
 
 interface RegisterProps {
@@ -24,11 +24,11 @@ function Register({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormAuthType>({
-    resolver: zodResolver(formAuthSchema),
+  } = useForm<FormRegisterType>({
+    resolver: zodResolver(formRegisterSchema),
   })
 
-  async function onSubmit(authData: FormAuthType) {
+  async function onSubmit(authData: FormRegisterType) {
     const result = await createUser(authData)
 
     console.log(result)
