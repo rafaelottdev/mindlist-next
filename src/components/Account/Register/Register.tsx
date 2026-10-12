@@ -1,9 +1,13 @@
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"
 import { HiLogout } from "react-icons/hi"
-
+import { createUser } from "@/lib/actions/createUser"
+import { formAuthSchema } from "@/lib/schemas/formAuthSchema"
+import type { FormAuthType } from "@/types/FormAuthType"
 import styles from "../Access.module.sass"
 
-interface Login {
+interface RegisterProps {
   isLogin: boolean
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>
   showRegisterPassword: boolean
@@ -15,7 +19,21 @@ function Register({
   setIsLogin,
   showRegisterPassword,
   setShowRegisterPassword,
-}: Login) {
+}: RegisterProps) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormAuthType>({
+    resolver: zodResolver(formAuthSchema),
+  })
+
+  async function onSubmit(authData: FormAuthType) {
+    const result = await createUser(authData)
+
+    console.log(result)
+  }
+
   return (
     <div
       className={`
@@ -26,17 +44,22 @@ function Register({
     >
       <h2 className={styles["access-container__title"]}>Cadastro</h2>
 
-      <form action="" autoComplete="off">
+      <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <div className={styles["access-container__input-container"]}>
           <div className={styles["access-container__input-wrapper"]}>
             <label htmlFor="name">Nome</label>
+
             <input
               type="text"
-              name="name"
               id="name"
-              minLength={5}
-              maxLength={30}
+              maxLength={10}
+              className={`${styles["access-container__input"]}`}
+              {...register("name")}
             />
+
+            {errors.name && (
+              <p className={styles["error-form"]}>{errors.name.message}</p>
+            )}
           </div>
 
           <div
@@ -46,7 +69,18 @@ function Register({
             `}
           >
             <label htmlFor="email">Email</label>
-            <input type="email" name="email" id="email" maxLength={50} />
+
+            <input
+              type="email"
+              id="email"
+              maxLength={150}
+              className={`${styles["access-container__input"]}`}
+              {...register("email")}
+            />
+
+            {errors.email && (
+              <p className={styles["error-form"]}>{errors.email.message}</p>
+            )}
           </div>
 
           <div className={styles["access-container__input-wrapper"]}>
@@ -55,10 +89,11 @@ function Register({
             <div className={styles["access-container__password-input-wrapper"]}>
               <input
                 type={showRegisterPassword ? "text" : "password"}
-                name="password"
                 id="password"
                 minLength={8}
                 maxLength={10}
+                className={`${styles["access-container__input"]}`}
+                {...register("password")}
               />
 
               <button
@@ -68,6 +103,10 @@ function Register({
                 {showRegisterPassword ? <AiFillEye /> : <AiFillEyeInvisible />}
               </button>
             </div>
+
+            {errors.password && (
+              <p className={styles["error-form"]}>{errors.password.message}</p>
+            )}
           </div>
         </div>
 
