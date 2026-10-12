@@ -1,13 +1,9 @@
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"
 import { HiLogout } from "react-icons/hi"
-import { loginAction } from "@/lib/actions/loginAction"
-import { formLoginSchema } from "@/lib/schemas/formLoginSchema"
-import type { FormLoginType } from "@/types/FormLoginType"
+
 import styles from "../Access.module.sass"
 
-interface Login {
+interface LoginProps {
   isLogin: boolean
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>
   showLoginPassword: boolean
@@ -19,21 +15,7 @@ function Login({
   setIsLogin,
   showLoginPassword,
   setShowLoginPassword,
-}: Login) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormLoginType>({
-    resolver: zodResolver(formLoginSchema),
-  })
-
-  async function onSubmit(formData: FormLoginType) {
-    const result = await loginAction(formData)
-
-    console.log(result)
-  }
-
+}: LoginProps) {
   return (
     <div
       className={`
@@ -43,23 +25,17 @@ function Login({
     >
       <h2 className={styles["access-container__title"]}>Login</h2>
 
-      <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+      <form onSubmit={(e) => e.preventDefault()} autoComplete="off">
         <div className={styles["access-container__input-container"]}>
           <div className={styles["access-container__input-wrapper"]}>
             <label htmlFor="email">Email</label>
+
             <input
               type="email"
               id="email"
               maxLength={50}
               className={`${styles["access-container__input"]}`}
-              {...register("email")}
             />
-
-            {errors.email && (
-              <p className={styles["error-form-login"]}>
-                {errors.email.message}
-              </p>
-            )}
           </div>
 
           <div className={styles["access-container__input-wrapper"]}>
@@ -72,7 +48,6 @@ function Login({
                 minLength={8}
                 maxLength={10}
                 className={`${styles["access-container__input"]}`}
-                {...register("password")}
               />
 
               <button
@@ -82,12 +57,6 @@ function Login({
                 {showLoginPassword ? <AiFillEye /> : <AiFillEyeInvisible />}
               </button>
             </div>
-
-            {errors.password && (
-              <p className={styles["error-form-login"]}>
-                {errors.password.message}
-              </p>
-            )}
           </div>
         </div>
 
