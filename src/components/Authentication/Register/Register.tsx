@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { redirect } from "next/navigation"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"
 import { HiLogout } from "react-icons/hi"
@@ -11,22 +12,15 @@ import styles from "../Access.module.sass"
 interface RegisterProps {
   isLogin: boolean
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>
-  showRegisterPassword: boolean
-  setShowRegisterPassword: React.Dispatch<React.SetStateAction<boolean>>
-  setCreateMessage: React.Dispatch<
-    React.SetStateAction<{ error: boolean; message: string } | undefined>
-  >
-  showErrorNotification: () => void
+  handleAuthMessage: (isError: boolean, message: string) => void
 }
 
-function Register({
-  isLogin,
-  setIsLogin,
-  showRegisterPassword,
-  setShowRegisterPassword,
-  setCreateMessage,
-  showErrorNotification,
-}: RegisterProps) {
+function Register({ isLogin, setIsLogin, handleAuthMessage }: RegisterProps) {
+  const router = useRouter()
+  const [showRegisterPassword, setShowRegisterPassword] =
+    useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
   const {
     register,
     handleSubmit,
@@ -36,14 +30,29 @@ function Register({
   })
 
   async function onSubmit(authData: FormRegisterType) {
-    const result = await createAccount(authData)
+    if (isLoading) return
 
-    setCreateMessage(result)
+    setIsLoading(true)
+    let shouldRedirect = false
 
-    if (result.error) {
-      showErrorNotification()
-    } else {
-      redirect("/")
+    try {
+      const result = await createAccount(authData)
+
+      if (result.error) {
+        handleAuthMessage(true, result.message)
+        setIsLoading(false)
+      } else {
+        handleAuthMessage(false, "")
+        shouldRedirect = true
+      }
+    } catch (_error) {
+      handleAuthMessage(true, "Ocorreu um erro inesperado no cadastro")
+    } finally {
+      setIsLoading(false)
+    }
+
+    if (shouldRedirect) {
+      router.push("/")
     }
   }
 
@@ -127,8 +136,9 @@ function Register({
           <button
             type="submit"
             className={styles["access-container__submit-button"]}
+            disabled={isLoading}
           >
-            Entrar
+            {isLoading ? "carregando" : "Entrar"}
           </button>
 
           <button

@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"
 import { HiLogout } from "react-icons/hi"
@@ -10,16 +11,10 @@ import styles from "../Access.module.sass"
 interface LoginProps {
   isLogin: boolean
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>
-  showLoginPassword: boolean
-  setShowLoginPassword: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-function Login({
-  isLogin,
-  setIsLogin,
-  showLoginPassword,
-  setShowLoginPassword,
-}: LoginProps) {
+function Login({ isLogin, setIsLogin }: LoginProps) {
+  const [showLoginPassword, setShowLoginPassword] = useState<boolean>(false)
   const {
     register,
     handleSubmit,

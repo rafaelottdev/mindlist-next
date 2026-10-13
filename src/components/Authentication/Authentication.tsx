@@ -9,57 +9,49 @@ import Register from "./Register/Register"
 
 function Authentication() {
   const [isLogin, setIsLogin] = useState<boolean>(true)
-  const [showLoginPassword, setShowLoginPassword] = useState<boolean>(false)
-  const [showRegisterPassword, setShowRegisterPassword] =
-    useState<boolean>(false)
-  const [createMessage, setCreateMessage] = useState<
-    { error: boolean; message: string } | undefined
-  >()
-  const [hasError, setHasError] = useState<boolean>(false)
+  const [notification, setNotification] = useState<{
+    isError: boolean
+    message: string
+  } | null>()
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  function showErrorNotification() {
-    setHasError(true)
+  function handleAuthMessage(isError: boolean, message: string) {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current)
 
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current)
+    if (message === "") {
+      setNotification(null)
+      return
     }
 
+    setNotification({ isError, message })
+
     timeoutRef.current = setTimeout(() => {
-      setHasError(false)
-      timeoutRef.current = null
-    }, 2000)
+      setNotification(null)
+    }, 1500)
   }
 
   return (
     <section className={styles["auth-section"]}>
-      <div
-        className={`
-          ${styles["auth-section__notification"]}
-          ${hasError ? styles["auth-section__notification--error"] : ""}
-        `}
-      >
-        <FaExclamation />
+      {notification && (
+        <div
+          className={`
+            ${styles["auth-section__notification"]}
+          `}
+        >
+          <FaExclamation />
 
-        <p>{createMessage?.error ? createMessage?.message : ""}</p>
-      </div>
+          <p>{notification.message}</p>
+        </div>
+      )}
 
       <div className={styles["auth-section__border"]}>
         <div className={styles["auth-section__container"]}>
-          <Login
-            isLogin={isLogin}
-            setIsLogin={setIsLogin}
-            showLoginPassword={showLoginPassword}
-            setShowLoginPassword={setShowLoginPassword}
-          />
+          <Login isLogin={isLogin} setIsLogin={setIsLogin} />
 
           <Register
             isLogin={isLogin}
             setIsLogin={setIsLogin}
-            showRegisterPassword={showRegisterPassword}
-            setShowRegisterPassword={setShowRegisterPassword}
-            setCreateMessage={setCreateMessage}
-            showErrorNotification={showErrorNotification}
+            handleAuthMessage={handleAuthMessage}
           />
 
           <div
