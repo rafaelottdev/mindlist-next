@@ -4,9 +4,43 @@
 .auth-section
   width: 100vw
   height: 100vh
-  background-color: $blue-500
 
   @include flex-center
+  position: relative
+
+  background-color: $blue-500
+
+.auth-section__notification
+  height: 70px
+  padding: 0 100px 0 10px
+
+  position: absolute
+  right: -100%
+  top: 11px
+
+  display: flex
+  align-items: center
+  gap: 5px
+
+  z-index: 3
+  overflow: hidden
+
+  border-radius: 5px 0 0 5px
+  color: white
+  background: linear-gradient(-146.449deg, #152484 12%, #263FEA 100%)
+
+  transition: .3s
+
+  svg
+    font-size: 37px
+  
+  p
+    font-family: $baloo-regular
+    font-size: 18px
+    letter-spacing: .5px
+
+.auth-section__notification--error
+  right: 0%
 
 .auth-section__border
   padding: 30px

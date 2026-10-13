@@ -3,7 +3,7 @@
 import type { FormRegisterType } from "@/types/FormRegisterType"
 import { auth } from "../auth/server"
 
-export async function createUser(authData: FormRegisterType) {
+export async function createAccount(authData: FormRegisterType) {
   const { error } = await auth.signUp.email({
     name: authData.name,
     email: authData.email,
@@ -11,8 +11,8 @@ export async function createUser(authData: FormRegisterType) {
   })
 
   if (error) {
-    return { error: error.message }
+    return { error: true, message: "Algo deu errado na criação da conta" }
   }
 
-  return "Conta criada com sucesso!"
+  return { error: false, message: "Conta criada com sucesso" }
 }

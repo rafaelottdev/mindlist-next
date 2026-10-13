@@ -1,8 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod"
+import { redirect } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"
 import { HiLogout } from "react-icons/hi"
-import { createUser } from "@/lib/actions/createUser"
+import { createAccount } from "@/lib/actions/createAccount"
 import { formRegisterSchema } from "@/lib/schemas/formRegisterSchema"
 import type { FormRegisterType } from "@/types/FormRegisterType"
 import styles from "../Access.module.sass"
@@ -12,6 +13,10 @@ interface RegisterProps {
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>
   showRegisterPassword: boolean
   setShowRegisterPassword: React.Dispatch<React.SetStateAction<boolean>>
+  setCreateMessage: React.Dispatch<
+    React.SetStateAction<{ error: boolean; message: string } | undefined>
+  >
+  showErrorNotification: () => void
 }
 
 function Register({
@@ -19,6 +24,8 @@ function Register({
   setIsLogin,
   showRegisterPassword,
   setShowRegisterPassword,
+  setCreateMessage,
+  showErrorNotification,
 }: RegisterProps) {
   const {
     register,
@@ -29,9 +36,15 @@ function Register({
   })
 
   async function onSubmit(authData: FormRegisterType) {
-    const result = await createUser(authData)
+    const result = await createAccount(authData)
 
-    console.log(result)
+    setCreateMessage(result)
+
+    if (result.error) {
+      showErrorNotification()
+    } else {
+      redirect("/")
+    }
   }
 
   return (
