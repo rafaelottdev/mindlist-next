@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"
 import { HiLogout } from "react-icons/hi"
-import { validateUser } from "@/lib/actions/validateUser"
+import { validateAccount } from "@/lib/actions/validateAccount"
 import { formLoginSchema } from "@/lib/schemas/formLoginSchema"
 import type { FormLoginType } from "@/types/FormLoginType"
 import styles from "../Access.module.sass"
@@ -29,7 +29,7 @@ function Login({
   })
 
   async function onSubmit(authData: FormLoginType) {
-    const result = await validateUser(authData)
+    const result = await validateAccount(authData)
 
     console.log(result)
   }
