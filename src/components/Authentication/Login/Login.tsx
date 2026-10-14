@@ -1,8 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"
 import { HiLogout } from "react-icons/hi"
+import ButtonLoading from "@/components/loadings/ButtonLoading/ButtonLoading"
 import { validateAccount } from "@/lib/actions/validateAccount"
 import { formLoginSchema } from "@/lib/schemas/formLoginSchema"
 import type { FormLoginType } from "@/types/FormLoginType"
@@ -11,22 +13,55 @@ import styles from "../Access.module.sass"
 interface LoginProps {
   isLogin: boolean
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>
+  handleAuthMessage: (isError: boolean, message: string) => void
 }
 
-function Login({ isLogin, setIsLogin }: LoginProps) {
+function Login({ isLogin, setIsLogin, handleAuthMessage }: LoginProps) {
+  const router = useRouter()
   const [showLoginPassword, setShowLoginPassword] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValues,
   } = useForm<FormLoginType>({
     resolver: zodResolver(formLoginSchema),
   })
 
   async function onSubmit(authData: FormLoginType) {
-    const result = await validateAccount(authData)
+    if (isLoading) return
 
-    console.log(result)
+    setIsLoading(true)
+    let shouldRedirect = false
+
+    try {
+      const result = await validateAccount(authData)
+
+      if (result.error) {
+        handleAuthMessage(true, result.message)
+        setIsLoading(false)
+      } else {
+        handleAuthMessage(false, "")
+        shouldRedirect = true
+      }
+    } catch (_error) {
+      handleAuthMessage(true, "Ocorreu um erro inesperado no login")
+    } finally {
+      setIsLoading(false)
+    }
+
+    if (shouldRedirect) {
+      router.push("/")
+    }
+  }
+
+  function clearFields() {
+    setValues({
+      email: "",
+      password: "",
+    })
   }
 
   return (
@@ -41,11 +76,11 @@ function Login({ isLogin, setIsLogin }: LoginProps) {
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <div className={styles["access-container__input-container"]}>
           <div className={styles["access-container__input-wrapper"]}>
-            <label htmlFor="email">Email</label>
+            <label htmlFor="login-email">Email</label>
 
             <input
               type="email"
-              id="email"
+              id="login-email"
               maxLength={150}
               className={`${styles["access-container__input"]}`}
               {...register("email")}
@@ -57,12 +92,12 @@ function Login({ isLogin, setIsLogin }: LoginProps) {
           </div>
 
           <div className={styles["access-container__input-wrapper"]}>
-            <label htmlFor="password">Senha</label>
+            <label htmlFor="login-password">Senha</label>
 
             <div className={styles["access-container__password-input-wrapper"]}>
               <input
                 type={showLoginPassword ? "text" : "password"}
-                id="password"
+                id="login-password"
                 minLength={8}
                 maxLength={10}
                 className={`${styles["access-container__input"]}`}
@@ -87,14 +122,18 @@ function Login({ isLogin, setIsLogin }: LoginProps) {
           <button
             type="submit"
             className={styles["access-container__submit-button"]}
+            disabled={isLoading}
           >
-            Entrar
+            {isLoading ? <ButtonLoading /> : "Entrar"}
           </button>
 
           <button
             type="button"
             className={styles["access-container__register-button"]}
-            onClick={() => setIsLogin(false)}
+            onClick={() => {
+              setIsLogin(false)
+              clearFields()
+            }}
           >
             <p>Cadastro</p>
 

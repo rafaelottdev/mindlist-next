@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"
 import { HiLogout } from "react-icons/hi"
+import ButtonLoading from "@/components/loadings/ButtonLoading/ButtonLoading"
 import { createAccount } from "@/lib/actions/createAccount"
 import { formRegisterSchema } from "@/lib/schemas/formRegisterSchema"
 import type { FormRegisterType } from "@/types/FormRegisterType"
@@ -25,6 +26,7 @@ function Register({ isLogin, setIsLogin, handleAuthMessage }: RegisterProps) {
     register,
     handleSubmit,
     formState: { errors },
+    setValues,
   } = useForm<FormRegisterType>({
     resolver: zodResolver(formRegisterSchema),
   })
@@ -56,6 +58,14 @@ function Register({ isLogin, setIsLogin, handleAuthMessage }: RegisterProps) {
     }
   }
 
+  function clearFields() {
+    setValues({
+      name: "",
+      email: "",
+      password: "",
+    })
+  }
+
   return (
     <div
       className={`
@@ -69,11 +79,11 @@ function Register({ isLogin, setIsLogin, handleAuthMessage }: RegisterProps) {
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <div className={styles["access-container__input-container"]}>
           <div className={styles["access-container__input-wrapper"]}>
-            <label htmlFor="name">Nome</label>
+            <label htmlFor="register-name">Nome</label>
 
             <input
               type="text"
-              id="name"
+              id="register-name"
               maxLength={10}
               className={`${styles["access-container__input"]}`}
               {...register("name")}
@@ -90,11 +100,11 @@ function Register({ isLogin, setIsLogin, handleAuthMessage }: RegisterProps) {
               ${styles["access-container__input-wrapper--register"]}
             `}
           >
-            <label htmlFor="email">Email</label>
+            <label htmlFor="register-email">Email</label>
 
             <input
               type="email"
-              id="email"
+              id="register-email"
               maxLength={150}
               className={`${styles["access-container__input"]}`}
               {...register("email")}
@@ -106,12 +116,12 @@ function Register({ isLogin, setIsLogin, handleAuthMessage }: RegisterProps) {
           </div>
 
           <div className={styles["access-container__input-wrapper"]}>
-            <label htmlFor="password">Senha</label>
+            <label htmlFor="register-password">Senha</label>
 
             <div className={styles["access-container__password-input-wrapper"]}>
               <input
                 type={showRegisterPassword ? "text" : "password"}
-                id="password"
+                id="register-password"
                 minLength={8}
                 maxLength={10}
                 className={`${styles["access-container__input"]}`}
@@ -138,7 +148,7 @@ function Register({ isLogin, setIsLogin, handleAuthMessage }: RegisterProps) {
             className={styles["access-container__submit-button"]}
             disabled={isLoading}
           >
-            {isLoading ? "carregando" : "Entrar"}
+            {isLoading ? <ButtonLoading /> : "Entrar"}
           </button>
 
           <button
@@ -147,7 +157,10 @@ function Register({ isLogin, setIsLogin, handleAuthMessage }: RegisterProps) {
               ${styles["access-container__register-button"]}
               ${styles["access-container__register-button--register"]}
             `}
-            onClick={() => setIsLogin(true)}
+            onClick={() => {
+              setIsLogin(true)
+              clearFields()
+            }}
           >
             <HiLogout />
 
