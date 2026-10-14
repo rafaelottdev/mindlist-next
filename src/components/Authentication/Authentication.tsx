@@ -27,7 +27,7 @@ function Authentication() {
 
     timeoutRef.current = setTimeout(() => {
       setNotification(null)
-    }, 1500)
+    }, 2000)
   }
 
   return (
@@ -46,7 +46,11 @@ function Authentication() {
 
       <div className={styles["auth-section__border"]}>
         <div className={styles["auth-section__container"]}>
-          <Login isLogin={isLogin} setIsLogin={setIsLogin} />
+          <Login
+            isLogin={isLogin}
+            setIsLogin={setIsLogin}
+            handleAuthMessage={handleAuthMessage}
+          />
 
           <Register
             isLogin={isLogin}

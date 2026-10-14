@@ -10,8 +10,8 @@ export async function validateAccount(authData: FormLoginType) {
   })
 
   if (error) {
-    return { error: error.message }
+    return { error: true, message: "Email ou senha invalidos" }
   }
 
-  return "Login feito com sucesso!"
+  return { error: false, message: "Login feito com sucesso" }
 }
