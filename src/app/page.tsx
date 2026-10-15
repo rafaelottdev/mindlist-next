@@ -1,4 +1,11 @@
+import Header from "@/components/Header/Header"
+
 export default function Home() {
-  return <div>HOME</div>
+  return (
+    <>
+      <Header />
+
+      <main style={{ height: "100vh" }}>Home</main>
+    </>
+  )
 }
-// tratamento de formulario (campos) -> conecta em um banco ||| não esquecer do proxy.ts
