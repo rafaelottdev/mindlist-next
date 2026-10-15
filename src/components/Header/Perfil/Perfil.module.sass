@@ -1,0 +1,97 @@
+@use "@/styles/abstracts/variables" as *
+@use "@/styles/abstracts/mixins" as *
+
+.config-perfil
+  width: 480px
+  height: 120px
+  padding: 0 10px
+
+  display: flex
+  align-items: center
+
+  position: absolute
+  left: -490px
+  top: 0
+
+  border-radius: 10px
+  color: white
+  background-color: $blue-400
+
+.config-perfil__form
+  display: flex
+  align-items: center
+  gap: 10px
+
+.config-perfil__input-container
+  display: flex
+  align-items: center
+  gap: 10px
+
+.config-perfil__image-container
+  width: 100px
+  height: 100px
+
+  position: relative
+  @include flex-center
+
+  border-radius: 50%
+  background-color: red
+
+  div
+
+  label
+    width: 100%
+    height: 100%
+
+    @include flex-center
+
+    cursor: pointer
+    border-radius: 50%
+    background-color: blue
+
+    font-size: 14px
+    font-family: $baloo-medium
+    letter-spacing: .5px
+
+  input
+    display: none
+
+.config-perfil__name-container
+  display: flex
+  flex-direction: column
+
+  label
+    margin-bottom: 5px
+    font-size: 14px
+    font-family: $baloo-medium
+    letter-spacing: .5px
+
+  input
+    width: 250px
+    height: 30px
+    padding: 0 5px
+    
+    font-size: 14px
+    font-family: $baloo-medium
+
+    border-radius: 5px
+    color: white
+    background-color: $blue-300
+
+.config-perfil__send-button-container
+  padding-top: 28px
+
+.config-perfil__send-button
+  width: 80px
+  height: 30px
+
+  font-family: $baloo-medium
+  font-size: 14px
+  letter-spacing: .5px
+
+  border-radius: 5px
+  color: white
+  background-color: $blue-300
+
+  &:hover
+    background: red

@@ -13,9 +13,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="pt-BR">
-      <body>
-        <main>{children}</main>
-      </body>
+      <body>{children}</body>
     </html>
   )
 }
