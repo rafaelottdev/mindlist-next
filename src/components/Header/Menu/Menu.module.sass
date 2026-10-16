@@ -56,19 +56,17 @@
       border-radius: 5px 5px 0 0
       padding-left: 7px
 
-  &:nth-child(2)
-    button
-      svg
-        font-size: 21px
-
   &:last-child
     button
       border-radius: 0 0 5px 5px
-      padding-left: 9px
+      padding-left: 9px          
 
 .menu__perfil-button
   width: 100%
   padding: 10px 5px
+
+  position: relative
+  overflow: hidden
 
   display: flex
   align-items: center
@@ -78,13 +76,65 @@
   background-color: transparent
 
   &:hover
-    svg, p
-      color: #ffffffd8
+    span
+      width: 100%
+
+    svg
+      left: 50%
+      transform: translateX(-50%)
+      font-size: 21px
+
+    svg.menu__notification-icon
+      font-size: 22px
 
   svg
+    position: relative
+    left: 0px
+
     font-size: 16px
+    z-index: 2
+    transition: .3s
+
+  svg.menu__notification-icon
+    font-size: 21px
 
   p
     font-family: $baloo-medium
     font-size: 14px
     letter-spacing: .5px
+
+    z-index: 0
+
+.menu__perfil-button--click
+  .menu__spinner-container
+    padding: 3px
+
+    position: relative
+    left: 50%
+    transform: translateX(-50%)
+    z-index: 2
+
+  span
+    width: 100%
+
+  svg
+    left: 50%
+    transform: translateX(-50%)
+    font-size: 21px
+
+  svg.menu__notification-icon
+      font-size: 22px
+
+.menu__background
+  width: 0%
+  height: 100%
+
+  position: absolute
+  top: 0
+  left: 0
+
+  z-index: 1
+
+  background-color: $blue-100
+
+  transition: .3s
