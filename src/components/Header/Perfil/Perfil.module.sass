@@ -18,9 +18,19 @@
   background-color: $blue-400
 
 .config-perfil__form
+  position: relative
   display: flex
   align-items: center
   gap: 10px
+
+.error-form
+  position: absolute
+  bottom: -5px
+  left: 110px
+
+  font-size: 13px
+  font-family: $baloo-medium
+  letter-spacing: .3px
 
 .config-perfil__input-container
   display: flex
@@ -38,6 +48,30 @@
   background-color: red
 
   div
+    width: 100px
+    height: 100px
+
+    position: absolute
+    top: 0
+    left: 0
+
+    overflow: hidden
+    border-radius: 50%
+
+    z-index: 0
+
+    span
+      width: 100%
+      height: 100%
+
+      position: absolute
+      top: 0
+      left: 0
+      background-color: #000000aa
+
+    img
+      width: 100%
+      height: 100%
 
   label
     width: 100%
@@ -47,11 +81,13 @@
 
     cursor: pointer
     border-radius: 50%
-    background-color: blue
+    background-color: transparent
 
     font-size: 14px
     font-family: $baloo-medium
     letter-spacing: .5px
+
+    z-index: 1
 
   input
     display: none

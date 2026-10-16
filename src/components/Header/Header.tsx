@@ -14,6 +14,7 @@ function Header() {
               alt="logo do site"
               width={60}
               height={60}
+              loading="eager"
             />
           </div>
 
@@ -23,6 +24,7 @@ function Header() {
               alt="nome do site"
               width={179}
               height={39}
+              loading="eager"
             />
           </h1>
         </Link>
