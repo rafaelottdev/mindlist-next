@@ -1,11 +1,12 @@
 "use client"
 
 import Image from "next/image"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { FaRegUser } from "react-icons/fa"
 import { MdNotificationsNone } from "react-icons/md"
 import { PiSignOutBold } from "react-icons/pi"
 import ButtonLoading from "@/components/loadings/ButtonLoading/ButtonLoading"
+import { getUser } from "@/lib/actions/getUser"
 import { signOut } from "@/lib/actions/signOut"
 import Notification from "../Notification/Notification"
 import Perfil from "../Perfil/Perfil"
@@ -17,6 +18,8 @@ function Menu() {
   const [showNotification, setShowNotification] = useState<boolean>(false)
   const [showSignOut, setShowSignOut] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [userName, setUserName] = useState<string | undefined>("")
+  const [userImage, setUserImage] = useState<string | null | undefined>("")
 
   async function onSignOut() {
     setIsLoading(true)
@@ -33,9 +36,26 @@ function Menu() {
     }
   }
 
+  useEffect(() => {
+    async function getUserName() {
+      const user = await getUser()
+      const name = user?.name
+
+      setUserName(name)
+    }
+
+    getUserName()
+  }, [])
+
   return (
     <div className={styles.menu}>
-      {showPerfil && <Perfil />}
+      {showPerfil && (
+        <Perfil
+          setUserName={setUserName}
+          userImage={userImage}
+          setUserImage={setUserImage}
+        />
+      )}
       {showNotification && <Notification />}
 
       <button
@@ -57,7 +77,7 @@ function Menu() {
         </div>
 
         <div className={styles["menu__perfil-name"]}>
-          <p>Rafaelott1</p>
+          <p>{userName}</p>
         </div>
       </button>
 
