@@ -25,17 +25,26 @@ export const formChangePerfilSchema = z.object({
 
   perfilName: z
     .string()
-    .min(2, "O nome precisa ter no mínimo 2 caracteres")
-    .max(10, "O nome só pode ter no maximo 10 caracteres")
-    .regex(/\S/, "O nome não deve estar vazio")
-    .regex(/^\S+(?:\s\S+)?$/, "O nome não pode conter mais de 1 espaço")
-    .transform((name) => {
-      return name
-        .trim()
-        .split(" ")
-        .map((word) => {
-          return word[0].toLocaleUpperCase().concat(word.substring(1))
-        })
-        .join(" ")
-    }),
+    .trim()
+    .refine(
+      (name) => !name || name.length >= 2,
+      "O nome precisa ter no mínimo 2 caracteres",
+    )
+    .refine(
+      (name) => !name || name.length <= 10,
+      "O nome só pode ter no maximo 10 caracteres",
+    )
+    .refine(
+      (name) => !name || /^\S+(?: \S+)?$/.test(name),
+      "O nome não pode conter mais de 1 espaço",
+    )
+    .transform((name) =>
+      name
+        ? name
+            .split(" ")
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ")
+        : undefined,
+    )
+    .optional(),
 })

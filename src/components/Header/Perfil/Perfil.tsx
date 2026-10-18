@@ -1,11 +1,20 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import Image from "next/image"
+import { useEffect } from "react"
 import { useForm } from "react-hook-form"
+import { getUser } from "@/lib/actions/getUser"
+import { updateUser } from "@/lib/actions/updateUser"
 import { formChangePerfilSchema } from "@/lib/schemas/formChangePerfilSchema"
 import type { formChangePerfilType } from "@/types/formChangePerfilType"
 import styles from "./Perfil.module.sass"
 
-function Perfil() {
+interface PerfilProp {
+  setUserName: React.Dispatch<React.SetStateAction<string | undefined>>
+  setUserImage: React.Dispatch<React.SetStateAction<string | null | undefined>>
+  userImage: string | null | undefined
+}
+
+function Perfil({ setUserName, userImage, setUserImage }: PerfilProp) {
   const {
     register,
     handleSubmit,
@@ -14,9 +23,38 @@ function Perfil() {
     resolver: zodResolver(formChangePerfilSchema),
   })
 
-  function onSubmit(formData: formChangePerfilType) {
-    console.log(formData.perfilImage)
+  async function onSubmit(data: formChangePerfilType) {
+    const name = data.perfilName
+    const imageFile = data.perfilImage?.item(0)
+
+    const formData = new FormData()
+
+    if (name) {
+      formData.append("perfilName", name)
+    }
+
+    if (imageFile) {
+      formData.append("perfilImage", imageFile)
+    }
+
+    const result = await updateUser(formData)
+
+    if (result) {
+      setUserName(result.newName)
+      setUserImage(result.newImage)
+    }
   }
+
+  useEffect(() => {
+    async function getUserImage() {
+      const user = await getUser()
+      const perfilImage = user?.image
+
+      setUserImage(perfilImage)
+    }
+
+    getUserImage()
+  }, [setUserImage])
 
   return (
     <div className={styles["config-perfil"]}>
@@ -30,7 +68,9 @@ function Perfil() {
             <div>
               <span></span>
               <Image
-                src="/img/header/perfil-default.png"
+                src={
+                  userImage ? `${userImage}` : `/img/header/perfil-default.png`
+                }
                 alt="imagem de perfil"
                 width={100}
                 height={100}

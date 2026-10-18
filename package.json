@@ -11,6 +11,7 @@
     "commit": "git-cz"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1152.0",
     "@hookform/resolvers": "^5.9.1",
     "@neondatabase/auth": "^0.6.0-beta",
     "next": "16.3.8",
