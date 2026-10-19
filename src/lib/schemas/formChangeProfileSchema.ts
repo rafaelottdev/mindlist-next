@@ -1,7 +1,7 @@
 import { z } from "zod"
 
-export const formChangePerfilSchema = z.object({
-  perfilImage: z
+export const formChangeProfileSchema = z.object({
+  profileImage: z
     .custom<FileList>(
       (value) => typeof FileList !== "undefined" && value instanceof FileList,
       "Selecione um arquivo válido",
@@ -23,7 +23,7 @@ export const formChangePerfilSchema = z.object({
       )
     }, "Formato da imagem invalido"),
 
-  perfilName: z
+  profileName: z
     .string()
     .trim()
     .refine(
