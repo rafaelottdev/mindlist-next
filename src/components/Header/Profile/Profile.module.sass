@@ -2,11 +2,11 @@
 @use "@/styles/abstracts/mixins" as *
 
 .profile-config
-  width: 480px
-  height: 154px
+  width: 280px
+  // height: 420px
 
   position: absolute
-  left: -505px
+  left: -305px
   top: 0
 
   border-radius: 10px
@@ -15,10 +15,12 @@
 
 .profile-config__form
   width: 100%
-  height: 100%
+  padding: 15px 0
+  // height: 100%
 
   position: relative
   display: flex
+  flex-direction: column
   align-items: center
   justify-content: center
 
@@ -32,7 +34,7 @@
   display: flex
   flex-direction: column
   align-items: center
-  gap: 5px
+  gap: 10px
 
 .profile-config__avatar-wrapper
   width: 100px
@@ -43,6 +45,11 @@
   overflow: hidden
 
   display: flex
+
+  transition: .3s
+
+  &:hover
+      transform: scale(.95)
 
   label
     width: 100%
@@ -109,15 +116,20 @@
       font-size: 13px
       color: white
 
-.profile-config__name-container
-  padding-bottom: 30px
+.profile-config__data-container
   display: flex
-  align-items: flex-end
-  gap: 10px
+  flex-direction: column
+  gap: 20px
 
 .profile-config__input-container
   display: flex
   flex-direction: column
+  justify-content: center
+  gap: 10px
+
+  div
+    display: flex
+    flex-direction: column
 
   label
     margin-bottom: 5px
@@ -137,8 +149,34 @@
     color: white
     background-color: $blue-300
 
-.config-profile__submit-container
+.profile-config__password-input-container
+  width: 250px
+  position: relative
 
+  input
+    padding-right: 40px
+
+  button
+    width: 35px
+    height: 30px
+
+    @include flex-center
+
+    position: absolute
+    top: 50%
+    right: 0
+    transform: translateY(-50%)
+
+    cursor: pointer
+    background: transparent
+
+    svg
+      font-size: 16px
+      fill: white
+
+.config-profile__submit-container
+  display: flex
+  justify-content: space-between
 
 .config-profile__submit-button
   width: 80px
@@ -158,10 +196,22 @@
     transform: scale(.95)
     background: $blue-100
 
+.config-profile__clear-fields-button
+  width: 30px
+  height: 30px
+  padding-top: 3px
+
+  @include flex-center
+  
+  background: transparent
+
+  svg
+    font-size: 18px
+    color: white
+
 .error-form
-  position: absolute
-  bottom: 20px
-  left: 125px
+  margin-top: 3px
+  max-width: 250px
 
   font-family: $baloo-regular
-  font-size: 14px
+  font-size: 13px

@@ -122,7 +122,6 @@ function Register({ isLogin, setIsLogin, handleAuthMessage }: RegisterProps) {
               <input
                 type={showRegisterPassword ? "text" : "password"}
                 id="register-password"
-                minLength={8}
                 maxLength={10}
                 className={`${styles["access-container__input"]}`}
                 {...register("password")}
