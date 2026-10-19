@@ -4,12 +4,12 @@
 .menu
   position: relative
 
-.menu__perfil
+.menu__profile
   display: flex
   align-items: center
   gap: 3px
 
-.menu__perfil-image
+.menu__profile-image
   width: 35px
   height: 35px
 
@@ -21,7 +21,7 @@
     height: 100%
     object-fit: cover
 
-.menu__perfil-name
+.menu__profile-name
   height: 35px
   padding: 0 10px
   
@@ -36,7 +36,7 @@
     letter-spacing: .3px
     color: white
 
-.menu__perfil-options
+.menu__profile-options
   width: 129px
   height: 0
 
@@ -51,7 +51,7 @@
 
   transition: .3s
 
-.menu__perfil-item
+.menu__profile-item
   &:first-child
     button
       border-radius: 5px 5px 0 0
@@ -62,9 +62,9 @@
       border-radius: 0 0 5px 5px
       padding-left: 9px          
 
-.menu__perfil-button
+.menu__profile-button
   width: 100%
-  padding: 10px 5px
+  padding: 8px 5px
 
   position: relative
   overflow: hidden
@@ -83,10 +83,6 @@
     svg
       left: 50%
       transform: translateX(-50%)
-      font-size: 21px
-
-    svg.menu__notification-icon
-      font-size: 22px
 
   svg
     position: relative
@@ -106,7 +102,7 @@
 
     z-index: 0
 
-.menu__perfil-button--click
+.menu__profile-button--click
   .menu__spinner-container
     padding: 3px
 
@@ -121,10 +117,9 @@
   svg
     left: 50%
     transform: translateX(-50%)
-    font-size: 21px
 
   svg.menu__notification-icon
-      font-size: 22px
+      font-size: 21px
 
 .menu__background
   width: 0%

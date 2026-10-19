@@ -15,18 +15,30 @@ export async function updateUser(formData: FormData) {
     newImage: user.image,
   }
 
-  const rawName = formData.get("perfilName")
+  const rawName = formData.get("profileName")
   const name = typeof rawName === "string" ? rawName.trim() : ""
-  const file = formData.get("perfilImage")
+  const file = formData.get("profileImage")
 
   if (name && name !== user.name) {
-    await auth.updateUser({ name })
+    const { error } = await auth.updateUser({ name })
+
+    if (error) {
+      // fazer uma notificação avisando que deu erro ao tentar atualizar o usuario
+      newUser.newName = user.name
+    }
+
     newUser.newName = name
   }
 
   if (file instanceof File && file.size > 0) {
     const url = await uploadAvatar(user.id, file)
-    await auth.updateUser({ image: url })
+    const { error } = await auth.updateUser({ image: url })
+
+    if (error) {
+      // fazer uma notificação avisando que deu erro ao tentar atualizar o usuario
+      newUser.newImage = user.image
+    }
+
     newUser.newImage = url
   }
 

@@ -9,12 +9,12 @@ import ButtonLoading from "@/components/loadings/ButtonLoading/ButtonLoading"
 import { getUser } from "@/lib/actions/getUser"
 import { signOut } from "@/lib/actions/signOut"
 import Notification from "../Notification/Notification"
-import Perfil from "../Perfil/Perfil"
+import Profile from "../Profile/Profile"
 import styles from "./Menu.module.sass"
 
 function Menu() {
   const [showMenu, setShowMenu] = useState<boolean>(false)
-  const [showPerfil, setShowPerfil] = useState<boolean>(false)
+  const [showProfile, setShowProfile] = useState<boolean>(false)
   const [showNotification, setShowNotification] = useState<boolean>(false)
   const [showSignOut, setShowSignOut] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -24,7 +24,7 @@ function Menu() {
   async function onSignOut() {
     setIsLoading(true)
     setShowSignOut(true)
-    setShowPerfil(false)
+    setShowProfile(false)
     setShowNotification(false)
 
     try {
@@ -37,63 +37,66 @@ function Menu() {
   }
 
   useEffect(() => {
-    async function getUserName() {
+    async function getUserProfile() {
       const user = await getUser()
       const name = user?.name
+      const image = user?.image
 
       setUserName(name)
+      setUserImage(image)
     }
 
-    getUserName()
+    getUserProfile()
   }, [])
 
   return (
     <div className={styles.menu}>
-      {showPerfil && (
-        <Perfil
+      {showProfile && (
+        <Profile
           setUserName={setUserName}
           userImage={userImage}
           setUserImage={setUserImage}
         />
       )}
+
       {showNotification && <Notification />}
 
       <button
         type="button"
-        className={styles.menu__perfil}
+        className={styles.menu__profile}
         onClick={() => {
           setShowMenu((prev) => !prev)
-          setShowPerfil(false)
+          setShowProfile(false)
           setShowNotification(false)
         }}
       >
-        <div className={styles["menu__perfil-image"]}>
+        <div className={styles["menu__profile-image"]}>
           <Image
-            src={`/img/header/perfil-default.png`}
+            src={userImage ? `${userImage}` : `/img/header/profile-default.png`}
             alt="foto de perfil"
             width={50}
             height={45}
           />
         </div>
 
-        <div className={styles["menu__perfil-name"]}>
+        <div className={styles["menu__profile-name"]}>
           <p>{userName}</p>
         </div>
       </button>
 
       <ul
-        className={styles["menu__perfil-options"]}
-        style={{ height: `${showMenu ? "127px" : "0px"}` }}
+        className={styles["menu__profile-options"]}
+        style={{ height: `${showMenu ? "115px" : "0px"}` }}
       >
-        <li className={styles["menu__perfil-item"]}>
+        <li className={styles["menu__profile-item"]}>
           <button
             type="button"
             className={`
-              ${styles["menu__perfil-button"]}
-              ${showPerfil ? `${styles["menu__perfil-button--click"]}` : ""}
+              ${styles["menu__profile-button"]}
+              ${showProfile ? `${styles["menu__profile-button--click"]}` : ""}
             `}
             onClick={() => {
-              setShowPerfil((prev) => !prev)
+              setShowProfile((prev) => !prev)
               setShowNotification(false)
             }}
           >
@@ -105,16 +108,16 @@ function Menu() {
           </button>
         </li>
 
-        <li className={styles["menu__perfil-item"]}>
+        <li className={styles["menu__profile-item"]}>
           <button
             type="button"
             className={`
-              ${styles["menu__perfil-button"]}
-              ${showNotification ? `${styles["menu__perfil-button--click"]}` : ""}
+              ${styles["menu__profile-button"]}
+              ${showNotification ? `${styles["menu__profile-button--click"]}` : ""}
             `}
             onClick={() => {
               setShowNotification((prev) => !prev)
-              setShowPerfil(false)
+              setShowProfile(false)
             }}
           >
             <span className={styles.menu__background}></span>
@@ -127,12 +130,12 @@ function Menu() {
           </button>
         </li>
 
-        <li className={styles["menu__perfil-item"]}>
+        <li className={styles["menu__profile-item"]}>
           <button
             type="button"
             className={`
-              ${styles["menu__perfil-button"]}
-              ${showSignOut ? `${styles["menu__perfil-button--click"]}` : ""}
+              ${styles["menu__profile-button"]}
+              ${showSignOut ? `${styles["menu__profile-button--click"]}` : ""}
             `}
             onClick={onSignOut}
           >
