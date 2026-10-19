@@ -1,11 +1,6 @@
 import { randomUUID } from "node:crypto"
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
-
-const s3 = new S3Client({
-  region: "us-east-2",
-  endpoint: process.env.AWS_ENDPOINT_URL_S3,
-  forcePathStyle: true,
-})
+import { PutObjectCommand } from "@aws-sdk/client-s3"
+import { s3 } from "@/lib/storage/s3Client"
 
 const maxSize = 5 * 1024 * 1024
 const allowed = ["image/jpeg", "image/png", "image/webp"]
