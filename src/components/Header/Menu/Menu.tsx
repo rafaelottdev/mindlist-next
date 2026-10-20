@@ -21,6 +21,8 @@ function Menu() {
   const [userName, setUserName] = useState<string | undefined>("")
   const [userImage, setUserImage] = useState<string | null | undefined>("")
 
+  const [userInfoLoading, setUserInfoLoading] = useState<boolean>(false)
+
   async function onSignOut() {
     setIsLoading(true)
     setShowSignOut(true)
@@ -38,12 +40,20 @@ function Menu() {
 
   useEffect(() => {
     async function getUserProfile() {
-      const user = await getUser()
-      const name = user?.name
-      const image = user?.image
+      try {
+        setUserInfoLoading(true)
 
-      setUserName(name)
-      setUserImage(image)
+        const user = await getUser()
+        const name = user?.name
+        const image = user?.image
+
+        setUserName(name)
+        setUserImage(image)
+      } catch (error) {
+        console.log(error)
+      } finally {
+        setUserInfoLoading(false)
+      }
     }
 
     getUserProfile()
@@ -71,16 +81,22 @@ function Menu() {
         }}
       >
         <div className={styles["menu__profile-image"]}>
-          <Image
-            src={userImage ? `${userImage}` : `/img/header/profile-default.png`}
-            alt="foto de perfil"
-            width={50}
-            height={45}
-          />
+          {userInfoLoading ? (
+            <ButtonLoading />
+          ) : (
+            <Image
+              src={
+                userImage ? `${userImage}` : `/img/header/profile-default.png`
+              }
+              alt="foto de perfil"
+              width={50}
+              height={45}
+            />
+          )}
         </div>
 
         <div className={styles["menu__profile-name"]}>
-          <p>{userName}</p>
+          {userInfoLoading ? <ButtonLoading /> : <p>{userName}</p>}
         </div>
       </button>
 

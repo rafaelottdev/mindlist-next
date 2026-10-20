@@ -6,6 +6,7 @@ import type {
   UseFormWatch,
 } from "react-hook-form"
 import { FaRegTrashAlt } from "react-icons/fa"
+import ButtonLoading from "@/components/loadings/ButtonLoading/ButtonLoading"
 import { deleteProfileAvatar } from "@/lib/actions/deleteProfileAvatar"
 import { getUser } from "@/lib/actions/getUser"
 import type { formChangeProfileType } from "@/types/formChangeProfileType"
@@ -28,6 +29,7 @@ function ProfileAvatar({
 }: ProfileAvatarProps) {
   const fileList = watch("profileImage")
   const [preview, setPreview] = useState<string | null>(null)
+  const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
     const file = fileList?.[0]
@@ -54,9 +56,16 @@ function ProfileAvatar({
     getUserImage()
   }, [setUserImage])
 
-  function handleClick() {
-    deleteProfileAvatar()
-    setUserImage("")
+  async function handleClick() {
+    try {
+      setLoading(true)
+      await deleteProfileAvatar()
+      setUserImage("")
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -87,7 +96,7 @@ function ProfileAvatar({
           className={styles["avatar-container__remove-button"]}
           onClick={handleClick}
         >
-          <FaRegTrashAlt />
+          {loading ? <ButtonLoading /> : <FaRegTrashAlt />}
         </button>
       </div>
 
