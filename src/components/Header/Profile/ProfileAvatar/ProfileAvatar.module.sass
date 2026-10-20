@@ -1,0 +1,88 @@
+@use "@/styles/abstracts/variables" as *
+@use "@/styles/abstracts/mixins" as *
+
+.avatar-container
+  display: flex
+  flex-direction: column
+  align-items: center
+  gap: 10px
+
+.avatar-container__avatar-wrapper
+  width: 100px
+  height: 100px
+
+  position: relative
+  border-radius: 50%
+  overflow: hidden
+
+  display: flex
+
+  transition: .3s
+
+  &:hover
+      transform: scale(.95)
+
+  label
+    width: 100%
+    height: 100%
+
+    @include flex-center
+
+    cursor: pointer
+    border-radius: 50%
+    background-color: transparent
+
+    font-size: 14px
+    font-family: $baloo-medium
+    letter-spacing: .5px
+
+    z-index: 1
+
+  input
+    display: none
+
+.avatar-container__image-container
+  width: 100%
+  height: 100%
+
+  position: absolute
+  top: 0
+  left: 0
+
+  overflow: hidden
+  border-radius: 50%
+
+  z-index: 0
+
+  span
+    width: 100%
+    height: 100%
+
+    position: absolute
+    top: 0
+    left: 0
+    background-color: #000000aa
+
+  img
+    width: 100%
+    height: 100%
+
+.avatar-container__remove-button
+    width: 25px
+    height: 25px
+    padding-top: 1px
+
+    @include flex-center
+
+    border-radius: 5px
+    background-color: $blue-300
+
+    transition: .3s
+
+    &:hover
+      transform: scale(.95)
+      background: $blue-100
+
+    svg
+      font-size: 13px
+      color: white
