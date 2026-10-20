@@ -1,6 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { FaXmark } from "react-icons/fa6"
+import ButtonLoading from "@/components/loadings/ButtonLoading/ButtonLoading"
 import { updateUser } from "@/lib/actions/updateUser"
 import { formChangeProfileSchema } from "@/lib/schemas/formChangeProfileSchema"
 import type { formChangeProfileType } from "@/types/formChangeProfileType"
@@ -16,6 +18,7 @@ interface ProfileProp {
 }
 
 function Profile({ setUserName, userImage, setUserImage }: ProfileProp) {
+  const [loading, setLoading] = useState<boolean>(false)
   const {
     register,
     handleSubmit,
@@ -28,39 +31,47 @@ function Profile({ setUserName, userImage, setUserImage }: ProfileProp) {
   })
 
   async function onSubmit(data: formChangeProfileType) {
-    const imageFile = data.profileImage?.item(0)
-    const name = data.profileName
-    const currentPassword = data.currentPassword
-    const newPassword = data.changePassword
+    try {
+      setLoading(true)
 
-    const formData = new FormData()
+      const imageFile = data.profileImage?.item(0)
+      const name = data.profileName
+      const currentPassword = data.currentPassword
+      const newPassword = data.changePassword
 
-    if (name) {
-      formData.append("profileName", name)
-    }
+      const formData = new FormData()
 
-    if (imageFile) {
-      formData.append("profileImage", imageFile)
-    }
+      if (name) {
+        formData.append("profileName", name)
+      }
 
-    if (currentPassword) {
-      formData.append("currentPassword", currentPassword)
-    }
+      if (imageFile) {
+        formData.append("profileImage", imageFile)
+      }
 
-    if (newPassword) {
-      formData.append("newPassword", newPassword)
-    }
+      if (currentPassword) {
+        formData.append("currentPassword", currentPassword)
+      }
 
-    const result = await updateUser(formData)
+      if (newPassword) {
+        formData.append("newPassword", newPassword)
+      }
 
-    if (result) {
-      setUserName(result.newName)
-      setUserImage(result.newImage)
+      const result = await updateUser(formData)
 
-      if (imageFile) resetField("profileImage")
-      if (name) setValue("profileName", "")
-      if (currentPassword) setValue("currentPassword", "")
-      if (newPassword) setValue("changePassword", "")
+      if (result) {
+        setUserName(result.newName)
+        setUserImage(result.newImage)
+
+        if (imageFile) resetField("profileImage")
+        if (name) setValue("profileName", "")
+        if (currentPassword) setValue("currentPassword", "")
+        if (newPassword) setValue("changePassword", "")
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -108,7 +119,7 @@ function Profile({ setUserName, userImage, setUserImage }: ProfileProp) {
               type="submit"
               className={styles["config-profile__submit-button"]}
             >
-              Definir
+              {loading ? <ButtonLoading /> : "Definir"}
             </button>
 
             <button

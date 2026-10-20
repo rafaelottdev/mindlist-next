@@ -13,8 +13,12 @@
   width: 35px
   height: 35px
 
+  @include flex-center
+
   border-radius: 5px
   overflow: hidden
+
+  background-color: $blue-400
 
   img
     width: 100%
@@ -22,6 +26,7 @@
     object-fit: cover
 
 .menu__profile-name
+  min-width: 70px
   height: 35px
   padding: 0 10px
   
