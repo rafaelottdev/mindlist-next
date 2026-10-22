@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 
 import "../styles/globals.sass"
+import { Providers } from "./providers"
 
 export const metadata: Metadata = {
   title: "MindList",
@@ -13,7 +14,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="pt-BR">
-      <body>{children}</body>
+      <body>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   )
 }
