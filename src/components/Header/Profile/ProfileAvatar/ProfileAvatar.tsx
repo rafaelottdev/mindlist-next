@@ -7,6 +7,7 @@ import type {
 } from "react-hook-form"
 import { FaRegTrashAlt } from "react-icons/fa"
 import ButtonLoading from "@/components/loadings/ButtonLoading/ButtonLoading"
+import { useNotify } from "@/contexts/NotificationAlert/NotificationAlert"
 import { deleteProfileAvatar } from "@/lib/actions/deleteProfileAvatar"
 import { getUser } from "@/lib/actions/getUser"
 import type { formChangeProfileType } from "@/types/formChangeProfileType"
@@ -30,6 +31,7 @@ function ProfileAvatar({
   const fileList = watch("profileImage")
   const [preview, setPreview] = useState<string | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
+  const { notify } = useNotify()
 
   useEffect(() => {
     const file = fileList?.[0]
@@ -47,22 +49,34 @@ function ProfileAvatar({
 
   useEffect(() => {
     async function getUserImage() {
-      const user = await getUser()
-      const profileImage = user?.image
+      const result = await getUser()
 
-      setUserImage(profileImage)
+      if (!result.error) {
+        const user = result.user
+        const profileImage = user?.image
+
+        setUserImage(profileImage)
+      } else {
+        notify(result.message)
+      }
     }
 
     getUserImage()
-  }, [setUserImage])
+  }, [setUserImage, notify])
 
   async function handleClick() {
     try {
       setLoading(true)
-      await deleteProfileAvatar()
+      const result = await deleteProfileAvatar()
+
+      if (result?.error) {
+        notify(result.message)
+      }
+
       setUserImage("")
     } catch (error) {
       console.log(error)
+      notify("Algo deu errado ao tentar apagar a imagem de perfil")
     } finally {
       setLoading(false)
     }
