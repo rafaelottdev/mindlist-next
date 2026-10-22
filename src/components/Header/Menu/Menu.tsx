@@ -6,6 +6,7 @@ import { FaRegUser } from "react-icons/fa"
 import { MdNotificationsNone } from "react-icons/md"
 import { PiSignOutBold } from "react-icons/pi"
 import ButtonLoading from "@/components/loadings/ButtonLoading/ButtonLoading"
+import { useNotify } from "@/contexts/NotificationAlert/NotificationAlert"
 import { getUser } from "@/lib/actions/getUser"
 import { signOut } from "@/lib/actions/signOut"
 import Notification from "../Notification/Notification"
@@ -20,8 +21,8 @@ function Menu() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [userName, setUserName] = useState<string | undefined>("")
   const [userImage, setUserImage] = useState<string | null | undefined>("")
-
   const [userInfoLoading, setUserInfoLoading] = useState<boolean>(false)
+  const { notify } = useNotify()
 
   async function onSignOut() {
     setIsLoading(true)
@@ -30,9 +31,16 @@ function Menu() {
     setShowNotification(false)
 
     try {
-      await signOut()
+      const result = await signOut()
+
+      if (result?.error) {
+        notify(result.message)
+      }
     } catch (error) {
+      if (error instanceof Error && error.message === "NEXT_REDIRECT") return
+
       console.log(error)
+      notify("Algo deu errado ao tentar sair")
     } finally {
       setIsLoading(false)
     }
@@ -43,21 +51,27 @@ function Menu() {
       try {
         setUserInfoLoading(true)
 
-        const user = await getUser()
-        const name = user?.name
-        const image = user?.image
+        const result = await getUser()
 
-        setUserName(name)
-        setUserImage(image)
+        if (!result.error) {
+          const name = result.user?.name
+          const image = result.user?.image
+
+          setUserName(name)
+          setUserImage(image)
+        } else {
+          notify(result.message)
+        }
       } catch (error) {
         console.log(error)
+        notify("Algo deu errado ao tentar buscar informações do usuario")
       } finally {
         setUserInfoLoading(false)
       }
     }
 
     getUserProfile()
-  }, [])
+  }, [notify])
 
   return (
     <div className={styles.menu}>

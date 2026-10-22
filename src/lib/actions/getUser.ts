@@ -6,9 +6,12 @@ export async function getUser() {
   const { data, error } = await auth.getSession()
 
   if (error) {
-    // Fazer uma notificação para esse erro e tratar o erro
-    return null
+    return {
+      error: true,
+      message: "Erro ao buscar informações do usuario",
+      user: null,
+    }
   }
 
-  return data?.user
+  return { error: false, message: null, user: data?.user }
 }

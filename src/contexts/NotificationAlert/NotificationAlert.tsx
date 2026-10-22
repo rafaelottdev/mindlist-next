@@ -1,11 +1,11 @@
 "use client"
 
-import { createContext, useContext, useState } from "react"
+import { createContext, useCallback, useContext, useState } from "react"
 import { FaExclamation } from "react-icons/fa6"
 import styles from "./NotificationAlert.module.sass"
 
 type NotificationAlertValue = {
-  notify: (msg: string) => void
+  notify: (msg: string | null) => void
 }
 
 const NotificationAlertContext = createContext<NotificationAlertValue | null>(
@@ -19,11 +19,11 @@ export function NotificationAlertProvider({
 }) {
   const [message, setMessage] = useState<string | null>(null)
 
-  function notify(msg: string) {
+  const notify = useCallback((msg: string | null) => {
     setMessage(msg)
 
     setTimeout(() => setMessage(null), 1500)
-  }
+  }, [])
 
   return (
     <NotificationAlertContext.Provider value={{ notify }}>

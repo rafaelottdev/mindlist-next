@@ -6,13 +6,22 @@ import { uploadAvatar } from "../storage/uploadAvatar"
 import { getUser } from "./getUser"
 
 export async function updateUser(formData: FormData) {
-  const user = await getUser()
+  const result = await getUser()
+
+  if (result.error) {
+    return {
+      error: true,
+      message: "Erro ao buscar o usuario",
+      newUserInfo: null,
+    }
+  }
+
+  const user = result.user
   if (!user) return
 
-  const newUser = {
+  const newUserInfo = {
     newImage: user.image,
     newName: user.name,
-    error: null as string | null,
   }
 
   const file = formData.get("profileImage")
@@ -26,27 +35,37 @@ export async function updateUser(formData: FormData) {
     const { error } = await auth.updateUser({ image: url })
 
     if (error) {
-      // fazer uma notificação avisando que deu erro ao tentar atualizar o usuario
-      console.log(error)
-    } else {
-      newUser.newImage = url
+      return {
+        error: true,
+        message: "Erro ao tentar atualizar a imagem de perfil",
+        newUserInfo: null,
+      }
     }
+
+    newUserInfo.newImage = url
   }
 
   if (name && name !== user.name) {
     const { error } = await auth.updateUser({ name })
 
     if (error) {
-      // fazer uma notificação avisando que deu erro ao tentar atualizar o usuario
-      console.log(error)
-    } else {
-      newUser.newName = name
+      return {
+        error: true,
+        message: "Erro ao tentar atualizar o nome",
+        newUserInfo: null,
+      }
     }
+
+    newUserInfo.newName = name
   }
 
   if (currentPassword && newPassword) {
     if (currentPassword === newPassword) {
-      newUser.error = "A nova senha precisa ser diferente da atual"
+      return {
+        error: true,
+        message: "A nova senha precisa ser diferente da atual",
+        newUserInfo: null,
+      }
     } else {
       const { error } = await auth.changePassword({
         currentPassword,
@@ -55,12 +74,23 @@ export async function updateUser(formData: FormData) {
       })
 
       if (error) {
-        newUser.error = "Senha atual incorreta ou erro ao alterar a senha"
+        return {
+          error: true,
+          message: "Erro ao tentar alterar a senha",
+          newUserInfo: null,
+        }
+      }
+
+      return {
+        error: false,
+        message: "Senha alterada com sucesso",
+        newUserInfo: newUserInfo,
+        changePassword: true,
       }
     }
   }
 
   revalidatePath("/", "layout")
 
-  return newUser
+  return { error: false, message: null, newUserInfo: newUserInfo }
 }

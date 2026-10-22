@@ -3,6 +3,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { FaXmark } from "react-icons/fa6"
 import ButtonLoading from "@/components/loadings/ButtonLoading/ButtonLoading"
+import { useNotify } from "@/contexts/NotificationAlert/NotificationAlert"
 import { updateUser } from "@/lib/actions/updateUser"
 import { formChangeProfileSchema } from "@/lib/schemas/formChangeProfileSchema"
 import type { formChangeProfileType } from "@/types/formChangeProfileType"
@@ -29,6 +30,7 @@ function Profile({ setUserName, userImage, setUserImage }: ProfileProp) {
   } = useForm<formChangeProfileType>({
     resolver: zodResolver(formChangeProfileSchema),
   })
+  const { notify } = useNotify()
 
   async function onSubmit(data: formChangeProfileType) {
     try {
@@ -59,17 +61,28 @@ function Profile({ setUserName, userImage, setUserImage }: ProfileProp) {
 
       const result = await updateUser(formData)
 
-      if (result) {
-        setUserName(result.newName)
-        setUserImage(result.newImage)
+      if (result?.error) {
+        notify(result.message)
+      } else {
+        if (result?.newUserInfo) {
+          const newName = result.newUserInfo.newName
+          const newImage = result.newUserInfo.newImage
+          setUserName(newName)
+          setUserImage(newImage)
 
-        if (imageFile) resetField("profileImage")
-        if (name) setValue("profileName", "")
-        if (currentPassword) setValue("currentPassword", "")
-        if (newPassword) setValue("changePassword", "")
+          if (result.changePassword) {
+            notify(result.message)
+          }
+
+          if (imageFile) resetField("profileImage")
+          if (name) setValue("profileName", "")
+          if (currentPassword) setValue("currentPassword", "")
+          if (newPassword) setValue("changePassword", "")
+        }
       }
     } catch (error) {
       console.log(error)
+      notify("Algo de errado ao tentar atualizar o perfil")
     } finally {
       setLoading(false)
     }

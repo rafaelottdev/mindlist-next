@@ -6,16 +6,27 @@ import { deleteAvatar } from "../storage/deleteAvatar"
 import { getUser } from "./getUser"
 
 export async function deleteProfileAvatar() {
-  const user = await getUser()
+  const result = await getUser()
 
+  if (result.error) {
+    return { error: true, message: "Erro ao buscar o usuario" }
+  }
+
+  const user = result.user
   if (!user) return
 
-  // tratar erro
-  await auth.updateUser({ image: "" })
-
   if (user.image) {
+    const { error } = await auth.updateUser({ image: "" })
     await deleteAvatar(user.id, user.image)
+
+    if (error) {
+      return {
+        error: true,
+        message: "Erro ao tentar apagar a imagem de perfil",
+      }
+    }
   }
 
   revalidatePath("/", "layout")
+  return { error: false, message: null }
 }
