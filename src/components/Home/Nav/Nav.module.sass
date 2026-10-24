@@ -1,0 +1,49 @@
+@use "@/styles/abstracts/variables" as *
+@use "@/styles/abstracts/mixins" as *
+  
+.home__nav-container
+  @include flex-center
+  gap: 80px
+
+.home__nav-button
+  width: 35px
+  height: 35px
+
+  @include flex-center
+
+  cursor: pointer
+  background: transparent
+  
+  svg
+    color: $blue-100
+    font-size: 32px
+
+.home__nav
+  width: 750px
+  height: 43px
+
+  position: relative
+  overflow: hidden
+
+.home__list
+  width: max-content
+  display: flex
+  gap: 150px
+
+  position: absolute
+  left: 0
+  top: 0
+
+  transition: .3s
+
+.home__item
+
+.home__link
+  width: 150px
+
+  @include flex-center
+
+  font-size: 27px
+  font-family: $baloo-extrabold
+  letter-spacing: .3px
+  color: $blue-100
