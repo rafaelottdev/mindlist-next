@@ -1,11 +1,11 @@
 import Header from "@/components/Header/Header"
 
-export default function Home() {
+export default function MainLayout({ children }: LayoutProps<"/">) {
   return (
     <>
       <Header />
 
-      <main style={{ height: "100vh" }}>Home</main>
+      <main>{children}</main>
     </>
   )
 }
