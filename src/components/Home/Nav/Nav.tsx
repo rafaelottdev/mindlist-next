@@ -1,77 +1,113 @@
 "use client"
 
 import Link from "next/link"
-// import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { usePathname, useRouter } from "next/navigation"
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io"
 import { moveLeftSlide, moveRightSlide } from "@/lib/utils/moveSlide"
 import styles from "./Nav.module.sass"
 
-function Nav() {
-  // const router = useRouter()
-  // const urls = [
-  //   "/",
-  //   "/concluido",
-  //   "/cancelado",
-  //   "/atrasado",
-  //   "/favorito",
-  //   "pomodoro",
-  // ]
-  const [moveSize, _setMoveSize] = useState<number>(300)
-  const [currentIndex, setCurrentIndex] = useState<number>(0)
-  const total: number = currentIndex * moveSize
+const urlList = [
+  "/",
+  "/concluido",
+  "/cancelado",
+  "/atrasado",
+  "/favorito",
+  "/pomodoro",
+]
+const moveSize: number = 300
+const visibleItems = 3
 
-  // useEffect(() => {
-  //   router.push(urls[currentIndex])
-  // }, [currentIndex, router.push])
+function Nav() {
+  const router = useRouter()
+  const pathName: string = usePathname()
+
+  const currentIndex: number = Math.max(urlList.indexOf(pathName), 0)
+  const page = Math.floor(currentIndex / visibleItems)
+  const move: number = page * visibleItems * moveSize
 
   return (
-    <div className={styles["home__nav-container"]}>
+    <div className={styles["nav-container"]}>
       <button
         type="button"
-        className={styles["home__nav-button"]}
-        onClick={() => moveLeftSlide(currentIndex, setCurrentIndex)}
+        className={styles["nav-container__nav-button"]}
+        onClick={() => moveLeftSlide(urlList, currentIndex, router)}
       >
         <IoIosArrowBack />
       </button>
 
-      <nav className={styles.home__nav}>
+      <nav className={styles["nav-container__nav"]}>
         <ul
-          className={styles.home__list}
-          style={{ transform: `translateX(-${total}px)` }}
+          className={styles["nav-container__list"]}
+          style={{ transform: `translateX(-${move}px)` }}
         >
-          <li className={styles.home__item}>
-            <Link href="/" className={styles.home__link}>
+          <li className={styles["nav-container__item"]}>
+            <Link
+              href="/"
+              className={`
+                ${styles["nav-container__link"]}
+                ${pathName === "/" ? styles["nav-container__link--selected"] : styles["nav-container__link--deselected"]}
+              `}
+            >
               Pendente
             </Link>
           </li>
 
-          <li className={styles.home__item}>
-            <Link href="/concluido" className={styles.home__link}>
+          <li className={styles["nav-container__item"]}>
+            <Link
+              href="/concluido"
+              className={`
+                ${styles["nav-container__link"]}
+                ${pathName === "/concluido" ? styles["nav-container__link--selected"] : styles["nav-container__link--deselected"]}
+              `}
+            >
               Concluido
             </Link>
           </li>
 
-          <li className={styles.home__item}>
-            <Link href="/cancelado" className={styles.home__link}>
+          <li className={styles["nav-container__item"]}>
+            <Link
+              href="/cancelado"
+              className={`
+                ${styles["nav-container__link"]}
+                ${pathName === "/cancelado" ? styles["nav-container__link--selected"] : styles["nav-container__link--deselected"]}
+              `}
+            >
               Cancelado
             </Link>
           </li>
 
-          <li className={styles.home__item}>
-            <Link href="/atrasado" className={styles.home__link}>
+          <li className={styles["nav-container__item"]}>
+            <Link
+              href="/atrasado"
+              className={`
+                ${styles["nav-container__link"]}
+                ${pathName === "/atrasado" ? styles["nav-container__link--selected"] : styles["nav-container__link--deselected"]}
+              `}
+            >
               Atrasado
             </Link>
           </li>
 
-          <li className={styles.home__item}>
-            <Link href="/favorito" className={styles.home__link}>
+          <li className={styles["nav-container__item"]}>
+            <Link
+              href="/favorito"
+              className={`
+                ${styles["nav-container__link"]}
+                ${pathName === "/favorito" ? styles["nav-container__link--selected"] : styles["nav-container__link--deselected"]}
+              `}
+            >
               Favorito
             </Link>
           </li>
 
-          <li className={styles.home__item}>
-            <Link href="/pomodoro" className={styles.home__link}>
+          <li className={styles["nav-container__item"]}>
+            <Link
+              href="/pomodoro"
+              className={`
+                ${styles["nav-container__link"]}
+                ${pathName === "/pomodoro" ? styles["nav-container__link--selected"] : styles["nav-container__link--deselected"]}
+              `}
+            >
               Pomodoro
             </Link>
           </li>
@@ -80,8 +116,8 @@ function Nav() {
 
       <button
         type="button"
-        className={styles["home__nav-button"]}
-        onClick={() => moveRightSlide(currentIndex, setCurrentIndex)}
+        className={styles["nav-container__nav-button"]}
+        onClick={() => moveRightSlide(urlList, currentIndex, router)}
       >
         <IoIosArrowForward />
       </button>

@@ -8,7 +8,7 @@ function Slogan() {
 
         <span className={styles.slogan__span}>Seus</span>
 
-        <span className={styles.slogan__span}>Projetos</span>
+        <span className={styles.slogan__span}>Objetivos</span>
       </p>
     </div>
   )

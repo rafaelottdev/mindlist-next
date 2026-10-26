@@ -1,0 +1,93 @@
+@use "@/styles/abstracts/variables" as *
+@use "@/styles/abstracts/mixins" as *
+  
+.form-container
+  width: 280px
+  height: 380px
+
+  overflow: hidden
+  position: relative
+  border-radius: 5px
+
+.form-container__cover-form-container
+  width: 100%
+  height: 100%
+
+  position: absolute
+  top: 0
+  left: 0
+
+.form-container__cover-image
+  width: 100%
+  height: 100%
+  filter: brightness(60%)
+
+.form-container__add-project-button
+  // width: 100px
+  width: 165px
+  height: 35px
+
+  position: absolute
+  top: 50%
+  left: 50%
+  transform: translate(-50%)
+
+  @include flex-center
+  gap: 5px
+
+  font-size: 16px
+  font-family: $baloo-bold
+
+  border-radius: 5px
+  cursor: pointer
+  background-color: white
+  color: $blue-400
+
+  svg
+    font-size: 21px
+
+// Formulario
+
+.form-container__form
+  width: 100%
+  height: 100%
+
+  padding: 20px
+
+  color: white
+  font-family: $baloo-regular
+  
+.form-container__name-date-container
+  display: flex
+
+  input
+    width: 100px
+
+.form-container__input-container
+  display: flex
+  flex-direction: column
+
+  input
+
+.form-container__name-container
+.form-container__date-container
+.form-container__cover-container
+.form-container__cover-label
+.form-container__priority-container
+.form-container__input-list-option
+.form-container__tag-container
+.form-container__tag-wrapper
+.form-container__add-tag-container
+.form-container__tag-list
+.form-container__add-tag-button
+.form-container__tag-option-list
+.form-container__form-button-container
+.form-container__send-button
+.form-container__clear-button
+
+// Interativo
+.form-container__cover-form-container--hide
+  z-index: -1
+
+.form-container__add-project-button--hide
+  display: none
