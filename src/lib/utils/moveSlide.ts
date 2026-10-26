@@ -1,17 +1,21 @@
+import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
+
 export function moveLeftSlide(
+  urlList: string[],
   currentIndex: number,
-  setCurrentIndex: React.Dispatch<React.SetStateAction<number>>,
+  router: AppRouterInstance,
 ) {
   if (currentIndex > 0) {
-    setCurrentIndex((prev) => prev - 1)
+    router.push(urlList[currentIndex - 1])
   }
 }
 
 export function moveRightSlide(
+  urlList: string[],
   currentIndex: number,
-  setCurrentIndex: React.Dispatch<React.SetStateAction<number>>,
+  router: AppRouterInstance,
 ) {
   if (currentIndex < 5) {
-    setCurrentIndex((prev) => prev + 1)
+    router.push(urlList[currentIndex + 1])
   }
 }

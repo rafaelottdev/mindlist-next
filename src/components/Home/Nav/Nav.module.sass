@@ -1,11 +1,11 @@
 @use "@/styles/abstracts/variables" as *
 @use "@/styles/abstracts/mixins" as *
   
-.home__nav-container
+.nav-container
   @include flex-center
   gap: 80px
 
-.home__nav-button
+.nav-container__nav-button
   width: 35px
   height: 35px
 
@@ -18,14 +18,14 @@
     color: $blue-100
     font-size: 32px
 
-.home__nav
+.nav-container__nav
   width: 750px
   height: 43px
 
   position: relative
   overflow: hidden
 
-.home__list
+.nav-container__list
   width: max-content
   display: flex
   gap: 150px
@@ -34,11 +34,11 @@
   left: 0
   top: 0
 
-  transition: .3s
+  transition: .5s
 
-.home__item
+.nav-container__item
 
-.home__link
+.nav-container__link
   width: 150px
 
   @include flex-center
@@ -46,4 +46,11 @@
   font-size: 27px
   font-family: $baloo-extrabold
   letter-spacing: .3px
+
+// interativo
+
+.nav-container__link--selected
   color: $blue-100
+
+.nav-container__link--deselected
+  color: $blue-100-2
