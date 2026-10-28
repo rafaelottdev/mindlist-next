@@ -10,15 +10,15 @@ import ButtonLoading from "@/components/loadings/ButtonLoading/ButtonLoading"
 import { useNotify } from "@/contexts/NotificationAlert/NotificationAlert"
 import { deleteProfileAvatar } from "@/lib/actions/deleteProfileAvatar"
 import { getUser } from "@/lib/actions/getUser"
-import type { formChangeProfileType } from "@/types/formChangeProfileType"
+import type { FormChangeProfileType } from "@/types/FormChangeProfileType"
 import styles from "./ProfileAvatar.module.sass"
 
 interface ProfileAvatarProps {
   setUserImage: React.Dispatch<React.SetStateAction<string | null | undefined>>
   userImage: string | null | undefined
-  register: UseFormRegister<formChangeProfileType>
-  errors: FieldErrors<formChangeProfileType>
-  watch: UseFormWatch<formChangeProfileType>
+  register: UseFormRegister<FormChangeProfileType>
+  errors: FieldErrors<FormChangeProfileType>
+  watch: UseFormWatch<FormChangeProfileType>
 }
 
 function ProfileAvatar({

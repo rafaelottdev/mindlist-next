@@ -19,7 +19,7 @@ function FormCover({ showForm, setShowForm }: FormCoverProps) {
         src="/img/home/project-cover.png"
         alt=""
         width={280}
-        height={380}
+        height={370}
         loading="eager"
         className={styles["form-cover__image"]}
       />

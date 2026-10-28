@@ -1,10 +1,10 @@
 import type { FieldErrors, UseFormRegister } from "react-hook-form"
-import type { formChangeProfileType } from "@/types/formChangeProfileType"
+import type { FormChangeProfileType } from "@/types/FormChangeProfileType"
 import styles from "../Profile.module.sass"
 
 interface ProfileNameInputProps {
-  register: UseFormRegister<formChangeProfileType>
-  errors: FieldErrors<formChangeProfileType>
+  register: UseFormRegister<FormChangeProfileType>
+  errors: FieldErrors<FormChangeProfileType>
 }
 
 function ProfileNameInput({ register, errors }: ProfileNameInputProps) {
