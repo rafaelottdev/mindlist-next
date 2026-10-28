@@ -6,7 +6,7 @@ import ButtonLoading from "@/components/loadings/ButtonLoading/ButtonLoading"
 import { useNotify } from "@/contexts/NotificationAlert/NotificationAlert"
 import { updateUser } from "@/lib/actions/updateUser"
 import { formChangeProfileSchema } from "@/lib/schemas/formChangeProfileSchema"
-import type { formChangeProfileType } from "@/types/formChangeProfileType"
+import type { FormChangeProfileType } from "@/types/FormChangeProfileType"
 import styles from "./Profile.module.sass"
 import ProfileAvatar from "./ProfileAvatar/ProfileAvatar"
 import ProfileNameInput from "./ProfileNameInput/ProfileNameInput"
@@ -27,12 +27,12 @@ function Profile({ setUserName, userImage, setUserImage }: ProfileProp) {
     formState: { errors },
     setValue,
     resetField,
-  } = useForm<formChangeProfileType>({
+  } = useForm<FormChangeProfileType>({
     resolver: zodResolver(formChangeProfileSchema),
   })
   const { notify } = useNotify()
 
-  async function onSubmit(data: formChangeProfileType) {
+  async function onSubmit(data: FormChangeProfileType) {
     try {
       setLoading(true)
 

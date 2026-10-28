@@ -1,13 +1,13 @@
 import { useState } from "react"
 import type { FieldErrors, UseFormRegister } from "react-hook-form"
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"
-import type { formChangeProfileType } from "@/types/formChangeProfileType"
+import type { FormChangeProfileType } from "@/types/FormChangeProfileType"
 import styles from "./ProfilePasswordInput.module.sass"
 
 interface ProfilePasswordInputProps {
-  register: UseFormRegister<formChangeProfileType>
-  errors: FieldErrors<formChangeProfileType>
-  inputName: keyof formChangeProfileType
+  register: UseFormRegister<FormChangeProfileType>
+  errors: FieldErrors<FormChangeProfileType>
+  inputName: keyof FormChangeProfileType
 }
 
 function ProfilePasswordInput({
