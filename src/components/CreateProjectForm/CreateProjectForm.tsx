@@ -15,19 +15,31 @@ import Tags from "./Tags/Tags"
 function CreateProjectForm() {
   const [showForm, setShowForm] = useState<boolean>(false)
   const [selectedTags, setSelectedTags] = useState<TagType[]>([])
-  const { control, register, handleSubmit } = useForm<formCreateProjectType>({
+  const {
+    control,
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<formCreateProjectType>({
     resolver: zodResolver(formCreateProjectSchema),
     defaultValues: {
       projectTags: [],
     },
   })
-  const { append } = useFieldArray({
+  const { append, replace } = useFieldArray({
     control,
     name: "projectTags",
   })
 
   function onSubmit(data: formCreateProjectType) {
-    console.log(data.projectCover)
+    console.log(data)
+  }
+
+  function clearFields() {
+    reset()
+    setSelectedTags([])
+    replace([])
   }
 
   return (
@@ -39,21 +51,37 @@ function CreateProjectForm() {
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className={styles["form-container__name-date-container"]}>
-          <Input
-            inputId="projectName"
-            labelTitle="Nome do Projeto"
-            inputType="text"
-            registerName="projectName"
-            register={register}
-          />
+          <div>
+            <Input
+              inputId="projectName"
+              labelTitle="Nome do Projeto"
+              inputType="text"
+              registerName="projectName"
+              register={register}
+            />
 
-          <Input
-            inputId="projectDeadline"
-            labelTitle="Data Limite"
-            inputType="date"
-            registerName="projectDate"
-            register={register}
-          />
+            {errors.projectName && (
+              <p className={styles["input-error"]}>
+                {errors.projectName.message}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <Input
+              inputId="projectDeadline"
+              labelTitle="Data Limite"
+              inputType="date"
+              registerName="projectDate"
+              register={register}
+            />
+
+            {errors.projectDate && (
+              <p className={styles["input-error"]}>
+                {errors.projectDate.message}
+              </p>
+            )}
+          </div>
         </div>
 
         <div className={styles["form-container__cover-container"]}>
@@ -68,6 +96,12 @@ function CreateProjectForm() {
 
             <div>Selecionar Imagem</div>
           </label>
+
+          {errors.projectCover && (
+            <p className={styles["input-error"]}>
+              {errors.projectCover.message}
+            </p>
+          )}
 
           <input
             type="file"
@@ -119,12 +153,19 @@ function CreateProjectForm() {
               <label htmlFor="highPriority">Alta</label>
             </div>
           </div>
+
+          {errors.projectPriority && (
+            <p className={styles["input-error"]}>
+              {errors.projectPriority.message}
+            </p>
+          )}
         </fieldset>
 
         <Tags
           selectedTags={selectedTags}
           setSelectedTags={setSelectedTags}
           append={append}
+          error={errors.projectTags}
         />
 
         <div className={styles["form-container__form-button-container"]}>
@@ -138,7 +179,10 @@ function CreateProjectForm() {
           <button
             type="button"
             className={styles["form-container__clear-button"]}
-            onClick={() => setShowForm(false)}
+            onClick={() => {
+              setShowForm(false)
+              clearFields()
+            }}
           >
             <FaXmark />
           </button>
