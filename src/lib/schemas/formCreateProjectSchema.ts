@@ -16,15 +16,15 @@ const getImageDimensions = (
 export const formCreateProjectSchema = z.object({
   projectName: z
     .string()
-    .min(2, "O nome do projeto precisa ter no mínimo 2 caracteres")
-    .max(30, "O nome do projeto só pode ter no maximo 30 caracteres")
-    .regex(/\S/, "O nome do projeto não deve estar vazio"),
+    .min(2, "Nome muito curto")
+    .max(30, "Nome muito grande")
+    .regex(/\S/, "Não deve estar vazio"),
 
   projectDate: z
     .string()
     .regex(/\S/, "A data é obrigatoria")
     .regex(/^\d{4}-\d{2}-\d{2}$/, {
-      message: "Formato inválido. Use DD-MM-AAAA",
+      message: "Formato inválido",
     })
     .refine((date) => !Number.isNaN(Date.parse(date)), {
       message: "Data Invalida",
@@ -40,7 +40,7 @@ export const formCreateProjectSchema = z.object({
         return currentDate > today
       },
       {
-        message: "A data deve ser obrigatoriamente amanhã ou depois",
+        message: "A data deve ser futura",
       },
     ),
 
@@ -63,10 +63,12 @@ export const formCreateProjectSchema = z.object({
     .refine(
       async (files) => {
         const file = files?.item(0)
-        if (!file) return false
+        if (file) {
+          const { width, height } = await getImageDimensions(file)
+          return width >= 1200 && height >= 600
+        }
 
-        const { width, height } = await getImageDimensions(file)
-        return width >= 1200 && height >= 600
+        return true
       },
       {
         message: "A imagem deve ser maior",
@@ -74,8 +76,8 @@ export const formCreateProjectSchema = z.object({
     ),
 
   projectPriority: z
-    .string()
-    .regex(/\S/, "A prioridade do projeto não deve estar vazia"),
+    .string("Escolha uma prioridade")
+    .regex(/\S/, "Escolha uma prioridade"),
 
   projectTags: z
     .array(
@@ -84,6 +86,6 @@ export const formCreateProjectSchema = z.object({
         name: z.string().regex(/\S/, "A tag não deve estar vazia"),
       }),
     )
-    .min(1, "Pelo menos uma tag deve ser adicionada")
+    .min(1, "Deve ter Pelo menos uma tag")
     .max(3, "Apenas 3 tags por projeto"),
 })
