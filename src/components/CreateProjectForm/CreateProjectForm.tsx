@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
 import { useFieldArray, useForm } from "react-hook-form"
 import { FaXmark } from "react-icons/fa6"
+import { createProject } from "@/lib/actions/createProject"
 import { formCreateProjectSchema } from "@/lib/schemas/formCreateProjectSchema"
 import type { formCreateProjectType } from "@/types/FormCreateProjectType"
 import type { TagType } from "@/types/TagType"
@@ -32,8 +33,38 @@ function CreateProjectForm() {
     name: "projectTags",
   })
 
-  function onSubmit(data: formCreateProjectType) {
-    console.log(data)
+  async function onSubmit(projectData: formCreateProjectType) {
+    const name = projectData.projectName
+    const date = projectData.projectDate
+    const imageFile = projectData.projectCover?.item(0)
+    const priority = projectData.projectPriority
+    const tagList = projectData.projectTags
+
+    const formData = new FormData()
+
+    if (name) {
+      formData.append("name", name)
+    }
+
+    if (date) {
+      formData.append("date", date)
+    }
+
+    if (imageFile) {
+      formData.append("imageFile", imageFile)
+    }
+
+    if (priority) {
+      formData.append("priority", priority)
+    }
+
+    if (tagList) {
+      tagList.map((tag) => formData.append("tagList", tag.name))
+    }
+
+    const _result = await createProject(formData)
+
+    clearFields()
   }
 
   function clearFields() {
