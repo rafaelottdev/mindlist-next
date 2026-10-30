@@ -10,6 +10,10 @@ const getImageDimensions = (
       resolve({ width: img.width, height: img.height })
       URL.revokeObjectURL(img.src)
     }
+    img.onerror = () => {
+      resolve({ width: 0, height: 0 })
+      URL.revokeObjectURL(img.src)
+    }
   })
 }
 
@@ -50,6 +54,11 @@ export const formCreateProjectSchema = z.object({
       "Selecione um arquivo válido",
     )
     .optional()
+    .refine((files) => {
+      const file = files?.item(0)
+
+      return !file || file.size <= 5 * 1024 * 1024
+    }, "A imagem precisa ter no máximo 5 MB")
     .refine((files) => {
       const file = files?.item(0)
 
