@@ -22,14 +22,22 @@ const tags = [
 ]
 
 interface TagsProps {
+  showTagOptionList: boolean
+  setShowTagOptionList: React.Dispatch<React.SetStateAction<boolean>>
   selectedTags: TagType[]
   setSelectedTags: React.Dispatch<React.SetStateAction<TagType[]>>
   append: any
   error: any
 }
 
-function Tags({ selectedTags, setSelectedTags, append, error }: TagsProps) {
-  const [showTagOptionList, setShowTagOptionList] = useState<boolean>(false)
+function Tags({
+  showTagOptionList,
+  setShowTagOptionList,
+  selectedTags,
+  setSelectedTags,
+  append,
+  error,
+}: TagsProps) {
   const [tagError, setTagError] = useState<{ error: boolean; message: string }>(
     { error: false, message: "" },
   )
@@ -41,7 +49,10 @@ function Tags({ selectedTags, setSelectedTags, append, error }: TagsProps) {
 
       <div className={styles["tag-container__wrapper"]}>
         <div className={styles["tag-container__add-tag"]}>
-          <ul className={styles["tag-container__tag-list"]}>
+          <ul
+            className={styles["tag-container__tag-list"]}
+            style={{ paddingLeft: `${selectedTags.length > 0 ? "3px" : "0"}` }}
+          >
             {selectedTags.map((tag) => (
               <li key={tag.id}>
                 <p>{tag.name}</p>
