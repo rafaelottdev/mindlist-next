@@ -32,7 +32,10 @@ function FormCover({ showForm, setShowForm }: FormCoverProps) {
         `}
         onClick={() => setShowForm(true)}
       >
-        Adicionar Projeto
+        <span className={styles["form-cover__button-background"]}></span>
+
+        <p>Adicionar Projeto</p>
+
         <HiLogout />
       </button>
     </div>

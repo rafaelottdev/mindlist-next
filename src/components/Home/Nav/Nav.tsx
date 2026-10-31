@@ -29,7 +29,11 @@ function Nav() {
     <div className={styles["nav-container"]}>
       <button
         type="button"
-        className={styles["nav-container__nav-button"]}
+        disabled={currentIndex === 0}
+        className={`
+          ${styles["nav-container__nav-button"]}
+          ${currentIndex === 0 && styles["nav-container__nav-button--color"]}
+        `}
         onClick={() => moveLeftSlide(urlList, currentIndex, router)}
       >
         <IoIosArrowBack />
@@ -116,7 +120,11 @@ function Nav() {
 
       <button
         type="button"
-        className={styles["nav-container__nav-button"]}
+        disabled={currentIndex === urlList.length}
+        className={`
+          ${styles["nav-container__nav-button"]}
+          ${currentIndex === urlList.length - 1 && styles["nav-container__nav-button--color"]}
+        `}
         onClick={() => moveRightSlide(urlList, currentIndex, router)}
       >
         <IoIosArrowForward />

@@ -23,8 +23,6 @@
   background: white
 
 .tag-container__tag-list
-  padding-left: 3px
-
   font-family: $baloo-medium
   font-size: 14px
 
@@ -43,6 +41,7 @@
 
     border-radius: 20px
     background-color: #c4c4c4
+    z-index: 2
     
     p
       font-size: 12px
@@ -77,13 +76,16 @@
   color: $blue-400
   background-color: white
 
+  p
+    cursor: pointer
+
 .tag-container__add-button--change
-  width: 30px
-  padding: 0 0
+  width: 100%
+  padding: 0 5px 0 0
   
   position: absolute
   right: 0
-  justify-content: center
+  justify-content: right
 
   p
     display: none

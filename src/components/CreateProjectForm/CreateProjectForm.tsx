@@ -1,27 +1,35 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useState } from "react"
+import Image from "next/image"
+import { useEffect, useState } from "react"
 import { useFieldArray, useForm } from "react-hook-form"
 import { FaXmark } from "react-icons/fa6"
+import { useNotify } from "@/contexts/NotificationAlert/NotificationAlert"
 import { createProject } from "@/lib/actions/createProject"
 import { formCreateProjectSchema } from "@/lib/schemas/formCreateProjectSchema"
 import type { formCreateProjectType } from "@/types/FormCreateProjectType"
 import type { TagType } from "@/types/TagType"
+import ButtonLoading from "../loadings/ButtonLoading/ButtonLoading"
 import styles from "./CreateProjectForm.module.sass"
 import FormCover from "./FormCover/FormCover"
 import Input from "./Input/Input"
 import Tags from "./Tags/Tags"
 
 function CreateProjectForm() {
+  const { notify } = useNotify()
   const [showForm, setShowForm] = useState<boolean>(false)
+  const [showTagOptionList, setShowTagOptionList] = useState<boolean>(false)
   const [selectedTags, setSelectedTags] = useState<TagType[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
+  const [preview, setPreview] = useState<string | null>(null)
   const {
     control,
     register,
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
   } = useForm<formCreateProjectType>({
     resolver: zodResolver(formCreateProjectSchema),
     defaultValues: {
@@ -33,38 +41,69 @@ function CreateProjectForm() {
     name: "projectTags",
   })
 
+  const fileList = watch("projectCover")
+
+  useEffect(() => {
+    const file = fileList?.[0]
+
+    if (!file) {
+      setPreview(null)
+      return
+    }
+
+    const url = URL.createObjectURL(file)
+    setPreview(url)
+
+    return () => URL.revokeObjectURL(url)
+  }, [fileList])
+
   async function onSubmit(projectData: formCreateProjectType) {
-    const name = projectData.projectName
-    const date = projectData.projectDate
-    const imageFile = projectData.projectCover?.item(0)
-    const priority = projectData.projectPriority
-    const tagList = projectData.projectTags
+    try {
+      setLoading(true)
+      const name = projectData.projectName
+      const date = projectData.projectDate
+      const imageFile = projectData.projectCover?.item(0)
+      const priority = projectData.projectPriority
+      const tagList = projectData.projectTags
 
-    const formData = new FormData()
+      const formData = new FormData()
 
-    if (name) {
-      formData.append("name", name)
+      if (name) {
+        formData.append("name", name)
+      }
+
+      if (date) {
+        formData.append("date", date)
+      }
+
+      if (imageFile) {
+        formData.append("imageFile", imageFile)
+      }
+
+      if (priority) {
+        formData.append("priority", priority)
+      }
+
+      if (tagList) {
+        tagList.map((tag) => formData.append("tagList", tag.name))
+      }
+
+      const result = await createProject(formData)
+
+      if (result?.error) {
+        notify(result.message)
+      } else {
+        notify(result.message)
+        setShowTagOptionList(false)
+        clearFields()
+      }
+    } catch (error) {
+      console.log(error)
+      setLoading(false)
+      notify("Algo de errado ao tentar criar um projeto")
+    } finally {
+      setLoading(false)
     }
-
-    if (date) {
-      formData.append("date", date)
-    }
-
-    if (imageFile) {
-      formData.append("imageFile", imageFile)
-    }
-
-    if (priority) {
-      formData.append("priority", priority)
-    }
-
-    if (tagList) {
-      tagList.map((tag) => formData.append("tagList", tag.name))
-    }
-
-    const _result = await createProject(formData)
-
-    clearFields()
   }
 
   function clearFields() {
@@ -125,7 +164,27 @@ function CreateProjectForm() {
           >
             <p>Capa</p>
 
-            <div>Selecionar Imagem</div>
+            <div className={styles["form-container__cover"]}>
+              <div>
+                {preview && (
+                  <Image
+                    src={preview}
+                    alt="Capa do projeto"
+                    width={100}
+                    height={100}
+                  />
+                )}
+              </div>
+
+              <p
+                className={`
+                  ${styles["form-container__cover-legend"]}
+                  ${preview && styles["form-container__cover-legend--color"]}
+                `}
+              >
+                Selecionar Imagem
+              </p>
+            </div>
           </label>
 
           {errors.projectCover && (
@@ -193,6 +252,8 @@ function CreateProjectForm() {
         </fieldset>
 
         <Tags
+          showTagOptionList={showTagOptionList}
+          setShowTagOptionList={setShowTagOptionList}
           selectedTags={selectedTags}
           setSelectedTags={setSelectedTags}
           append={append}
@@ -204,7 +265,7 @@ function CreateProjectForm() {
             type="submit"
             className={styles["form-container__send-button"]}
           >
-            Criar Projeto
+            {loading ? <ButtonLoading /> : <p>Criar Projeto</p>}
           </button>
 
           <button

@@ -19,7 +19,11 @@ export async function createProject(formData: FormData) {
   }
 
   const userId = result?.user?.id
-  if (!userId) return
+  if (!userId)
+    return {
+      error: true,
+      message: "Usuario não encontrado, impossivel criar projeto",
+    }
 
   const name = formData.get("name")
   const date = formData.get("date")
@@ -31,10 +35,16 @@ export async function createProject(formData: FormData) {
     url = await uploadProjectImage(userId, imageFile)
   }
 
-  console.log(url)
   const sql = neon(dataBaseUrl)
-  const _response = await sql`
-    INSERT INTO projects (user_id, status, image_url, name, deadline, priority, tags, position)
-    VALUES (${userId}, 'pendente', ${url}, ${name}, ${date}, ${priority}, ${tagList}, 1)
-  `
+  try {
+    await sql`
+      INSERT INTO projects (user_id, status, image_url, name, deadline, priority, tags)
+      VALUES (${userId}, 'pendente', ${url}, ${name}, ${date}, ${priority}, ${tagList})
+    `
+  } catch (error) {
+    console.log(error)
+    return { error: true, message: "Não foi possivel criar o projeto" }
+  }
+
+  return { error: false, message: "Projeto criado com sucesso" }
 }

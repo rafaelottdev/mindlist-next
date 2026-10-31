@@ -91,7 +91,7 @@ export const formCreateProjectSchema = z.object({
   projectTags: z
     .array(
       z.object({
-        id: z.number().min(1, "O ID não pode ser 0 ou menor"),
+        id: z.number().min(0, "O ID não pode ser menor que zero"),
         name: z.string().regex(/\S/, "A tag não deve estar vazia"),
       }),
     )
