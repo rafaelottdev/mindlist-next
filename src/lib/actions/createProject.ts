@@ -6,10 +6,18 @@ import { getUser } from "./getUser"
 
 export async function createProject(formData: FormData) {
   const dataBaseUrl = process.env.DATABASE_URL
-  let url = "indefinida"
+  let url = ""
 
-  if (!dataBaseUrl) {
-    throw new Error("DATABASE_URL não está definida")
+  try {
+    if (!dataBaseUrl) {
+      throw new Error("DATABASE_URL não está definida")
+    }
+  } catch (error) {
+    console.log(error)
+    return {
+      error: true,
+      message: "Erro ao tentar se conectar ao banco de dados",
+    }
   }
 
   const result = await getUser()
@@ -38,8 +46,8 @@ export async function createProject(formData: FormData) {
   const sql = neon(dataBaseUrl)
   try {
     await sql`
-      INSERT INTO projects (user_id, status, image_url, name, deadline, priority, tags)
-      VALUES (${userId}, 'pendente', ${url}, ${name}, ${date}, ${priority}, ${tagList})
+      INSERT INTO projects (user_id, status, image_url, name, deadline, priority, tags, favorite)
+      VALUES (${userId}, 'pendente', ${url}, ${name}, ${date}, ${priority}, ${tagList}, false)
     `
   } catch (error) {
     console.log(error)
