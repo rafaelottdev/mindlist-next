@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useFieldArray, useForm } from "react-hook-form"
 import { FaXmark } from "react-icons/fa6"
@@ -17,6 +18,7 @@ import Input from "./Input/Input"
 import Tags from "./Tags/Tags"
 
 function CreateProjectForm() {
+  const router = useRouter()
   const { notify } = useNotify()
   const [showForm, setShowForm] = useState<boolean>(false)
   const [showTagOptionList, setShowTagOptionList] = useState<boolean>(false)
@@ -94,6 +96,7 @@ function CreateProjectForm() {
         notify(result.message)
       } else {
         notify(result.message)
+        router.refresh()
         setShowTagOptionList(false)
         clearFields()
       }

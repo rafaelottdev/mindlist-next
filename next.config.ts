@@ -7,10 +7,14 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "br-patient-hat-b42s35bq.storage.c-6.us-east-2.aws.neon.tech",
         pathname: "/avatars/**"
-      }
+      },
+      {
+        protocol: "https",
+        hostname: "br-patient-hat-b42s35bq.storage.c-6.us-east-2.aws.neon.tech",
+        pathname: "/project-background/**"
+      },
     ]
   }
 }
 
 export default nextConfig;
-// 
