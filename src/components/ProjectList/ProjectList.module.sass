@@ -1,0 +1,212 @@
+@use "@/styles/abstracts/variables" as *
+@use "@/styles/abstracts/mixins" as *
+  
+.project-card
+
+.project-card__link
+  width: 280px
+  height: 370px
+
+  display: block
+  position: relative
+  overflow: hidden
+
+  border-radius: 10px
+
+.project-card__background-container
+  width: 100%
+  height: 100%
+
+  position: absolute
+  top: 0
+  left: 0
+
+  filter: brightness(90%)
+
+  img
+    width: 100%
+    height: 100%
+    object-fit: cover
+
+.project-card__content-container
+  width: 100%
+  height: 100%
+
+  position: relative
+
+  font-family: $baloo-regular
+  color: white
+
+.project-card__cover-container
+  width: 100%
+  height: 160px
+  position: relative
+
+.project-card__cover-image-container
+  width: 100%
+  height: 100%
+
+  position: absolute
+  top: 0
+  left: 0
+  overflow: hidden
+
+  filter: brightness(70%)
+
+  img
+    width: 100%
+    height: 100%
+    object-fit: cover
+
+.project-card__project-list-options
+  position: absolute
+  right: 5px
+  bottom: 5px
+
+  display: flex
+  align-items: center
+  gap: 3px
+
+.project-card__option-items
+  svg
+    font-size: 18px
+
+.project-card__priority
+  width: 25px
+  height: 25px
+  @include flex-center
+
+  border-radius: 3px
+
+.project-card__option-button
+  width: 25px
+  height: 25px
+  @include flex-center
+
+  cursor: pointer
+  border-radius: 3px
+  color: white
+  background-color: transparent // #ffffff28
+
+  transition: .2s
+
+  &:hover
+    transform: scale(1.3)
+
+.project-card__favorite-button
+
+.project-card__delete-button
+
+.project-card__edit-button
+
+.project-card__project-info-container
+  padding: 15px
+
+.project-card__project-info-top
+  display: flex
+  flex-direction: column
+  gap: 15px
+
+.project-card__name
+  font-size: 24px
+  letter-spacing: .5px
+
+.project-card__deadline
+  width: 145px
+  height: 30px
+
+  display: flex
+  justify-content: center
+  align-items: center
+  gap: 8px
+
+  border-radius: 20px
+  border: 1px solid rgba(180, 195, 255, 0.16)
+  background-color: rgba(130, 150, 255, 0.12)
+
+  svg
+    font-size: 14px
+
+  p
+    font-size: 13px
+    letter-spacing: .3px
+
+.project-card__tag-container
+  display: flex
+  align-items: center
+  gap: 5px
+
+.project-card__tag-list
+  display: flex
+  gap: 5px
+
+  li
+    width: 75px
+    height: 25px
+    @include flex-center
+
+    font-size: 13px
+    letter-spacing: .3px
+
+    border-radius: 15px
+    border: 1px solid rgba(190, 200, 255, 0.22)
+    background-color: rgba(255, 255, 255, 0.06)
+
+.project-card__project-info-bottom
+  margin-top: 20px
+  padding-top: 15px
+
+  border-top: 1px solid rgba(190, 200, 255, 0.22)
+  display: flex
+  justify-content: space-between
+
+.project-card__status-list
+  display: flex
+  gap: 5px
+
+.project-card__status
+  width: 20px
+  height: 20px
+  @include flex-center
+
+  border: 1px solid white
+  border-radius: 5px
+
+  &:last-child
+    cursor: pointer
+    color: white
+    background-color: transparent
+
+  svg
+    font-size: 12px
+
+.project-card__completed-task-container
+
+.project-card__completed-task-bar
+  width: 100%
+  height: 5px
+
+  margin-bottom: 5px
+
+  border-radius: 5px
+  background-color: rgba(255, 255, 255, 0.212)
+  
+  div
+    width: 0%
+    height: 100%
+
+    border-radius: 5px
+    background-color: #A5B4FC
+
+    transition: .3s
+  
+.project-card__completed-task-text
+  font-size: 12px
+  letter-spacing: .3px
+
+// Interativo
+
+.project-card__status--current
+  background-color: #A5B4FC
+  color: $blue-400
+  border-color: #A5B4FC

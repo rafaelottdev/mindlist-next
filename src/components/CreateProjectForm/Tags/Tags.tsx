@@ -75,7 +75,9 @@ function Tags({
             `}
             onClick={() => setShowTagOptionList((prev) => !prev)}
           >
-            <FaPlus />
+            <div>
+              <FaPlus />
+            </div>
 
             <p>Adicionar Tags</p>
           </button>

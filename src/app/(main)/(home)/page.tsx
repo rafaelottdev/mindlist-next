@@ -6,7 +6,7 @@ export default async function page() {
   const projectResponse = await getProjects()
 
   return (
-    <div>
+    <div style={{ display: "flex", gap: "18px" }}>
       <ProjectList projectResponse={projectResponse} />
 
       <CreateProjectForm />

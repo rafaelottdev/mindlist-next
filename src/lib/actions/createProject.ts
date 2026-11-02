@@ -47,7 +47,7 @@ export async function createProject(formData: FormData) {
   try {
     await sql`
       INSERT INTO projects (user_id, status, image_url, name, deadline, priority, tags, favorite)
-      VALUES (${userId}, 'pendente', ${url}, ${name}, ${date}, ${priority}, ${tagList}, false)
+      VALUES (${userId}, 'pending', ${url}, ${name}, ${date}, ${priority}, ${tagList}, false)
     `
   } catch (error) {
     console.log(error)
