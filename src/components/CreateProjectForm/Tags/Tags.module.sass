@@ -76,16 +76,32 @@
   color: $blue-400
   background-color: white
 
+  div
+    display: flex
+    align-items: center
+
+    svg
+      font-size: 14px
+
   p
     cursor: pointer
 
 .tag-container__add-button--change
   width: 100%
-  padding: 0 5px 0 0
+  padding: 0
   
   position: absolute
   right: 0
   justify-content: right
+
+  div
+    width: 30px
+    height: 100%
+
+    @include flex-center
+    z-index: 2
+
+    background-color: white
 
   p
     display: none
