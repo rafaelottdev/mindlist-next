@@ -1,7 +1,12 @@
 "use client"
 
+import { ConfirmAlertProvider } from "@/contexts/ConfirmAlert/ConfirmAlert"
 import { NotificationAlertProvider } from "@/contexts/NotificationAlert/NotificationAlert"
 
 export function Providers({ children }: { children: React.ReactNode }) {
-  return <NotificationAlertProvider>{children}</NotificationAlertProvider>
+  return (
+    <NotificationAlertProvider>
+      <ConfirmAlertProvider>{children}</ConfirmAlertProvider>
+    </NotificationAlertProvider>
+  )
 }

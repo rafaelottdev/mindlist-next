@@ -27,6 +27,7 @@ interface TagsProps {
   selectedTags: TagType[]
   setSelectedTags: React.Dispatch<React.SetStateAction<TagType[]>>
   append: any
+  remove: any
   error: any
 }
 
@@ -36,6 +37,7 @@ function Tags({
   selectedTags,
   setSelectedTags,
   append,
+  remove,
   error,
 }: TagsProps) {
   const [tagError, setTagError] = useState<{ error: boolean; message: string }>(
@@ -59,7 +61,9 @@ function Tags({
 
                 <button
                   type="button"
-                  onClick={() => deleteTag(setSelectedTags, tag.id)}
+                  onClick={() =>
+                    deleteTag(selectedTags, setSelectedTags, remove, tag.id)
+                  }
                 >
                   <FaXmark />
                 </button>

@@ -15,7 +15,7 @@ export function moveRightSlide(
   currentIndex: number,
   router: AppRouterInstance,
 ) {
-  if (currentIndex < 5) {
+  if (currentIndex < urlList.length - 1) {
     router.push(urlList[currentIndex + 1])
   }
 }
