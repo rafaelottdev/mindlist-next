@@ -105,6 +105,7 @@
 .project-card__project-info-top
   display: flex
   flex-direction: column
+  align-items: flex-start
   gap: 15px
 
 .project-card__name
@@ -112,8 +113,8 @@
   letter-spacing: .5px
 
 .project-card__deadline
-  width: 145px
   height: 30px
+  padding: 0 10px
 
   display: flex
   justify-content: center
@@ -141,8 +142,8 @@
   gap: 5px
 
   li
-    width: 75px
     height: 25px
+    padding: 0 10px
     @include flex-center
 
     font-size: 13px
@@ -171,11 +172,6 @@
 
   border: 1px solid white
   border-radius: 5px
-
-  &:last-child
-    cursor: pointer
-    color: white
-    background-color: transparent
 
   svg
     font-size: 12px

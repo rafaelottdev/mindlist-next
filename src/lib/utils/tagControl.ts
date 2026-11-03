@@ -36,10 +36,20 @@ export function addTag(
 }
 
 export function deleteTag(
+  selectedTags: TagType[],
   setSelectedTags: React.Dispatch<React.SetStateAction<TagType[]>>,
+  remove: any,
   id: number,
 ) {
   setSelectedTags((prev: TagType[]) =>
     prev.filter((tag: TagType) => tag.id !== id),
   )
+
+  selectedTags.map((tag: TagType, index) => {
+    if (tag.id === id) {
+      remove(index)
+    }
+
+    return null
+  })
 }

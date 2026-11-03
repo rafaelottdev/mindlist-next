@@ -16,7 +16,7 @@ function FormCover({ showForm, setShowForm }: FormCoverProps) {
       `}
     >
       <Image
-        src="/img/home/project-cover.png"
+        src="/img/home/create-project-cover.png"
         alt=""
         width={280}
         height={370}

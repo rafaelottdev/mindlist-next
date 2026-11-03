@@ -38,7 +38,7 @@ function CreateProjectForm() {
       projectTags: [],
     },
   })
-  const { append, replace } = useFieldArray({
+  const { append, replace, remove } = useFieldArray({
     control,
     name: "projectTags",
   })
@@ -67,6 +67,7 @@ function CreateProjectForm() {
       const imageFile = projectData.projectCover?.item(0)
       const priority = projectData.projectPriority
       const tagList = projectData.projectTags
+      console.log(projectData.projectTags)
 
       const formData = new FormData()
 
@@ -260,6 +261,7 @@ function CreateProjectForm() {
           selectedTags={selectedTags}
           setSelectedTags={setSelectedTags}
           append={append}
+          remove={remove}
           error={errors.projectTags}
         />
 
