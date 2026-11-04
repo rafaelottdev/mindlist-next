@@ -1,9 +1,8 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useFieldArray, useForm } from "react-hook-form"
 import { FaXmark } from "react-icons/fa6"
 import { useNotify } from "@/contexts/NotificationAlert/NotificationAlert"
@@ -11,11 +10,13 @@ import { createProject } from "@/lib/actions/createProject"
 import { formCreateProjectSchema } from "@/lib/schemas/formCreateProjectSchema"
 import type { formCreateProjectType } from "@/types/FormCreateProjectType"
 import type { TagType } from "@/types/TagType"
+import CoverInput from "../CoverInput/CoverInput"
+import Input from "../Input/Input"
 import ButtonLoading from "../loadings/ButtonLoading/ButtonLoading"
+import PriorityInput from "../PriorityInput/PriorityInput"
+import Tags from "../Tags/Tags"
 import styles from "./CreateProjectForm.module.sass"
 import FormCover from "./FormCover/FormCover"
-import Input from "./Input/Input"
-import Tags from "./Tags/Tags"
 
 function CreateProjectForm() {
   const router = useRouter()
@@ -24,7 +25,7 @@ function CreateProjectForm() {
   const [showTagOptionList, setShowTagOptionList] = useState<boolean>(false)
   const [selectedTags, setSelectedTags] = useState<TagType[]>([])
   const [loading, setLoading] = useState<boolean>(false)
-  const [preview, setPreview] = useState<string | null>(null)
+
   const {
     control,
     register,
@@ -42,22 +43,6 @@ function CreateProjectForm() {
     control,
     name: "projectTags",
   })
-
-  const fileList = watch("projectCover")
-
-  useEffect(() => {
-    const file = fileList?.[0]
-
-    if (!file) {
-      setPreview(null)
-      return
-    }
-
-    const url = URL.createObjectURL(file)
-    setPreview(url)
-
-    return () => URL.revokeObjectURL(url)
-  }, [fileList])
 
   async function onSubmit(projectData: formCreateProjectType) {
     try {
@@ -158,111 +143,30 @@ function CreateProjectForm() {
           </div>
         </div>
 
-        <div className={styles["form-container__cover-container"]}>
-          <label
-            htmlFor="projectCover"
-            className={`
-              ${styles["form-container__input-container"]}
-              ${styles["form-container__cover-label"]}
-            `}
-          >
-            <p>Capa</p>
+        <CoverInput
+          registerName="projectCover"
+          title="Capa"
+          register={register}
+          watch={watch}
+          errors={errors.projectCover}
+        />
 
-            <div className={styles["form-container__cover"]}>
-              <div>
-                {preview && (
-                  <Image
-                    src={preview}
-                    alt="Capa do projeto"
-                    width={100}
-                    height={100}
-                  />
-                )}
-              </div>
-
-              <p
-                className={`
-                  ${styles["form-container__cover-legend"]}
-                  ${preview && styles["form-container__cover-legend--color"]}
-                `}
-              >
-                Selecionar Imagem
-              </p>
-            </div>
-          </label>
-
-          {errors.projectCover && (
-            <p className={styles["input-error"]}>
-              {errors.projectCover.message}
-            </p>
-          )}
-
-          <input
-            type="file"
-            id="projectCover"
-            accept="image/*"
-            {...register("projectCover")}
-          />
-        </div>
-
-        <fieldset
-          className={`
-            ${styles["form-container__input-container"]}
-            ${styles["form-container__priority-container"]}
-          `}
-        >
-          <legend>Prioridade</legend>
-
-          <div className={styles["form-container__input-list-option"]}>
-            <div className={styles["form-container__option"]}>
-              <input
-                type="radio"
-                id="lowPriority"
-                value="low"
-                {...register("projectPriority")}
-              />
-
-              <label htmlFor="lowPriority">Baixa</label>
-            </div>
-
-            <div className={styles["form-container__option"]}>
-              <input
-                type="radio"
-                id="mediumPriority"
-                value="medium"
-                {...register("projectPriority")}
-              />
-
-              <label htmlFor="mediumPriority">Média</label>
-            </div>
-
-            <div className={styles["form-container__option"]}>
-              <input
-                type="radio"
-                id="highPriority"
-                value="high"
-                {...register("projectPriority")}
-              />
-
-              <label htmlFor="highPriority">Alta</label>
-            </div>
-          </div>
-
-          {errors.projectPriority && (
-            <p className={styles["input-error"]}>
-              {errors.projectPriority.message}
-            </p>
-          )}
-        </fieldset>
+        <PriorityInput
+          registerName="projectPriority"
+          title="Prioridade"
+          register={register}
+          errors={errors.projectPriority}
+        />
 
         <Tags
           showTagOptionList={showTagOptionList}
           setShowTagOptionList={setShowTagOptionList}
           selectedTags={selectedTags}
           setSelectedTags={setSelectedTags}
+          title="Tags"
           append={append}
           remove={remove}
-          error={errors.projectTags}
+          errors={errors.projectTags}
         />
 
         <div className={styles["form-container__form-button-container"]}>
