@@ -1,4 +1,5 @@
 import { useRef, useState } from "react"
+import type { FieldError, FieldErrorsImpl, Merge } from "react-hook-form"
 import { FaPlus, FaXmark } from "react-icons/fa6"
 import { addTag, deleteTag } from "@/lib/utils/tagControl"
 import type { TagType } from "@/types/TagType"
@@ -26,9 +27,18 @@ interface TagsProps {
   setShowTagOptionList: React.Dispatch<React.SetStateAction<boolean>>
   selectedTags: TagType[]
   setSelectedTags: React.Dispatch<React.SetStateAction<TagType[]>>
+  title: string
   append: any
   remove: any
-  error: any
+  errors:
+    | Merge<
+        FieldError,
+        (
+          | Merge<FieldError, FieldErrorsImpl<{ id: number; name: string }>>
+          | undefined
+        )[]
+      >
+    | undefined
 }
 
 function Tags({
@@ -36,9 +46,10 @@ function Tags({
   setShowTagOptionList,
   selectedTags,
   setSelectedTags,
+  title,
   append,
   remove,
-  error,
+  errors,
 }: TagsProps) {
   const [tagError, setTagError] = useState<{ error: boolean; message: string }>(
     { error: false, message: "" },
@@ -47,7 +58,7 @@ function Tags({
 
   return (
     <div className={`${styles["tag-container"]}`}>
-      <p>Tags</p>
+      <p>{title}</p>
 
       <div className={styles["tag-container__wrapper"]}>
         <div className={styles["tag-container__add-tag"]}>
@@ -113,8 +124,8 @@ function Tags({
         )}
       </div>
 
-      {error ? (
-        <p className={styles["input-error"]}>{error.message}</p>
+      {errors ? (
+        <p className={styles["input-error"]}>{errors.message}</p>
       ) : tagError.error ? (
         <p className={styles["input-error"]}>{tagError.message}</p>
       ) : (

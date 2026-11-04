@@ -1,22 +1,21 @@
-import type { FieldPath, UseFormRegister } from "react-hook-form"
-import type { formCreateProjectType } from "@/types/FormCreateProjectType"
+import type { FieldPath, FieldValues, UseFormRegister } from "react-hook-form"
 import styles from "./Input.module.sass"
 
-interface InputProps {
+interface InputProps<T extends FieldValues> {
   inputId: string
   labelTitle: string
   inputType: string
-  registerName: FieldPath<formCreateProjectType>
-  register: UseFormRegister<formCreateProjectType>
+  registerName: FieldPath<T>
+  register: UseFormRegister<T>
 }
 
-function Input({
+function Input<T extends FieldValues>({
   inputId,
   labelTitle,
   inputType,
   registerName,
   register,
-}: InputProps) {
+}: InputProps<T>) {
   return (
     <div className={styles["input-container"]}>
       <label htmlFor={inputId} className={styles["input-container__label"]}>

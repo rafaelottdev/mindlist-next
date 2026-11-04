@@ -1,0 +1,70 @@
+@use "@/styles/abstracts/variables" as *
+@use "@/styles/abstracts/mixins" as *
+  
+.editProject-form
+  width: 280px
+  height: 370px
+
+  padding: 0 10px
+
+  position: relative
+  overflow: hidden
+  border-radius: 10px
+
+  display: flex
+  flex-direction: column
+  justify-content: center
+  gap: 10px
+
+  font-size: 13px
+  font-family: $baloo-regular
+  color: white
+  letter-spacing: .3px
+
+  background-image: url("/img/home/project-background.png")
+  background-repeat: no-repeat
+  background-position: center
+  background-size: cover
+
+.editProject-form__name-date-container
+  display: flex
+  justify-content: space-between
+  gap: 5px
+
+.editProject-form__button-container
+  margin-top: 10px
+  display: flex
+  justify-content: space-between
+
+.editProject-form__send-button
+  .form-container__send-button
+  width: 100px
+  height: 30px
+
+  @include flex-center
+
+  font-family: $baloo-semibold
+  font-size: 14px
+
+  border-radius: 3px
+  cursor: pointer
+  color: $blue-400
+  background-color: white
+  transition: .3s
+
+.editProject-form__clear-button
+  width: 30px
+  height: 30px
+  padding-top: 4px
+
+  @include flex-center
+
+  cursor: pointer
+  background-color: transparent
+  color: white
+
+  svg
+    font-size: 21px
+
+.input-error
+  font-size: 12px
