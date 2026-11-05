@@ -22,7 +22,11 @@ export async function getProjects() {
   const result = await getUser()
 
   if (result.error) {
-    return result
+    return {
+      error: true,
+      message: "Não autorizado",
+      response: null,
+    }
   }
 
   const userId = result?.user?.id
@@ -30,6 +34,7 @@ export async function getProjects() {
     return {
       error: true,
       message: "Usuario não encontrado, impossivel criar projeto",
+      response: null
     }
 
   const sql = neon(dataBaseUrl)

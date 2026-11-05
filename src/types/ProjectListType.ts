@@ -9,4 +9,5 @@ export type ProjectListType = {
   tags: string[]
   position: number
   favorite: boolean
+  created_at: string
 }
