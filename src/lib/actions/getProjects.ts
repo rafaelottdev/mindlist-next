@@ -34,7 +34,7 @@ export async function getProjects() {
     return {
       error: true,
       message: "Usuario não encontrado, impossivel criar projeto",
-      response: null
+      response: null,
     }
 
   const sql = neon(dataBaseUrl)
