@@ -52,7 +52,6 @@ function CreateProjectForm() {
       const imageFile = projectData.projectCover?.item(0)
       const priority = projectData.projectPriority
       const tagList = projectData.projectTags
-      console.log(projectData.projectTags)
 
       const formData = new FormData()
 
