@@ -1,13 +1,31 @@
 "use server"
 
 import { neon } from "@neondatabase/serverless"
+import { deleteOldProjectCover } from "../storage/deleteOldProjectCover"
+import { getUser } from "./getUser"
 
-export async function deleteProject(projectId: number, userId: number) {
+export async function deleteProject(
+  projectId: number,
+  projectCoverUrl: string,
+) {
   const dataBaseUrl = process.env.DATABASE_URL
 
   if (!dataBaseUrl) {
     throw new Error("DATABASE_URL não está definida")
   }
+
+  const result = await getUser()
+
+  if (result.error) {
+    return result
+  }
+
+  const userId = result?.user?.id
+  if (!userId)
+    return {
+      error: true,
+      message: "Usuario não encontrado, impossivel criar projeto",
+    }
 
   const sql = neon(dataBaseUrl)
   await sql`
@@ -15,4 +33,12 @@ export async function deleteProject(projectId: number, userId: number) {
 
     WHERE id = ${projectId} AND user_id = ${userId}
   `
+
+  if (projectCoverUrl) {
+    const [{ count }] = await sql`
+      SELECT count(*)::int as count from projects where image_url = ${projectCoverUrl}
+    `
+
+    if (count === 0) await deleteOldProjectCover(userId, projectCoverUrl)
+  }
 }

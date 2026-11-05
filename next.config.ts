@@ -14,7 +14,12 @@ const nextConfig: NextConfig = {
         pathname: "/project-background/**"
       },
     ]
-  }
+  },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "6mb",
+    },
+  },
 }
 
 export default nextConfig;

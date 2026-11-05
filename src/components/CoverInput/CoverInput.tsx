@@ -25,7 +25,7 @@ function CoverInput<T extends FieldValues>({
 }: CoverInputProps<T>) {
   const [preview, setPreview] = useState<string | null>(null)
 
-  const fileList = watch("projectCover")
+  const fileList = watch(registerName)
 
   useEffect(() => {
     const file = fileList?.[0]
@@ -44,7 +44,7 @@ function CoverInput<T extends FieldValues>({
   return (
     <div className={styles["cover-container"]}>
       <label
-        htmlFor="projectCover"
+        htmlFor={`${registerName}`}
         className={`
           ${styles["cover-container__input-container"]}
           ${styles["cover-container__cover-label"]}
@@ -79,7 +79,7 @@ function CoverInput<T extends FieldValues>({
 
       <input
         type="file"
-        id="projectCover"
+        id={`${registerName}`}
         accept="image/*"
         {...register(registerName)}
       />
