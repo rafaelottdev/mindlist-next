@@ -3,6 +3,7 @@
 import { useNotify } from "@/contexts/NotificationAlert/NotificationAlert"
 import type { ProjectListType } from "@/types/ProjectListType"
 import ProjectCard from "./ProjectCard/ProjectCard"
+import styles from "./ProjectList.module.sass"
 
 interface ProjectListProps {
   error: boolean
@@ -19,7 +20,7 @@ function ProjectList({
 
   const projectList =
     !projectResponse.error && projectResponse.response
-      ? projectResponse.response
+      ? projectResponse.response.slice(0, 2)
       : []
 
   if (projectResponse.error) {
@@ -27,7 +28,7 @@ function ProjectList({
   }
 
   return (
-    <ul style={{ display: "flex", gap: "18px" }}>
+    <ul className={styles["project-list"]}>
       {projectList.map((project: ProjectListType | Record<string, any>) => (
         <li key={project.id}>
           <ProjectCard project={project} />

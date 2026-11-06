@@ -2,6 +2,7 @@
 
 import { neon } from "@neondatabase/serverless"
 import { uploadProjectImage } from "../storage/uploadProjectImage"
+import { getProjects } from "./getProjects"
 import { getUser } from "./getUser"
 
 export async function createProject(formData: FormData) {
@@ -41,6 +42,16 @@ export async function createProject(formData: FormData) {
 
   if (imageFile instanceof File && imageFile.size > 0) {
     url = await uploadProjectImage(userId, imageFile)
+  }
+
+  const projectList = await getProjects()
+
+  if (projectList.error) {
+    return { error: true, message: "Não foi possivel criar o projeto" }
+  } else {
+    if (projectList.response && projectList.response.length >= 2) {
+      return { error: true, message: "Apenas dois projetos são permitidos" }
+    }
   }
 
   const sql = neon(dataBaseUrl)
