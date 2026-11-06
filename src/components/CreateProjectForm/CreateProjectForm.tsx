@@ -98,6 +98,7 @@ function CreateProjectForm() {
     reset()
     setSelectedTags([])
     replace([])
+    setShowTagOptionList(false)
   }
 
   return (
