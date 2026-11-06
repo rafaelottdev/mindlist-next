@@ -10,8 +10,16 @@ export async function deleteProject(
 ) {
   const dataBaseUrl = process.env.DATABASE_URL
 
-  if (!dataBaseUrl) {
-    throw new Error("DATABASE_URL não está definida")
+  try {
+    if (!dataBaseUrl) {
+      throw new Error("DATABASE_URL não está definida")
+    }
+  } catch (error) {
+    console.log(error)
+    return {
+      error: true,
+      message: "Erro ao tentar conectar o banco de dados",
+    }
   }
 
   const result = await getUser()
@@ -24,21 +32,28 @@ export async function deleteProject(
   if (!userId)
     return {
       error: true,
-      message: "Usuario não encontrado, impossivel criar projeto",
+      message: "Não autorizado",
     }
 
-  const sql = neon(dataBaseUrl)
-  await sql`
-    DELETE FROM projects
-
-    WHERE id = ${projectId} AND user_id = ${userId}
-  `
-
-  if (projectCoverUrl) {
-    const [{ count }] = await sql`
-      SELECT count(*)::int as count from projects where image_url = ${projectCoverUrl}
+  try {
+    const sql = neon(dataBaseUrl)
+    await sql`
+      DELETE FROM projects
+  
+      WHERE id = ${projectId} AND user_id = ${userId}
     `
 
-    if (count === 0) await deleteOldProjectCover(userId, projectCoverUrl)
+    if (projectCoverUrl) {
+      const [{ count }] = await sql`
+        SELECT count(*)::int as count from projects where image_url = ${projectCoverUrl}
+      `
+
+      if (count === 0) await deleteOldProjectCover(userId, projectCoverUrl)
+    }
+  } catch (error) {
+    console.log(error)
+    return { error: true, message: "Erro ao tentar excluir o projeto" }
   }
+
+  return { error: false, message: "Projeto excluido com sucesso" }
 }

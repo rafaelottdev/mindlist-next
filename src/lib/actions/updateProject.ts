@@ -1,7 +1,7 @@
 "use server"
 
 import { neon } from "@neondatabase/serverless"
-import { ProjectListType } from "@/types/ProjectListType"
+import type { ProjectListType } from "@/types/ProjectListType"
 import { deleteOldProjectCover } from "../storage/deleteOldProjectCover"
 import { uploadProjectImage } from "../storage/uploadProjectImage"
 import { getUser } from "./getUser"
@@ -46,77 +46,83 @@ export async function updateProject(
 
   const sql = neon(dataBaseUrl)
 
-  if (newName && newName !== project.name) {
-    await sql`
-      UPDATE projects
-      SET name = ${newName}
-
-      WHERE id = ${project.id} AND user_id = ${userId}
-    `
-  }
-
-  if (newDeadline && newDeadline !== formattedDeadline) {
-    await sql`
-      UPDATE projects
-      SET deadline = ${newDeadline}
-
-      WHERE id = ${project.id} AND user_id = ${userId}
-    `
-  }
-
-  if (newImageFile instanceof File && newImageFile.size > 0) {
-    newUrl = await uploadProjectImage(userId, newImageFile)
-
-    if (newUrl && newUrl !== project.image_url) {
+  try {
+    if (newName && newName !== project.name) {
       await sql`
         UPDATE projects
-        SET image_url = ${newUrl}
-
+        SET name = ${newName}
+  
         WHERE id = ${project.id} AND user_id = ${userId}
       `
+    }
 
-      if (oldUrl) {
-        const [{ count }] = await sql`
-          SELECT count(*)::int as count from projects where image_url = ${oldUrl}
+    if (newDeadline && newDeadline !== formattedDeadline) {
+      await sql`
+        UPDATE projects
+        SET deadline = ${newDeadline}
+  
+        WHERE id = ${project.id} AND user_id = ${userId}
+      `
+    }
+
+    if (newImageFile instanceof File && newImageFile.size > 0) {
+      newUrl = await uploadProjectImage(userId, newImageFile)
+
+      if (newUrl && newUrl !== project.image_url) {
+        await sql`
+          UPDATE projects
+          SET image_url = ${newUrl}
+  
+          WHERE id = ${project.id} AND user_id = ${userId}
         `
 
-        if (count === 0) await deleteOldProjectCover(userId, oldUrl)
+        if (oldUrl) {
+          const [{ count }] = await sql`
+            SELECT count(*)::int as count from projects where image_url = ${oldUrl}
+          `
+
+          if (count === 0) await deleteOldProjectCover(userId, oldUrl)
+        }
       }
     }
-  }
 
-  if (newPriority && newPriority !== project.priority) {
-    await sql`
-      UPDATE projects
-      SET priority = ${newPriority}
-
-      WHERE id = ${project.id} AND user_id = ${userId}
-    `
-  }
-
-  if (newTagList) {
-    const verifyList: boolean[] = []
-
-    newTagList.map((item) => {
-      if (project.tags.includes(item)) {
-        verifyList.push(true)
-      } else {
-        verifyList.push(false)
-      }
-
-      return null
-    })
-
-    console.log(verifyList)
-
-    if (verifyList.includes(false) || verifyList.length < project.tags.length) {
+    if (newPriority && newPriority !== project.priority) {
       await sql`
         UPDATE projects
-        SET tags = ${newTagList}
-
+        SET priority = ${newPriority}
+  
         WHERE id = ${project.id} AND user_id = ${userId}
       `
     }
+
+    if (newTagList) {
+      const verifyList: boolean[] = []
+
+      newTagList.map((item) => {
+        if (project.tags.includes(item)) {
+          verifyList.push(true)
+        } else {
+          verifyList.push(false)
+        }
+
+        return null
+      })
+
+      if (
+        verifyList.includes(false) ||
+        verifyList.length < project.tags.length
+      ) {
+        await sql`
+          UPDATE projects
+          SET tags = ${newTagList}
+  
+          WHERE id = ${project.id} AND user_id = ${userId}
+        `
+      }
+    }
+  } catch (error) {
+    console.log(error)
+    return { error: true, message: "Erro ao tentar atualizar o projeto" }
   }
 
   return { error: false, message: "Projeto atualizado com sucesso" }

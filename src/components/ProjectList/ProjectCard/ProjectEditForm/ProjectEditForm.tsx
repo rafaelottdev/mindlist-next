@@ -5,6 +5,7 @@ import { useFieldArray, useForm } from "react-hook-form"
 import { FaXmark } from "react-icons/fa6"
 import CoverInput from "@/components/CoverInput/CoverInput"
 import Input from "@/components/Input/Input"
+import ButtonLoading from "@/components/loadings/ButtonLoading/ButtonLoading"
 import PriorityInput from "@/components/PriorityInput/PriorityInput"
 import Tags from "@/components/Tags/Tags"
 import { useNotify } from "@/contexts/NotificationAlert/NotificationAlert"
@@ -79,15 +80,17 @@ function ProjectEditForm({ project, setEditMode }: ProjectEditFormProps) {
 
       const result = await updateProject(formData, project)
 
-      if (result?.error) {
-        console.log(result.error)
+      if (result?.error && result?.message) {
+        throw new Error(result?.message)
       } else {
         router.refresh()
+        notify(result.message)
         setEditMode(false)
       }
     } catch (error) {
       console.log(error)
-      notify("Erro ao tentar atualizar o projeto")
+      setLoading(false)
+      notify(error instanceof Error ? error.message : String(error))
     } finally {
       setLoading(false)
     }
@@ -151,7 +154,7 @@ function ProjectEditForm({ project, setEditMode }: ProjectEditFormProps) {
           type="submit"
           className={styles["editProject-form__send-button"]}
         >
-          Editar Projeto
+          {loading ? <ButtonLoading /> : <p>Editar Projeto</p>}
         </button>
 
         <button
