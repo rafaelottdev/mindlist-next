@@ -11,7 +11,9 @@ import {
   RiSignalCellular2Fill,
   RiSignalCellular3Fill,
 } from "react-icons/ri"
+import ButtonLoading from "@/components/loadings/ButtonLoading/ButtonLoading"
 import { useConfirm } from "@/contexts/ConfirmAlert/ConfirmAlert"
+import { useNotify } from "@/contexts/NotificationAlert/NotificationAlert"
 import { deleteProject } from "@/lib/actions/deleteProject"
 import { updateFavorite } from "@/lib/actions/updateFavorite"
 import type { ProjectListType } from "@/types/ProjectListType"
@@ -24,9 +26,11 @@ type ProjectCardProps = {
 
 function ProjectCard({ project }: ProjectCardProps) {
   const router = useRouter()
+  const { notify } = useNotify()
   const { confirm } = useConfirm()
   const [favorite, setFavorite] = useState<boolean>(project.favorite)
   const [editMode, setEditMode] = useState<boolean>(false)
+  const [deleteLoading, setDeleteLoading] = useState<boolean>(false)
 
   const newDeadline = project.deadline
     .toLocaleDateString("pt-BR", {
@@ -39,6 +43,60 @@ function ProjectCard({ project }: ProjectCardProps) {
   const newTagList = project.tags.map((tag: string, id: number) => {
     return { id, name: tag }
   })
+
+  async function handleFavorite(
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) {
+    e.preventDefault()
+
+    try {
+      const result = await updateFavorite(
+        project.favorite,
+        project.id,
+        project.user_id,
+      )
+
+      if (result.error && result.message) {
+        throw new Error(result.message)
+      } else {
+        setFavorite((prev) => !prev)
+        router.refresh()
+        notify(result.message)
+      }
+    } catch (error) {
+      console.log(error)
+      notify(error instanceof Error ? error.message : String(error))
+    }
+  }
+
+  async function handleDeleteProject(
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) {
+    e.preventDefault()
+    const approve = await confirm("Deseja excluir o projeto")
+
+    try {
+      setDeleteLoading(true)
+
+      if (approve) {
+        const result = await deleteProject(project.id, project.image_url)
+
+        if (result.error && result.message) {
+          throw new Error(result.message)
+        } else {
+          notify(result.message)
+
+          router.refresh()
+        }
+      }
+    } catch (error) {
+      console.log(error)
+      setDeleteLoading(false)
+      notify(error instanceof Error ? error.message : String(error))
+    } finally {
+      setDeleteLoading(false)
+    }
+  }
 
   return (
     <>
@@ -98,16 +156,7 @@ function ProjectCard({ project }: ProjectCardProps) {
                       ${styles["project-card__option-button"]}
                       ${styles["project-card__favorite-button"]}
                     `}
-                    onClick={(e) => {
-                      e.preventDefault()
-                      updateFavorite(
-                        project.favorite,
-                        project.id,
-                        project.user_id,
-                      )
-                      setFavorite((prev) => !prev)
-                      router.refresh()
-                    }}
+                    onClick={(e) => handleFavorite(e)}
                   >
                     {favorite ? <PiStarFill /> : <PiStarBold />}
                   </button>
@@ -120,17 +169,9 @@ function ProjectCard({ project }: ProjectCardProps) {
                       ${styles["project-card__option-button"]}
                       ${styles["project-card__delete-button"]}
                     `}
-                    onClick={async (e) => {
-                      e.preventDefault()
-                      const approve = await confirm("Deseja excluir o projeto")
-
-                      if (approve) {
-                        deleteProject(project.id, project.image_url)
-                        router.refresh()
-                      }
-                    }}
+                    onClick={(e) => handleDeleteProject(e)}
                   >
-                    <FiTrash />
+                    {deleteLoading ? <ButtonLoading /> : <FiTrash />}
                   </button>
                 </li>
 

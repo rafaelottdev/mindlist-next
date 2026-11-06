@@ -22,7 +22,7 @@ export function NotificationAlertProvider({
   const notify = useCallback((msg: string | null) => {
     setMessage(msg)
 
-    setTimeout(() => setMessage(null), 1500)
+    setTimeout(() => setMessage(null), 2000)
   }, [])
 
   return (
