@@ -80,10 +80,11 @@ function CreateProjectForm() {
       if (result?.error) {
         notify(result.message)
       } else {
-        notify(result.message)
         router.refresh()
+        notify(result.message)
         setShowTagOptionList(false)
         clearFields()
+        setShowForm(false)
       }
     } catch (error) {
       console.log(error)
@@ -95,6 +96,7 @@ function CreateProjectForm() {
   }
 
   function clearFields() {
+    setShowForm(false)
     reset()
     setSelectedTags([])
     replace([])
@@ -180,10 +182,7 @@ function CreateProjectForm() {
           <button
             type="button"
             className={styles["form-container__clear-button"]}
-            onClick={() => {
-              setShowForm(false)
-              clearFields()
-            }}
+            onClick={() => clearFields()}
           >
             <FaXmark />
           </button>
