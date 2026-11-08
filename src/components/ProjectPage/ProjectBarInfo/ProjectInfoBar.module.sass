@@ -1,40 +1,145 @@
+@use "@/styles/abstracts/variables" as *
+@use "@/styles/abstracts/mixins" as *
+  
 .project-bar
+  width: max-content
+  max-width: calc(100vw - 40px)
+  height: 55px
+  padding: 10px 20px
+
+  position: absolute
+  bottom: 50px
+  left: 50%
+  transform: translateX(-50%)
+
+  display: flex
+  align-items: center
+  gap: 35px
+  white-space: nowrap
+
+  font-family: $baloo-regular
+  letter-spacing: .5px
+
+  border-radius: 10px
+  color: white
+  background-color: #101a388e
 
 .project-bar__title-priority-container
+  height: 100%
+  padding-right: 25px
+
+  display: flex
+  align-items: center
+  gap: 20px
+
+  border-right: 1px solid #ffffff9d
 
 .project-bar__title
+  font-size: 21px
 
 .project-bar__priority
+  @include flex-center
+
   svg
+    font-size: 21px
 
 .project-bar__general-info
+  display: flex
+  align-items: center
+  gap: 45px
 
 .project-bar__status-list
+  display: flex
+  align-items: center
+  gap: 10px
 
-.project-bar__status-item
+.project-bar__status
+  width: 21px
+  height: 21px
+  @include flex-center
+
+  border: 1px solid white
+  border-radius: 5px
+
   svg
+    font-size: 14px
 
 .project-bar__deadline-container
-  
-.project-bar__deadline-icon
+  height: 30px
+  padding: 0 10px
 
-.project-bar__deadline
+  display: flex
+  align-items: center
+  gap: 10px
+
+  border-radius: 20px
+  border: 1px solid rgba(190, 200, 255, 0.22)
+  background-color: rgba(255, 255, 255, 0.06)
 
 .project-bar__tag-list
+  display: flex
+  gap: 5px
 
 .project-bar__tag-item
+  height: 30px
+  padding: 0 13px
+  @include flex-center
+
+  border-radius: 20px
+  border: 1px solid rgba(190, 200, 255, 0.22)
+  background-color: rgba(255, 255, 255, 0.06)
 
 .project-bar__task-bar-container
+  margin-top: 20px
 
 .project-bar__task-bar
+  width: 135px
+  height: 5px
+
+  margin-bottom: 5px
+
+  border-radius: 5px
+  background-color: rgba(255, 255, 255, 0.212)
+
   div
+    width: 0%
+    height: 100%
+
+    border-radius: 5px
+    background-color: #A5B4FC
+
+    transition: .3s
 
 .project-bar__task-text
+  text-align: center
+  display: block
+  font-size: 11px
 
 .project-bar__favorite-edit-container
+  display: flex
+  gap: 10px
 
-.project-bar__favorite-button
-  svg
+.project-bar__button
+  width: 30px
+  height: 30px
 
-.project-bar__edit-button
+  @include flex-center
+  border-radius: 5px
+
+  cursor: pointer
+  color: white
+  background-color: transparent
+  transition: .3s
+
+  &:hover
+    background-color: #a5b4fc2d
+
   svg
+    font-size: 21px
+
+// Interativo
+
+.project-card__status--current
+  background-color: #A5B4FC
+  color: $blue-400
+  border-color: #A5B4FC

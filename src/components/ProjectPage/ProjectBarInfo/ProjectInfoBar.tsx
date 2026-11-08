@@ -50,11 +50,21 @@ function ProjectInfoBar({
 
       <div className={styles["project-bar__general-info"]}>
         <ul className={styles["project-bar__status-list"]}>
-          <li className={styles["project-bar__status-item"]}>
+          <li
+            className={`
+              ${styles["project-bar__status"]}
+              ${projectData.status === "pending" ? styles["project-card__status--current"] : ""}
+            `}
+          >
             <FaRegCircle />
           </li>
 
-          <li className={styles["project-bar__status-item"]}>
+          <li
+            className={`
+              ${styles["project-bar__status"]}
+              ${projectData.status === "completed" ? styles["project-card__status--current"] : ""}
+            `}
+          >
             <FaCheck />
           </li>
         </ul>
@@ -87,14 +97,20 @@ function ProjectInfoBar({
       <div className={styles["project-bar__favorite-edit-container"]}>
         <button
           type="button"
-          className={`${styles["project-bar__favorite-button"]}`}
+          className={`
+            ${styles["project-bar__favorite-button"]}
+            ${styles["project-bar__button"]}
+          `}
         >
           {favorite ? <PiStarFill /> : <PiStarBold />}
         </button>
 
         <button
           type="button"
-          className={`${styles["project-bar__edit-button"]}`}
+          className={`
+            ${styles["project-bar__edit-button"]}
+            ${styles["project-bar__button"]}
+          `}
         >
           <LuClipboardPen />
         </button>
