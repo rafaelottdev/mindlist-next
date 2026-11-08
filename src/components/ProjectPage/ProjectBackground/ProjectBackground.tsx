@@ -5,7 +5,7 @@ function ProjectBackground({ src }: { src: string }) {
   return (
     <div className={styles["background-container"]}>
       <Image
-        src={src}
+        src={src ? src : "/img/home/project-background-full.png"}
         alt="Imagem de fundo do projeto"
         width={1550}
         height={650}

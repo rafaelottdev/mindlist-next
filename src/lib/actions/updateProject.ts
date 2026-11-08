@@ -95,7 +95,7 @@ export async function updateProject(
       `
     }
 
-    if (newTagList) {
+    if (newTagList.length > 0) {
       const verifyList: boolean[] = []
 
       newTagList.map((item) => {

@@ -47,6 +47,7 @@ function ProjectEditForm({ project, setEditMode }: ProjectEditFormProps) {
   })
 
   async function onSubmit(projectData: FormEditProjectType) {
+    console.log(projectData.editProjectTags)
     try {
       setLoading(true)
 
@@ -74,7 +75,7 @@ function ProjectEditForm({ project, setEditMode }: ProjectEditFormProps) {
         formData.append("newPriority", newPriority)
       }
 
-      if (newtagList) {
+      if (newtagList.length > 0) {
         newtagList.map((tag) => formData.append("newTagList", tag.name))
       }
 
