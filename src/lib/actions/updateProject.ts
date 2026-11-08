@@ -35,7 +35,7 @@ export async function updateProject(
   if (!userId)
     return {
       error: true,
-      message: "Usuario não encontrado, impossivel criar projeto",
+      message: "Usuario não encontrado",
     }
 
   const newName = formData.get("newName")
