@@ -3,7 +3,12 @@ import styles from "./ProjectBackground.module.sass"
 
 function ProjectBackground({ src }: { src: string }) {
   return (
-    <div className={styles["background-container"]}>
+    <div
+      className={`
+        ${styles["background-container"]}
+        ${!src && styles["background-container--brightness"]}
+      `}
+    >
       <Image
         src={src ? src : "/img/home/project-background-full.png"}
         alt="Imagem de fundo do projeto"

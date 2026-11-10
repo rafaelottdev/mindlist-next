@@ -17,7 +17,7 @@ export async function createProject(formData: FormData) {
     console.log(error)
     return {
       error: true,
-      message: "Erro ao tentar se conectar ao banco de dados",
+      message: "Erro ao tentar conectar o banco de dados",
     }
   }
 

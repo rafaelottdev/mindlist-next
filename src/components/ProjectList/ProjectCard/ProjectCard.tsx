@@ -21,7 +21,7 @@ import styles from "./ProjectCard.module.sass"
 import ProjectEditForm from "./ProjectEditForm/ProjectEditForm"
 
 type ProjectCardProps = {
-  project: ProjectListType | Record<string, any>
+  project: ProjectListType
 }
 
 function ProjectCard({ project }: ProjectCardProps) {
@@ -32,7 +32,7 @@ function ProjectCard({ project }: ProjectCardProps) {
   const [editMode, setEditMode] = useState<boolean>(false)
   const [deleteLoading, setDeleteLoading] = useState<boolean>(false)
 
-  const newDeadline = project.deadline
+  const newDeadline = new Date(project.deadline)
     .toLocaleDateString("pt-BR", {
       day: "numeric",
       month: "long",
@@ -50,11 +50,7 @@ function ProjectCard({ project }: ProjectCardProps) {
     e.preventDefault()
 
     try {
-      const result = await updateFavorite(
-        project.favorite,
-        project.id,
-        project.user_id,
-      )
+      const result = await updateFavorite(project.favorite, project.id)
 
       if (result.error && result.message) {
         throw new Error(result.message)

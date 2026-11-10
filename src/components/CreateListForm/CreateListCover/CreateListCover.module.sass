@@ -1,0 +1,66 @@
+@use "@/styles/abstracts/variables" as *
+@use "@/styles/abstracts/mixins" as *
+  
+.create-list-cover
+  width: 100%
+  height: 100%
+
+  position: absolute
+  top: 0
+  left: 0
+
+  border-radius: 10px
+
+  z-index: 2
+
+.create-list-cover__button
+  width: 100%
+  height: 100%
+  padding-left: 100px
+
+  position: relative
+  display: flex
+  align-items: center
+  gap: 10px
+
+  cursor: pointer
+  color: white
+  background-color: $blue-400
+
+  &:hover
+    span
+      width: 100%
+
+    svg
+      left: 50%
+      transform: translateX(-50%) scale(1.3)
+
+  span
+    width: 0%
+    height: 100%
+
+    position: absolute
+    top: 0
+    right: 0
+    z-index: 1
+
+    background-color: $blue-400
+    transition: .3s
+
+  p
+    position: absolute
+    left: 34%
+    font-size: 18px
+    font-family: $baloo-bold
+
+  svg
+    position: absolute
+    left: 57%
+    font-size: 24px
+    transition: .3s
+    z-index: 1
+
+// Interativo
+
+.form-cover--hide
+  display: none

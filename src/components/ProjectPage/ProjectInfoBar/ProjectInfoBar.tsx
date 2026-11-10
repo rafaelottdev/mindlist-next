@@ -1,23 +1,23 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { FaCheck, FaRegCircle, FaRegClock } from "react-icons/fa6"
-import { LuClipboardPen } from "react-icons/lu"
 import { PiStarBold, PiStarFill } from "react-icons/pi"
 import {
   RiSignalCellular1Fill,
   RiSignalCellular2Fill,
   RiSignalCellular3Fill,
 } from "react-icons/ri"
+import { useNotify } from "@/contexts/NotificationAlert/NotificationAlert"
+import { updateFavorite } from "@/lib/actions/updateFavorite"
 import type { ProjectListType } from "@/types/ProjectListType"
 import styles from "./ProjectInfoBar.module.sass"
 
-function ProjectInfoBar({
-  projectData,
-}: {
-  projectData: ProjectListType | Record<string, any>
-}) {
-  const [favorite, _setFavorite] = useState<boolean>(projectData.favorite)
+function ProjectInfoBar({ projectData }: { projectData: ProjectListType }) {
+  const router = useRouter()
+  const { notify } = useNotify()
+  const [favorite, setFavorite] = useState<boolean>(projectData.favorite)
 
   const newDeadline = new Date(projectData.deadline)
     .toLocaleDateString("pt-BR", {
@@ -29,6 +29,23 @@ function ProjectInfoBar({
   const newTagList = projectData.tags.map((tag: string, id: number) => {
     return { id, name: tag }
   })
+
+  async function handleFavorite() {
+    try {
+      const result = await updateFavorite(projectData.favorite, projectData.id)
+
+      if (result.error && result.message) {
+        throw new Error(result.message)
+      } else {
+        setFavorite((prev) => !prev)
+        router.refresh()
+        notify(result.message)
+      }
+    } catch (error) {
+      console.log(error)
+      notify(error instanceof Error ? error.message : String(error))
+    }
+  }
 
   return (
     <div className={styles["project-bar"]}>
@@ -94,25 +111,13 @@ function ProjectInfoBar({
         </div>
       </div>
 
-      <div className={styles["project-bar__favorite-edit-container"]}>
+      <div className={styles["project-bar__favorite-container"]}>
         <button
           type="button"
-          className={`
-            ${styles["project-bar__favorite-button"]}
-            ${styles["project-bar__button"]}
-          `}
+          className={` ${styles["project-bar__favorite-button"]}`}
+          onClick={handleFavorite}
         >
           {favorite ? <PiStarFill /> : <PiStarBold />}
-        </button>
-
-        <button
-          type="button"
-          className={`
-            ${styles["project-bar__edit-button"]}
-            ${styles["project-bar__button"]}
-          `}
-        >
-          <LuClipboardPen />
         </button>
       </div>
     </div>
