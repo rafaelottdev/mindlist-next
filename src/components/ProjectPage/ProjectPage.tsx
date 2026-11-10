@@ -49,7 +49,7 @@ function ProjectPage({ resultProject, resultLists }: ProjectPageProps) {
     <div className={styles["project-page-container"]}>
       <ProjectBackground src={projectData.image_url} />
 
-      <section>
+      <section className={styles["project-page-container__lists"]}>
         <ProjectLists lists={lists} />
 
         <CreateListForm projectData={projectData} />

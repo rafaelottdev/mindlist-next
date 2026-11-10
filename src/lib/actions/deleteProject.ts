@@ -29,11 +29,12 @@ export async function deleteProject(
   }
 
   const userId = result?.user?.id
-  if (!userId)
+  if (!userId) {
     return {
       error: true,
       message: "Não autorizado",
     }
+  }
 
   try {
     const sql = neon(dataBaseUrl)
@@ -52,6 +53,7 @@ export async function deleteProject(
     }
   } catch (error) {
     console.log(error)
+
     return { error: true, message: "Erro ao tentar excluir o projeto" }
   }
 

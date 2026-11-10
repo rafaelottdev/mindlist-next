@@ -56,7 +56,6 @@ function ProjectCard({ project }: ProjectCardProps) {
         throw new Error(result.message)
       } else {
         setFavorite((prev) => !prev)
-        router.refresh()
         notify(result.message)
       }
     } catch (error) {
