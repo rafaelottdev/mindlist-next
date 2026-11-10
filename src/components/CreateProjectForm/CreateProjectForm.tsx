@@ -8,7 +8,7 @@ import { FaXmark } from "react-icons/fa6"
 import { useNotify } from "@/contexts/NotificationAlert/NotificationAlert"
 import { createProject } from "@/lib/actions/createProject"
 import { formCreateProjectSchema } from "@/lib/schemas/formCreateProjectSchema"
-import type { formCreateProjectType } from "@/types/FormCreateProjectType"
+import type { FormCreateProjectType } from "@/types/FormCreateProjectType"
 import type { TagType } from "@/types/TagType"
 import CoverInput from "../CoverInput/CoverInput"
 import Input from "../Input/Input"
@@ -33,7 +33,7 @@ function CreateProjectForm() {
     formState: { errors },
     reset,
     watch,
-  } = useForm<formCreateProjectType>({
+  } = useForm<FormCreateProjectType>({
     resolver: zodResolver(formCreateProjectSchema),
     defaultValues: {
       projectTags: [],
@@ -44,7 +44,7 @@ function CreateProjectForm() {
     name: "projectTags",
   })
 
-  async function onSubmit(projectData: formCreateProjectType) {
+  async function onSubmit(projectData: FormCreateProjectType) {
     try {
       setLoading(true)
       const name = projectData.projectName
@@ -89,7 +89,7 @@ function CreateProjectForm() {
     } catch (error) {
       console.log(error)
       setLoading(false)
-      notify("Algo de errado ao tentar criar um projeto")
+      notify("Algo deu errado ao tentar criar o projeto")
     } finally {
       setLoading(false)
     }

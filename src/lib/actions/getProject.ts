@@ -1,9 +1,14 @@
 "use server"
 
 import { neon } from "@neondatabase/serverless"
+import type { ProjectListType } from "@/types/ProjectListType"
 import { getUser } from "./getUser"
 
-export async function getProject(projectId: string) {
+export async function getProject(projectId: string): Promise<{
+  error: boolean
+  message: string
+  response: ProjectListType[] | null
+}> {
   const dataBaseUrl = process.env.DATABASE_URL
 
   try {
@@ -40,11 +45,11 @@ export async function getProject(projectId: string) {
   const sql = neon(dataBaseUrl)
 
   try {
-    const response = await sql`
+    const response = (await sql`
       SELECT * FROM projects
 
       WHERE user_id = ${userId} AND id = ${projectId}
-    `
+    `) as ProjectListType[]
 
     return {
       error: false,

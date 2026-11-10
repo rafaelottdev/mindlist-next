@@ -17,7 +17,7 @@ import type { TagType } from "@/types/TagType"
 import styles from "./ProjectEditForm.module.sass"
 
 type ProjectEditFormProps = {
-  project: ProjectListType | Record<string, any>
+  project: ProjectListType
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>
 }
 

@@ -8,11 +8,11 @@ import { getUser } from "./getUser"
 
 export async function updateProject(
   formData: FormData,
-  project: ProjectListType | Record<string, any>,
+  project: ProjectListType,
 ) {
   const dataBaseUrl = process.env.DATABASE_URL
   const formattedDeadline = new Intl.DateTimeFormat("fr-CA").format(
-    project.deadline,
+    new Date(project.deadline),
   )
   let newUrl = ""
   const oldUrl = project.image_url
@@ -32,17 +32,20 @@ export async function updateProject(
   const result = await getUser()
 
   const userId = result?.user?.id
-  if (!userId)
+  if (!userId) {
     return {
       error: true,
       message: "Usuario não encontrado",
     }
+  }
 
   const newName = formData.get("newName")
   const newDeadline = formData.get("newDeadline")
   const newImageFile = formData.get("newImageFile")
   const newPriority = formData.get("newPriority")
-  const newTagList = formData.getAll("newTagList")
+  const newTagList = formData
+    .getAll("newTagList")
+    .filter((item): item is string => typeof item === "string")
 
   const sql = neon(dataBaseUrl)
 

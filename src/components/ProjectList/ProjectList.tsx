@@ -8,7 +8,7 @@ import styles from "./ProjectList.module.sass"
 interface ProjectListProps {
   error: boolean
   message: string
-  response: ProjectListType[] | null | Record<string, any>[]
+  response: ProjectListType[] | null
 }
 
 function ProjectList({
@@ -29,7 +29,7 @@ function ProjectList({
 
   return (
     <ul className={styles["project-list"]}>
-      {projectList.map((project: ProjectListType | Record<string, any>) => (
+      {projectList.map((project: ProjectListType) => (
         <li key={project.id}>
           <ProjectCard project={project} />
         </li>

@@ -1,12 +1,9 @@
 "use server"
 
 import { neon } from "@neondatabase/serverless"
+import { getUser } from "./getUser"
 
-export async function updateFavorite(
-  favorite: boolean,
-  projectId: number,
-  userId: string,
-) {
+export async function updateFavorite(favorite: boolean, projectId: number) {
   const dataBaseUrl = process.env.DATABASE_URL
 
   try {
@@ -16,6 +13,25 @@ export async function updateFavorite(
   } catch (error) {
     console.log(error)
     return { error: true, message: "Erro ao tentar conectar o banco" }
+  }
+
+  const result = await getUser()
+
+  if (result.error) {
+    return {
+      error: true,
+      message: "Não autorizado",
+      response: null,
+    }
+  }
+
+  const userId = result?.user?.id
+  if (!userId) {
+    return {
+      error: true,
+      message: "Usuario não encontrado",
+      response: null,
+    }
   }
 
   const sql = neon(dataBaseUrl)
