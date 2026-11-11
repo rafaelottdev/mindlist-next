@@ -8,7 +8,7 @@ export async function getUser() {
   if (error) {
     return {
       error: true,
-      message: "Erro ao buscar informações do usuario",
+      message: "Erro ao buscar o usuario",
       user: null,
     }
   }
