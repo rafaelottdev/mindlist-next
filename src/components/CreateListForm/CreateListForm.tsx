@@ -10,6 +10,7 @@ import { createList } from "@/lib/actions/createList"
 import { formCreateListSchema } from "@/lib/schemas/formCreateListSchema"
 import type { FormCreateListType } from "@/types/FormCreateListType"
 import type { ProjectListType } from "@/types/ProjectListType"
+import ButtonLoading from "../loadings/ButtonLoading/ButtonLoading"
 import CreateListCover from "./CreateListCover/CreateListCover"
 import styles from "./CreateListForm.module.sass"
 
@@ -17,7 +18,7 @@ function CreateListForm({ projectData }: { projectData: ProjectListType }) {
   const router = useRouter()
   const { notify } = useNotify()
   const [showForm, setShowForm] = useState<boolean>(false)
-  const [_loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
 
   const {
     register,
@@ -122,7 +123,7 @@ function CreateListForm({ projectData }: { projectData: ProjectListType }) {
 
         <div className={styles["create-list__button-container"]}>
           <button type="submit" className={styles["create-list__send-button"]}>
-            Criar
+            {loading ? <ButtonLoading /> : <p>Criar</p>}
           </button>
 
           <button
