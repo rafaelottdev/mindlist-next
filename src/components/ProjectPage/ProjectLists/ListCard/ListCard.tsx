@@ -10,6 +10,7 @@ import {
   RiSignalCellular2Fill,
   RiSignalCellular3Fill,
 } from "react-icons/ri"
+import ButtonLoading from "@/components/loadings/ButtonLoading/ButtonLoading"
 import { useConfirm } from "@/contexts/ConfirmAlert/ConfirmAlert"
 import { useNotify } from "@/contexts/NotificationAlert/NotificationAlert"
 import { deleteList } from "@/lib/actions/deleteList"
@@ -22,12 +23,15 @@ function ListCard({ list }: { list: ListType }) {
   const { notify } = useNotify()
   const { confirm } = useConfirm()
   const [editMode, setEditMode] = useState<boolean>(false)
+  const [deleteLoading, setDeleteLoading] = useState<boolean>(false)
 
   async function handleDeleteList() {
     const approve = await confirm("Deseja excluir a lista")
 
     try {
       if (approve) {
+        setDeleteLoading(true)
+
         const result = await deleteList(list.id)
 
         if (result.error && result.message) {
@@ -40,7 +44,10 @@ function ListCard({ list }: { list: ListType }) {
       }
     } catch (error) {
       console.log(error)
+      setDeleteLoading(false)
       notify(error instanceof Error ? error.message : String(error))
+    } finally {
+      setDeleteLoading(false)
     }
   }
 
@@ -88,7 +95,7 @@ function ListCard({ list }: { list: ListType }) {
 
             <div className={styles["list-card__edit-container"]}>
               <button type="button" onClick={handleDeleteList}>
-                <FiTrash />
+                {deleteLoading ? <ButtonLoading /> : <FiTrash />}
               </button>
 
               <button type="button" onClick={() => setEditMode(true)}>

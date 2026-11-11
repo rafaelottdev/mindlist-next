@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { FaXmark } from "react-icons/fa6"
+import ButtonLoading from "@/components/loadings/ButtonLoading/ButtonLoading"
 import { useNotify } from "@/contexts/NotificationAlert/NotificationAlert"
 import { updateList } from "@/lib/actions/updateList"
 import { formEditListSchema } from "@/lib/schemas/formEditListSchema"
@@ -21,7 +22,7 @@ function ListEditForm({
 }) {
   const router = useRouter()
   const { notify } = useNotify()
-  const [_loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
 
   const {
     register,
@@ -34,14 +35,14 @@ function ListEditForm({
 
   async function onSubmit(formData: FormEditListType) {
     try {
-      setLoading(true)
+      if (formData.editListName || formData.editListPriority) {
+        setLoading(true)
 
-      const result = await updateList(formData, list)
+        const result = await updateList(formData, list)
 
-      if (result.error) {
-        notify(result.message)
-      } else {
-        if (formData.editListName || formData.editListPriority) {
+        if (result.error) {
+          notify(result.message)
+        } else {
           router.refresh()
           notify(result.message)
           reset()
@@ -125,7 +126,7 @@ function ListEditForm({
 
       <div className={styles["list-form__button-container"]}>
         <button type="submit" className={styles["list-form__send-button"]}>
-          Editar
+          {loading ? <ButtonLoading /> : <p>Editar</p>}
         </button>
 
         <button
