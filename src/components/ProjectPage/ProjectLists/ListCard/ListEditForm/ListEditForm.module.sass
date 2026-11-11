@@ -1,0 +1,106 @@
+@use "@/styles/abstracts/variables" as *
+@use "@/styles/abstracts/mixins" as *
+
+.list-form
+  width: 350px
+  height: 130px
+
+  @include flex-center
+  gap: 20px
+  
+  font-family: $baloo-regular
+  letter-spacing: .3px
+  overflow: hidden
+  border-radius: 10px
+  color: white
+  background-color: $blue-400
+
+.list-form__field-container
+  display: flex
+  flex-direction: column
+  gap: 10px
+
+.list-form__name
+  display: flex
+  flex-direction: column
+  gap: 2px
+
+  label
+    padding-left: 1px
+    font-size: 13px
+
+  input
+    width: 210px
+    height: 30px
+    padding: 5px
+
+    color: white
+    font-family: $baloo-regular
+    font-size: 14px
+    border-radius: 5px
+    background-color: $blue-300
+
+.list-form__priority-container
+  legend
+    padding-left: 1px
+    font-size: 13px
+    margin-bottom: -2px
+
+.list-form__priority-options
+  display: flex
+  gap: 10px
+
+.list-form__priority
+  display: flex
+  align-items: center
+  gap: 3px
+
+  label
+    font-size: 14px
+
+.list-form__button-container
+  height: 100%
+  padding: 36px 0 11px 0
+  
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+  align-items: center
+
+  button
+    @include flex-center
+    cursor: pointer
+    border-radius: 5px
+
+.list-form__send-button
+  width: 80px
+  height: 30px
+
+  font-size: 14px
+  font-family: $baloo-semibold
+  letter-spacing: .3px
+  
+  color: $blue-400
+  background-color: white
+  transition: .3s
+
+  &:hover
+    transform: scale(.95)
+
+.list-form__cancel-button
+  width: 55px
+  height: 30px
+
+  color: white
+  background-color: transparent
+  transition: .3s
+
+  &:hover
+    transform: scale(.95)
+
+  svg
+    font-size: 27px
+
+.input-error
+  margin-top: -1px
+  font-size: 12px

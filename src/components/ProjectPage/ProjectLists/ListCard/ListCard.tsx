@@ -15,6 +15,7 @@ import { useNotify } from "@/contexts/NotificationAlert/NotificationAlert"
 import { deleteList } from "@/lib/actions/deleteList"
 import type { ListType } from "@/types/ListType"
 import styles from "./ListCard.module.sass"
+import ListEditForm from "./ListEditForm/ListEditForm"
 
 function ListCard({ list }: { list: ListType }) {
   const router = useRouter()
@@ -44,51 +45,60 @@ function ListCard({ list }: { list: ListType }) {
   }
 
   return (
-    <div className={styles["list-card"]}>
-      <div className={styles["list-card__info-top"]}>
-        <div className={styles["list-card__title-priority-container"]}>
-          <h4>{list.title}</h4>
+    <>
+      {editMode ? (
+        <ListEditForm list={list} setEditMode={setEditMode} />
+      ) : (
+        <div className={styles["list-card"]}>
+          <div className={styles["list-card__info-top"]}>
+            <div className={styles["list-card__title-priority-container"]}>
+              <h4>{list.title}</h4>
 
-          {list.priority === "low" ? (
-            <RiSignalCellular1Fill />
-          ) : list.priority === "medium" ? (
-            <RiSignalCellular2Fill />
-          ) : list.priority === "high" ? (
-            <RiSignalCellular3Fill />
-          ) : (
-            ""
-          )}
+              {list.priority === "low" ? (
+                <RiSignalCellular1Fill />
+              ) : list.priority === "medium" ? (
+                <RiSignalCellular2Fill />
+              ) : list.priority === "high" ? (
+                <RiSignalCellular3Fill />
+              ) : (
+                ""
+              )}
+            </div>
+
+            <p className={styles["list-card__task-count"]}>0</p>
+          </div>
+
+          <div className={styles["list-card__task-container"]}>
+            <ul className={styles["list-card__task-list"]}></ul>
+
+            <button
+              type="button"
+              className={styles["list-card__add-task-button"]}
+            >
+              <FaPlus />
+
+              <p>Adicionar Tarefa</p>
+            </button>
+          </div>
+
+          <div className={styles["list-card__info-bottom"]}>
+            <div className={styles["list-card__progress-task-bar"]}>
+              <div></div>
+            </div>
+
+            <div className={styles["list-card__edit-container"]}>
+              <button type="button" onClick={handleDeleteList}>
+                <FiTrash />
+              </button>
+
+              <button type="button" onClick={() => setEditMode(true)}>
+                <LuClipboardPen />
+              </button>
+            </div>
+          </div>
         </div>
-
-        <p className={styles["list-card__task-count"]}>0</p>
-      </div>
-
-      <div className={styles["list-card__task-container"]}>
-        <ul className={styles["list-card__task-list"]}></ul>
-
-        <button type="button" className={styles["list-card__add-task-button"]}>
-          <FaPlus />
-
-          <p>Adicionar Tarefa</p>
-        </button>
-      </div>
-
-      <div className={styles["list-card__info-bottom"]}>
-        <div className={styles["list-card__progress-task-bar"]}>
-          <div></div>
-        </div>
-
-        <div className={styles["list-card__edit-container"]}>
-          <button type="button" onClick={handleDeleteList}>
-            <FiTrash />
-          </button>
-
-          <button type="button">
-            <LuClipboardPen />
-          </button>
-        </div>
-      </div>
-    </div>
+      )}
+    </>
   )
 }
 
