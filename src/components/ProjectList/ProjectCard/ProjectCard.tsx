@@ -1,7 +1,9 @@
+"use client"
+
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { FaCheck, FaRegCircle, FaRegClock } from "react-icons/fa6"
 import { FiTrash } from "react-icons/fi"
 import { LuClipboardPen } from "react-icons/lu"
@@ -15,6 +17,8 @@ import ButtonLoading from "@/components/loadings/ButtonLoading/ButtonLoading"
 import { useConfirm } from "@/contexts/ConfirmAlert/ConfirmAlert"
 import { useNotify } from "@/contexts/NotificationAlert/NotificationAlert"
 import { deleteProject } from "@/lib/actions/deleteProject"
+import { getCompletedList } from "@/lib/actions/getCompletedList"
+import { getLists } from "@/lib/actions/getLists"
 import { updateFavorite } from "@/lib/actions/updateFavorite"
 import type { ProjectListType } from "@/types/ProjectListType"
 import styles from "./ProjectCard.module.sass"
@@ -31,6 +35,8 @@ function ProjectCard({ project }: ProjectCardProps) {
   const [favorite, setFavorite] = useState<boolean>(project.favorite)
   const [editMode, setEditMode] = useState<boolean>(false)
   const [deleteLoading, setDeleteLoading] = useState<boolean>(false)
+  const [listQtd, setListQtd] = useState<number>(0)
+  const [completedListQtd, setCompletedListQtd] = useState<number>(0)
 
   const newDeadline = new Date(project.deadline)
     .toLocaleDateString("pt-BR", {
@@ -92,6 +98,25 @@ function ProjectCard({ project }: ProjectCardProps) {
       setDeleteLoading(false)
     }
   }
+
+  useEffect(() => {
+    async function handleList() {
+      const listResult = await getLists(project.id)
+      const completedListResult = await getCompletedList(project.id)
+
+      const listQtd = listResult?.response?.length
+      const completedListResultQtd = completedListResult?.response?.length
+      if (listQtd) {
+        setListQtd(listQtd)
+      }
+
+      if (completedListResultQtd) {
+        setCompletedListQtd(completedListResultQtd)
+      }
+    }
+
+    handleList()
+  }, [project.id])
 
   return (
     <>
@@ -231,13 +256,16 @@ function ProjectCard({ project }: ProjectCardProps) {
                 <div
                   className={styles["project-card__completed-task-container"]}
                 >
-                  {/* Qtde tarefas concluidas */}
                   <div className={styles["project-card__completed-task-bar"]}>
-                    <div></div>
+                    <div
+                      style={{
+                        width: `${(completedListQtd / listQtd) * 100}%`,
+                      }}
+                    ></div>
                   </div>
 
                   <p className={styles["project-card__completed-task-text"]}>
-                    {} de {} Listas Concluidas
+                    {completedListQtd} de {listQtd} Listas Concluidas
                   </p>
                 </div>
               </div>

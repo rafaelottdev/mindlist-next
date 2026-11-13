@@ -1,3 +1,5 @@
+"use server"
+
 import { neon } from "@neondatabase/serverless"
 import type { ListType } from "@/types/ListType"
 import { getUser } from "./getUser"
