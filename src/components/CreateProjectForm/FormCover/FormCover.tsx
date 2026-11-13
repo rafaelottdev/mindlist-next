@@ -1,13 +1,16 @@
 import Image from "next/image"
+import type { UseFormSetFocus } from "react-hook-form"
 import { HiLogout } from "react-icons/hi"
+import type { FormCreateProjectType } from "@/types/FormCreateProjectType"
 import styles from "./FormCover.module.sass"
 
 interface FormCoverProps {
   showForm: boolean
   setShowForm: React.Dispatch<React.SetStateAction<boolean>>
+  setFocus: UseFormSetFocus<FormCreateProjectType>
 }
 
-function FormCover({ showForm, setShowForm }: FormCoverProps) {
+function FormCover({ showForm, setShowForm, setFocus }: FormCoverProps) {
   return (
     <div
       className={`
@@ -30,7 +33,10 @@ function FormCover({ showForm, setShowForm }: FormCoverProps) {
           ${styles["form-cover__add-button"]}
           ${showForm && styles["form-cover__add-button--hide"]}
         `}
-        onClick={() => setShowForm(true)}
+        onClick={() => {
+          setShowForm(true)
+          setFocus("projectName")
+        }}
       >
         <span className={styles["form-cover__button-background"]}></span>
 

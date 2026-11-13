@@ -25,6 +25,7 @@ function CreateListForm({ projectData }: { projectData: ProjectListType }) {
     handleSubmit,
     formState: { errors },
     reset,
+    setFocus,
   } = useForm<FormCreateListType>({
     resolver: zodResolver(formCreateListSchema),
   })
@@ -53,7 +54,11 @@ function CreateListForm({ projectData }: { projectData: ProjectListType }) {
 
   return (
     <div className={styles["create-list"]}>
-      <CreateListCover showForm={showForm} setShowForm={setShowForm} />
+      <CreateListCover
+        showForm={showForm}
+        setShowForm={setShowForm}
+        setFocus={setFocus}
+      />
 
       <form
         onSubmit={handleSubmit(onSubmit)}

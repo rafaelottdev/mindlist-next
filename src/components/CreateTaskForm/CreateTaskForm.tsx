@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { FaXmark } from "react-icons/fa6"
 import { useNotify } from "@/contexts/NotificationAlert/NotificationAlert"
@@ -30,6 +30,7 @@ function CreateTaskForm({
     handleSubmit,
     formState: { errors },
     reset,
+    setFocus,
   } = useForm<formCreateTaskType>({
     resolver: zodResolver(formCreateTaskSchema),
   })
@@ -54,6 +55,10 @@ function CreateTaskForm({
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    setFocus("taskName")
+  }, [setFocus])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles["create-form"]}>
