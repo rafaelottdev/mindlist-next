@@ -1,6 +1,8 @@
+"use client"
+
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useFieldArray, useForm } from "react-hook-form"
 import { FaXmark } from "react-icons/fa6"
 import CoverInput from "@/components/CoverInput/CoverInput"
@@ -34,6 +36,7 @@ function ProjectEditForm({ project, setEditMode }: ProjectEditFormProps) {
     handleSubmit,
     formState: { errors },
     watch,
+    setFocus,
   } = useForm<FormEditProjectType>({
     resolver: zodResolver(formEditProjectSchema),
     defaultValues: {
@@ -96,6 +99,10 @@ function ProjectEditForm({ project, setEditMode }: ProjectEditFormProps) {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    setFocus("editProjectName")
+  }, [setFocus])
 
   return (
     <form

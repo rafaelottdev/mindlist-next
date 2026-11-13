@@ -33,6 +33,7 @@ function CreateProjectForm() {
     formState: { errors },
     reset,
     watch,
+    setFocus,
   } = useForm<FormCreateProjectType>({
     resolver: zodResolver(formCreateProjectSchema),
     defaultValues: {
@@ -105,7 +106,11 @@ function CreateProjectForm() {
 
   return (
     <div className={styles["form-container"]}>
-      <FormCover showForm={showForm} setShowForm={setShowForm} />
+      <FormCover
+        showForm={showForm}
+        setShowForm={setShowForm}
+        setFocus={setFocus}
+      />
 
       <form
         className={styles["form-container__form"]}

@@ -101,7 +101,11 @@ function ListCard({ list }: { list: ListType }) {
             <ul className={styles["list-card__task-list"]}>
               {taskList?.map((task) => (
                 <li key={task.id}>
-                  <TaskCard task={task} />
+                  <TaskCard
+                    task={task}
+                    listId={list.id}
+                    onUpdate={handleTaskList}
+                  />
                 </li>
               ))}
             </ul>

@@ -4,7 +4,7 @@
 .task-card
   width: 100%
   height: 35px
-  padding: 0 8px
+  padding: 0 8px 0 0
 
   display: flex
   position: relative
@@ -15,22 +15,44 @@
   border-radius: 5px
   background-color: $blue-300
 
+.task-card__check-action
+  width: 100%
+  height: 100%
+  padding: 0 0 0 8px
+
+  display: flex
+  align-items: center
+
+  border-radius: 5px
+  cursor: pointer
+  background-color: transparent
+
 .task-card__title-container
   display: flex
   align-items: center
   gap: 5px
 
 .task-card__check-button
-  width: 11px
-  height: 11px
+  width: 13px
+  height: 13px
+  padding: 1px 0 0 0
 
+  @include flex-center
   border-radius: 50%
 
   cursor: pointer
   border: 1px solid white
   background-color: transparent
+  
+  svg
+    font-size: 9px
+    color: white
 
 .task-card__title
+  font-size: 14px
+  font-family: $baloo-medium
+  letter-spacing: .3px
+  color: white
 
 .task-card__toggle-menu
   width: 30px
@@ -48,8 +70,8 @@
     background-color: #ffffff16
 
   div
-    width: 4px
-    height: 4px
+    width: 3px
+    height: 3px
 
     border-radius: 50%
     background-color: #ffffff9d
@@ -96,3 +118,7 @@
 
 .task-card__menu-container--display
   display: grid
+
+.task-card__check-button--checked
+  border-color: transparent
+  background-color: green

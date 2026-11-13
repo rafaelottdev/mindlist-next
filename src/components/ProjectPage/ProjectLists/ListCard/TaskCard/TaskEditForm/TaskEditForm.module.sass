@@ -1,0 +1,64 @@
+@use "@/styles/abstracts/variables" as *
+@use "@/styles/abstracts/mixins" as *
+  
+.edit-form
+  display: flex
+  justify-content: space-between
+  align-items: center
+
+.edit-form__input_container
+  width: 100%
+
+.edit-form__input
+  width: 220px
+  height: 35px
+  padding-left: 8px
+
+  font-size: 14px
+  font-family: $baloo-medium
+  letter-spacing: .3px
+
+  border-radius: 5px
+  color: white
+  background-color: $blue-300
+
+.edit-form__button-container
+  display: flex
+  align-items: center
+  gap: 5px
+
+  button
+    @include flex-center
+    cursor: pointer
+    border-radius: 5px
+    transition: .3s
+
+    &:hover
+      transform: scale(.95)
+
+.edit-form__edit-button
+  width: 50px
+  height: 25px
+
+  font-size: 13px
+  font-family: $baloo-medium
+  letter-spacing: .3px
+
+  div
+    border-top-color: $blue-400
+
+.edit-form__close-button
+  width: 30px
+  height: 30px
+
+  color: white
+  background-color: transparent
+
+  svg
+    font-size: 21px
+
+.input-error
+  margin-left: 1px
+  font-size: 12px
+  font-family: $baloo-regular
+  color: white

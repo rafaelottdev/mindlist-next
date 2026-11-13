@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { FaXmark } from "react-icons/fa6"
 import ButtonLoading from "@/components/loadings/ButtonLoading/ButtonLoading"
@@ -29,6 +29,7 @@ function ListEditForm({
     handleSubmit,
     formState: { errors },
     reset,
+    setFocus,
   } = useForm<FormEditListType>({
     resolver: zodResolver(formEditListSchema),
   })
@@ -57,6 +58,10 @@ function ListEditForm({
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    setFocus("editListName")
+  }, [setFocus])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles["list-form"]}>

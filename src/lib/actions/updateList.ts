@@ -37,7 +37,6 @@ export async function updateList(formData: FormEditListType, list: ListType) {
   const sql = neon(dataBaseUrl)
 
   try {
-    console.log(list.title)
     if (formData.editListName && formData.editListName !== list.title) {
       await sql`
         UPDATE lists

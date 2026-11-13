@@ -65,7 +65,6 @@ function ProjectCard({ project }: ProjectCardProps) {
         notify(result.message)
       }
     } catch (error) {
-      console.log(error)
       notify(error instanceof Error ? error.message : String(error))
     }
   }
@@ -91,7 +90,6 @@ function ProjectCard({ project }: ProjectCardProps) {
         }
       }
     } catch (error) {
-      console.log(error)
       setDeleteLoading(false)
       notify(error instanceof Error ? error.message : String(error))
     } finally {
@@ -204,7 +202,7 @@ function ProjectCard({ project }: ProjectCardProps) {
                     `}
                     onClick={(e) => {
                       e.preventDefault()
-                      setEditMode((prev) => !prev)
+                      setEditMode(true)
                     }}
                   >
                     <LuClipboardPen />
