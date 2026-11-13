@@ -1,0 +1,98 @@
+@use "@/styles/abstracts/variables" as *
+@use "@/styles/abstracts/mixins" as *
+  
+.task-card
+  width: 100%
+  height: 35px
+  padding: 0 8px
+
+  display: flex
+  position: relative
+  align-items: center
+  justify-content: space-between
+
+  cursor: pointer
+  border-radius: 5px
+  background-color: $blue-300
+
+.task-card__title-container
+  display: flex
+  align-items: center
+  gap: 5px
+
+.task-card__check-button
+  width: 11px
+  height: 11px
+
+  border-radius: 50%
+
+  cursor: pointer
+  border: 1px solid white
+  background-color: transparent
+
+.task-card__title
+
+.task-card__toggle-menu
+  width: 30px
+  height: 30px
+
+  @include flex-center
+  gap: 3px
+
+  border-radius: 5px
+  cursor: pointer
+  background-color: transparent
+  transition: .3s
+
+  &:hover
+    background-color: #ffffff16
+
+  div
+    width: 4px
+    height: 4px
+
+    border-radius: 50%
+    background-color: #ffffff9d
+
+.task-card__menu-container
+  width: 55px
+  height: 30px
+  display: none
+
+  position: absolute
+  right: 40px
+  top: 50%
+  transform: translateY(-50%)
+  z-index: 1
+
+  grid-template-columns: 1fr 1fr
+  overflow: hidden
+
+  z-index:100
+  border-radius: 5px
+  background-color: $blue-300
+
+  button
+    @include flex-center
+    cursor: pointer
+    background-color: transparent
+    transition: .3s
+
+    &:hover
+      background-color: #fbfafa18
+
+    svg
+      color: white
+      font-size: 16px
+
+.task-card__edit-button
+  background: red
+  svg
+
+.task-card__delete-button
+  svg
+
+// Interativo
+
+.task-card__menu-container--display
+  display: grid
