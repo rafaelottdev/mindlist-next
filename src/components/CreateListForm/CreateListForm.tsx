@@ -14,7 +14,12 @@ import ButtonLoading from "../loadings/ButtonLoading/ButtonLoading"
 import CreateListCover from "./CreateListCover/CreateListCover"
 import styles from "./CreateListForm.module.sass"
 
-function CreateListForm({ projectData }: { projectData: ProjectListType }) {
+interface CreateListFormProps {
+  projectData: ProjectListType
+  handleList: () => void
+}
+
+function CreateListForm({ projectData, handleList }: CreateListFormProps) {
   const router = useRouter()
   const { notify } = useNotify()
   const [showForm, setShowForm] = useState<boolean>(false)
@@ -42,6 +47,7 @@ function CreateListForm({ projectData }: { projectData: ProjectListType }) {
         notify(result.message)
         reset()
         setShowForm(false)
+        handleList()
       }
     } catch (error) {
       console.log(error)

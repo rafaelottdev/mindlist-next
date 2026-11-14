@@ -15,6 +15,7 @@ import ButtonLoading from "@/components/loadings/ButtonLoading/ButtonLoading"
 import { useConfirm } from "@/contexts/ConfirmAlert/ConfirmAlert"
 import { useNotify } from "@/contexts/NotificationAlert/NotificationAlert"
 import { deleteList } from "@/lib/actions/deleteList"
+import { getCompletedTask } from "@/lib/actions/getCompletedTask"
 import { getTasks } from "@/lib/actions/getTasks"
 import type { ListType } from "@/types/ListType"
 import type { taskType } from "@/types/taskType"
@@ -22,14 +23,21 @@ import styles from "./ListCard.module.sass"
 import ListEditForm from "./ListEditForm/ListEditForm"
 import TaskCard from "./TaskCard/TaskCard"
 
-function ListCard({ list }: { list: ListType }) {
+interface ListCardProps {
+  list: ListType
+  handleList: () => void
+}
+
+function ListCard({ list, handleList }: ListCardProps) {
   const router = useRouter()
   const { notify } = useNotify()
   const { confirm } = useConfirm()
   const [editMode, setEditMode] = useState<boolean>(false)
   const [createTaskMode, setCreateTaskMode] = useState<boolean>(false)
+  const [closeEditTask, setCloseEditTask] = useState<boolean>(true)
   const [deleteLoading, setDeleteLoading] = useState<boolean>(false)
   const [taskList, setTaskList] = useState<taskType[] | null>(null)
+  const [completedTaskQtd, setCompletedTaskQtd] = useState<number>(0)
 
   async function handleDeleteList() {
     const approve = await confirm("Deseja excluir a lista")
@@ -44,7 +52,7 @@ function ListCard({ list }: { list: ListType }) {
           throw new Error(result.message)
         } else {
           notify(result.message)
-
+          handleList()
           router.refresh()
         }
       }
@@ -56,6 +64,17 @@ function ListCard({ list }: { list: ListType }) {
       setDeleteLoading(false)
     }
   }
+
+  const handleCompletedTask = useCallback(async () => {
+    const completedTaskResult = await getCompletedTask(list.id)
+    const completedTaskResultQtd = completedTaskResult?.response?.length
+
+    if (completedTaskResultQtd) {
+      setCompletedTaskQtd(completedTaskResultQtd)
+    } else {
+      setCompletedTaskQtd(0)
+    }
+  }, [list.id])
 
   const handleTaskList = useCallback(async () => {
     const result = await getTasks(list.id)
@@ -71,7 +90,8 @@ function ListCard({ list }: { list: ListType }) {
 
   useEffect(() => {
     handleTaskList()
-  }, [handleTaskList])
+    handleCompletedTask()
+  }, [handleTaskList, handleCompletedTask])
 
   return (
     <>
@@ -94,7 +114,9 @@ function ListCard({ list }: { list: ListType }) {
               )}
             </div>
 
-            <p className={styles["list-card__task-count"]}>0</p>
+            <p className={styles["list-card__task-count"]}>
+              {completedTaskQtd} de {taskList?.length}
+            </p>
           </div>
 
           <div className={styles["list-card__task-container"]}>
@@ -105,6 +127,10 @@ function ListCard({ list }: { list: ListType }) {
                     task={task}
                     listId={list.id}
                     onUpdate={handleTaskList}
+                    setCreateTaskMode={setCreateTaskMode}
+                    setCloseEditTask={setCloseEditTask}
+                    closeEditTask={closeEditTask}
+                    handleCompletedTask={handleCompletedTask}
                   />
                 </li>
               ))}
@@ -120,7 +146,10 @@ function ListCard({ list }: { list: ListType }) {
               <button
                 type="button"
                 className={styles["list-card__add-task-button"]}
-                onClick={() => setCreateTaskMode(true)}
+                onClick={() => {
+                  setCreateTaskMode(true)
+                  setCloseEditTask(false)
+                }}
               >
                 <FaPlus />
 

@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { FaCheck, FaRegCircle, FaRegClock } from "react-icons/fa6"
 import { PiStarBold, PiStarFill } from "react-icons/pi"
 import {
@@ -14,7 +14,19 @@ import { updateFavorite } from "@/lib/actions/updateFavorite"
 import type { ProjectListType } from "@/types/ProjectListType"
 import styles from "./ProjectInfoBar.module.sass"
 
-function ProjectInfoBar({ projectData }: { projectData: ProjectListType }) {
+interface ProjectInfoBarProps {
+  projectData: ProjectListType
+  handleList: () => void
+  listQtd: number
+  completedListQtd: number
+}
+
+function ProjectInfoBar({
+  projectData,
+  handleList,
+  listQtd,
+  completedListQtd,
+}: ProjectInfoBarProps) {
   const router = useRouter()
   const { notify } = useNotify()
   const [favorite, setFavorite] = useState<boolean>(projectData.favorite)
@@ -46,6 +58,10 @@ function ProjectInfoBar({ projectData }: { projectData: ProjectListType }) {
       notify(error instanceof Error ? error.message : String(error))
     }
   }
+
+  useEffect(() => {
+    handleList()
+  }, [handleList])
 
   return (
     <div className={styles["project-bar"]}>
@@ -102,11 +118,15 @@ function ProjectInfoBar({ projectData }: { projectData: ProjectListType }) {
 
         <div className={styles["project-bar__task-bar-container"]}>
           <div className={styles["project-bar__task-bar"]}>
-            <div></div>
+            <div
+              style={{
+                width: `${completedListQtd === 0 && listQtd === 0 ? 0 : (completedListQtd / listQtd) * 100}%`,
+              }}
+            ></div>
           </div>
 
           <p className={styles["project-bar__task-text"]}>
-            {} de {}
+            {completedListQtd} de {listQtd}
           </p>
         </div>
       </div>

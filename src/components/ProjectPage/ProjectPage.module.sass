@@ -1,13 +1,53 @@
+@use "@/styles/abstracts/variables" as *
+  
 .project-page-container
   width: 100vw
   height: 100vh
-
-  padding: 200px 50px 0 100px
+  padding: 200px 0 3px 0
 
   position: relative
-  overflow-y: hidden
-  overflow-x: auto
+  overflow: hidden
 
 .project-page-container__lists
+  width: 100%
+  height: 100%
+  padding-right: 100px
+
+  position: relative
   display: flex
   gap: 15px
+
+  overflow-x: auto
+  overflow-y: hidden
+  z-index: 1
+
+  &::-webkit-scrollbar
+    width: 100%
+    height: 10px
+
+  &::-webkit-scrollbar-track 
+    border-radius: 5px
+
+  &::-webkit-scrollbar-thumb
+    background-color: #232e5e70
+    border-radius: 6px
+  
+  &::-webkit-scrollbar-thumb:hover 
+    background: #232e5ec1
+
+  &::-webkit-scrollbar-button
+    width: 22px
+    height: 10px
+    background-repeat: no-repeat
+    background-position: center
+    background-size: 8px 8px
+
+  &::-webkit-scrollbar-button:horizontal:decrement:start
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23A5B4FC' d='M19 2L5 12L19 22Z'/%3E%3C/svg%3E")
+
+  &::-webkit-scrollbar-button:horizontal:increment:end
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23A5B4FC' d='M5 2L19 12L5 22Z'/%3E%3C/svg%3E")
+
+  &::-webkit-scrollbar-button:horizontal:increment:start,
+  &::-webkit-scrollbar-button:horizontal:decrement:end
+    display: none
