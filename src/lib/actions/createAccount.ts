@@ -12,7 +12,7 @@ export async function createAccount(authData: FormRegisterType) {
 
   if (error) {
     if (error.message?.includes("already exists")) {
-      return { error: true, message: "Este email já está cadastrado" }
+      return { error: true, message: "Email já cadastrado" }
     }
 
     return { error: true, message: "Algo deu errado na criação da conta" }

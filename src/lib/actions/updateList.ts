@@ -8,25 +8,24 @@ import { getUser } from "./getUser"
 export async function updateList(formData: FormEditListType, list: ListType) {
   const dataBaseUrl = process.env.DATABASE_URL
 
-  try {
-    if (!dataBaseUrl) {
-      throw new Error("DATABASE_URL não está definida")
-    }
-  } catch (error) {
-    console.log(error)
+  if (!dataBaseUrl) {
     return {
       error: true,
-      message: "Erro ao tentar conectar o banco de dados",
+      message: "Erro ao conectar no banco de dados",
     }
   }
 
   const result = await getUser()
 
   if (result.error) {
-    return result
+    return {
+      error: true,
+      message: "Não Autorizado",
+    }
   }
 
   const userId = result?.user?.id
+
   if (!userId) {
     return {
       error: true,
@@ -34,31 +33,29 @@ export async function updateList(formData: FormEditListType, list: ListType) {
     }
   }
 
+  const name = formData.editListName
+  const priority = formData.editListPriority
   const sql = neon(dataBaseUrl)
 
   try {
-    if (formData.editListName && formData.editListName !== list.title) {
-      await sql`
-        UPDATE lists
-        SET title = ${formData.editListName}
-        WHERE id = ${list.id} AND user_id = ${userId}
-      `
-    }
-
     if (
-      formData.editListPriority &&
-      formData.editListPriority !== list.priority
+      (name && name !== list.title) ||
+      (priority && priority !== list.priority)
     ) {
       await sql`
         UPDATE lists
-        SET priority = ${formData.editListPriority}
+
+        SET
+          title = ${name || list.title},
+          priority = ${priority || list.priority}
+
         WHERE id = ${list.id} AND user_id = ${userId}
       `
     }
   } catch (error) {
-    console.log(error)
+    console.error(error)
 
-    return { error: true, message: "Erro ao tentar atualizar a lista" }
+    return { error: true, message: "Erro ao atualizar a lista" }
   }
 
   return { error: false, message: "Lista atualizada com sucesso" }

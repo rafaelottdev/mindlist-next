@@ -9,15 +9,17 @@ export async function deleteProfileAvatar() {
   const result = await getUser()
 
   if (result.error) {
-    return { error: true, message: "Erro ao buscar o usuario" }
+    return { error: true, message: "Não Autorizado" }
   }
 
   const user = result.user
-  if (!user) return
+
+  if (!user) {
+    return { error: true, message: "Usuario não encontrado" }
+  }
 
   if (user.image) {
     const { error } = await auth.updateUser({ image: "" })
-    await deleteAvatar(user.id, user.image)
 
     if (error) {
       return {
@@ -25,6 +27,8 @@ export async function deleteProfileAvatar() {
         message: "Erro ao tentar apagar a imagem de perfil",
       }
     }
+
+    await deleteAvatar(user.id, user.image)
   }
 
   revalidatePath("/", "layout")

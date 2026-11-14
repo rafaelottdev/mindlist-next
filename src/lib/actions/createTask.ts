@@ -7,26 +7,24 @@ import { getUser } from "./getUser"
 export async function createTask(formData: formCreateTaskType, listId: number) {
   const dataBaseUrl = process.env.DATABASE_URL
 
-  try {
-    if (!dataBaseUrl) {
-      throw new Error("DATABASE_URL não está definida")
-    }
-  } catch (error) {
-    console.log(error)
-
+  if (!dataBaseUrl) {
     return {
       error: true,
-      message: "Erro ao tentar conectar o banco de dados",
+      message: "Erro ao conectar no banco de dados",
     }
   }
 
   const result = await getUser()
 
   if (result.error) {
-    return result
+    return {
+      error: true,
+      message: "Não Autorizado",
+    }
   }
 
   const userId = result?.user?.id
+
   if (!userId) {
     return {
       error: true,
@@ -42,9 +40,9 @@ export async function createTask(formData: formCreateTaskType, listId: number) {
       VALUES  (${listId}, ${userId}, ${formData.taskName}, 'pending') 
     `
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return { error: true, message: "Não foi possivel criar a tarefa" }
   }
 
-  return { error: false, message: "tarefa criada com sucesso" }
+  return { error: false, message: "Tarefa criada com sucesso" }
 }

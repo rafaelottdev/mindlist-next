@@ -12,26 +12,24 @@ export async function createList(
 ) {
   const dataBaseUrl = process.env.DATABASE_URL
 
-  try {
-    if (!dataBaseUrl) {
-      throw new Error("DATABASE_URL não está definida")
-    }
-  } catch (error) {
-    console.log(error)
-
+  if (!dataBaseUrl) {
     return {
       error: true,
-      message: "Erro ao tentar conectar o banco de dados",
+      message: "Erro ao conectar no banco de dados",
     }
   }
 
   const result = await getUser()
 
   if (result.error) {
-    return result
+    return {
+      error: true,
+      message: "Não Autorizado",
+    }
   }
 
   const userId = result?.user?.id
+
   if (!userId) {
     return {
       error: true,
@@ -43,10 +41,10 @@ export async function createList(
 
   if (lists.error) {
     return { error: true, message: "Não foi possivel criar a lista" }
-  } else {
-    if (lists.response && lists.response.length >= 5) {
-      return { error: true, message: "Apenas 5 listas são permitidas" }
-    }
+  }
+
+  if (lists.response && lists.response.length >= 5) {
+    return { error: true, message: "Apenas 5 listas são permitidas" }
   }
 
   const sql = neon(dataBaseUrl)
@@ -57,7 +55,7 @@ export async function createList(
       VALUES (${projectData.id}, ${userId}, ${formData.listName}, 'pending', ${formData.listPriority})
     `
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return { error: true, message: "Não foi possivel criar a lista" }
   }
 

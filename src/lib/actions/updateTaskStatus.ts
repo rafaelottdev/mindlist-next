@@ -10,13 +10,11 @@ export async function updateTaskStatus(
 ) {
   const dataBaseUrl = process.env.DATABASE_URL
 
-  try {
-    if (!dataBaseUrl) {
-      throw new Error("DATABASE_URL não está definida")
+  if (!dataBaseUrl) {
+    return {
+      error: true,
+      message: "Erro ao conectar no banco de dados",
     }
-  } catch (error) {
-    console.log(error)
-    return { error: true, message: "Erro ao tentar conectar o banco" }
   }
 
   const result = await getUser()
@@ -24,12 +22,13 @@ export async function updateTaskStatus(
   if (result.error) {
     return {
       error: true,
-      message: "Não autorizado",
+      message: "Não Autorizado",
       response: null,
     }
   }
 
   const userId = result?.user?.id
+
   if (!userId) {
     return {
       error: true,
@@ -41,26 +40,20 @@ export async function updateTaskStatus(
   const sql = neon(dataBaseUrl)
 
   try {
-    if (completed) {
-      console.log(userId)
-      await sql`
-        UPDATE tasks
-        SET status = 'pending'
-  
-        WHERE id = ${taskId} AND list_id = ${listId} AND user_id = ${userId}
-      `
-    } else {
-      await sql`
-        UPDATE tasks
-        SET status = 'completed'
-  
-        WHERE id = ${taskId} AND list_id = ${listId} AND user_id = ${userId}
-      `
+    await sql`
+      UPDATE tasks
+      SET status = ${completed ? "pending" : "completed"}
+
+      WHERE id = ${taskId} AND list_id = ${listId} AND user_id = ${userId}
+    `
+
+    return {
+      error: false,
+      message: completed ? "Tarefa Pendente" : "Tarefa Concluida",
     }
   } catch (error) {
     console.log(error)
-    return { error: true, message: "Erro ao tentar alterar o projeto" }
-  }
 
-  return { error: false, message: "" }
+    return { error: true, message: "Erro ao alterar a tarefa" }
+  }
 }

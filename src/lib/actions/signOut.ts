@@ -7,7 +7,7 @@ export async function signOut() {
   const { error } = await auth.signOut()
 
   if (error) {
-    return { error: true, message: "Erro ao tentar sair da conta" }
+    return { error: true, message: "Erro ao sair da conta" }
   }
 
   redirect("/account")
