@@ -11,16 +11,10 @@ export async function getCompletedList(projectId: number): Promise<{
 }> {
   const dataBaseUrl = process.env.DATABASE_URL
 
-  try {
-    if (!dataBaseUrl) {
-      throw new Error("DATABASE_URL não está definida")
-    }
-  } catch (error) {
-    console.log(error)
-
+  if (!dataBaseUrl) {
     return {
       error: true,
-      message: "Erro ao tentar conectar o banco de dados",
+      message: "Erro ao conectar no banco de dados",
       response: null,
     }
   }
@@ -57,14 +51,15 @@ export async function getCompletedList(projectId: number): Promise<{
 
     return {
       error: false,
-      message: "Sucesso ao pegar as listas do projeto",
+      message: "Sucesso ao buscar as listas do projeto",
       response,
     }
   } catch (error) {
-    console.log(error)
+    console.error(error)
+
     return {
       error: true,
-      message: "Erro ao tentar buscar listas do projeto",
+      message: "Erro ao buscar as listas do projeto",
       response: null,
     }
   }

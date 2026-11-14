@@ -17,21 +17,24 @@ export async function updateProject(
   let newUrl = ""
   const oldUrl = project.image_url
 
-  try {
-    if (!dataBaseUrl) {
-      throw new Error("DATABASE_URL não está definida")
-    }
-  } catch (error) {
-    console.log(error)
+  if (!dataBaseUrl) {
     return {
       error: true,
-      message: "Erro ao tentar conectar o banco de dados",
+      message: "Erro ao conectar no banco de dados",
     }
   }
 
   const result = await getUser()
 
+  if (result.error) {
+    return {
+      error: true,
+      message: "Não Autorizado",
+    }
+  }
+
   const userId = result?.user?.id
+
   if (!userId) {
     return {
       error: true,
@@ -47,23 +50,41 @@ export async function updateProject(
     .getAll("newTagList")
     .filter((item): item is string => typeof item === "string")
 
+  const name = typeof newName === "string" && newName ? newName : project.name
+  const deadline =
+    typeof newDeadline === "string" && newDeadline
+      ? newDeadline
+      : formattedDeadline
+  const priority =
+    typeof newPriority === "string" && newPriority
+      ? newPriority
+      : project.priority
+
+  const tagsChanged =
+    newTagList.length > 0 &&
+    (newTagList.length !== project.tags.length ||
+      newTagList.some((tag) => !project.tags.includes(tag)))
+
+  const tags = tagsChanged ? newTagList : project.tags
+
   const sql = neon(dataBaseUrl)
 
   try {
-    if (newName && newName !== project.name) {
+    if (
+      name !== project.name ||
+      deadline !== formattedDeadline ||
+      priority !== project.priority ||
+      tagsChanged
+    ) {
       await sql`
         UPDATE projects
-        SET name = ${newName}
-  
-        WHERE id = ${project.id} AND user_id = ${userId}
-      `
-    }
 
-    if (newDeadline && newDeadline !== formattedDeadline) {
-      await sql`
-        UPDATE projects
-        SET deadline = ${newDeadline}
-  
+        SET
+          name = ${name},
+          deadline = ${deadline},
+          priority = ${priority},
+          tags = ${tags}
+
         WHERE id = ${project.id} AND user_id = ${userId}
       `
     }
@@ -75,7 +96,7 @@ export async function updateProject(
         await sql`
           UPDATE projects
           SET image_url = ${newUrl}
-  
+
           WHERE id = ${project.id} AND user_id = ${userId}
         `
 
@@ -84,48 +105,16 @@ export async function updateProject(
             SELECT count(*)::int as count from projects where image_url = ${oldUrl}
           `
 
-          if (count === 0) await deleteOldProjectCover(userId, oldUrl)
+          if (count === 0) {
+            await deleteOldProjectCover(userId, oldUrl)
+          }
         }
-      }
-    }
-
-    if (newPriority && newPriority !== project.priority) {
-      await sql`
-        UPDATE projects
-        SET priority = ${newPriority}
-  
-        WHERE id = ${project.id} AND user_id = ${userId}
-      `
-    }
-
-    if (newTagList.length > 0) {
-      const verifyList: boolean[] = []
-
-      newTagList.map((item) => {
-        if (project.tags.includes(item)) {
-          verifyList.push(true)
-        } else {
-          verifyList.push(false)
-        }
-
-        return null
-      })
-
-      if (
-        verifyList.includes(false) ||
-        verifyList.length < project.tags.length
-      ) {
-        await sql`
-          UPDATE projects
-          SET tags = ${newTagList}
-  
-          WHERE id = ${project.id} AND user_id = ${userId}
-        `
       }
     }
   } catch (error) {
-    console.log(error)
-    return { error: true, message: "Erro ao tentar atualizar o projeto" }
+    console.error(error)
+
+    return { error: true, message: "Erro ao atualizar o projeto" }
   }
 
   return { error: false, message: "Projeto atualizado com sucesso" }

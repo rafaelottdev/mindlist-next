@@ -11,16 +11,10 @@ export async function getProjects(): Promise<{
 }> {
   const dataBaseUrl = process.env.DATABASE_URL
 
-  try {
-    if (!dataBaseUrl) {
-      throw new Error("DATABASE_URL não está definida")
-    }
-  } catch (error) {
-    console.log(error)
-
+  if (!dataBaseUrl) {
     return {
       error: true,
-      message: "Erro ao tentar se conectar ao banco de dados",
+      message: "Erro ao conectar no banco de dados",
       response: null,
     }
   }
@@ -30,18 +24,20 @@ export async function getProjects(): Promise<{
   if (result.error) {
     return {
       error: true,
-      message: "Não autorizado",
+      message: "Não Autorizado",
       response: null,
     }
   }
 
   const userId = result?.user?.id
-  if (!userId)
+
+  if (!userId) {
     return {
       error: true,
       message: "Usuario não encontrado",
       response: null,
     }
+  }
 
   const sql = neon(dataBaseUrl)
 
@@ -55,14 +51,15 @@ export async function getProjects(): Promise<{
 
     return {
       error: false,
-      message: "Projetos pegos com sucesso",
+      message: "Sucesso ao buscar os projetos",
       response,
     }
   } catch (error) {
-    console.log(error)
+    console.error(error)
+
     return {
       error: true,
-      message: "Erro ao tentar buscar projetos",
+      message: "Erro ao buscar os projetos",
       response: null,
     }
   }

@@ -11,13 +11,19 @@ export async function updateUser(formData: FormData) {
   if (result.error) {
     return {
       error: true,
-      message: "Erro ao buscar o usuario",
+      message: "Não Autorizado",
       newUserInfo: null,
     }
   }
 
   const user = result.user
-  if (!user) return
+
+  if (!user) {
+    return {
+      error: true,
+      message: "Usuario não encontrado",
+    }
+  }
 
   const newUserInfo = {
     newImage: user.image,
@@ -37,7 +43,7 @@ export async function updateUser(formData: FormData) {
     if (error) {
       return {
         error: true,
-        message: "Erro ao tentar atualizar a imagem de perfil",
+        message: "Erro ao atualizar a imagem de perfil",
         newUserInfo: null,
       }
     }
@@ -51,7 +57,7 @@ export async function updateUser(formData: FormData) {
     if (error) {
       return {
         error: true,
-        message: "Erro ao tentar atualizar o nome",
+        message: "Erro ao atualizar o nome",
         newUserInfo: null,
       }
     }
@@ -59,38 +65,46 @@ export async function updateUser(formData: FormData) {
     newUserInfo.newName = name
   }
 
-  if (currentPassword && newPassword) {
+  if (currentPassword || newPassword) {
+    if (!currentPassword || !newPassword) {
+      return {
+        error: true,
+        message: "Preencha os dois campos de senha",
+        newUserInfo: null,
+      }
+    }
+
     if (currentPassword === newPassword) {
       return {
         error: true,
         message: "A nova senha precisa ser diferente da atual",
         newUserInfo: null,
       }
-    } else {
-      const { error } = await auth.changePassword({
-        currentPassword,
-        newPassword,
-        revokeOtherSessions: true,
-      })
+    }
 
-      if (error) {
-        return {
-          error: true,
-          message: "Erro ao tentar alterar a senha",
-          newUserInfo: null,
-        }
-      }
+    const { error } = await auth.changePassword({
+      currentPassword,
+      newPassword,
+      revokeOtherSessions: true,
+    })
 
+    if (error) {
       return {
-        error: false,
-        message: "Senha alterada com sucesso",
-        newUserInfo: newUserInfo,
-        changePassword: true,
+        error: true,
+        message: "Erro ao alterar a senha",
+        newUserInfo: null,
       }
+    }
+
+    return {
+      error: false,
+      message: "Senha alterada com sucesso",
+      newUserInfo: newUserInfo,
+      changePassword: true,
     }
   }
 
   revalidatePath("/", "layout")
 
-  return { error: false, message: null, newUserInfo: newUserInfo }
+  return { error: false, message: null, newUserInfo }
 }

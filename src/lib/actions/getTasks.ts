@@ -11,16 +11,10 @@ export async function getTasks(listId: number): Promise<{
 }> {
   const dataBaseUrl = process.env.DATABASE_URL
 
-  try {
-    if (!dataBaseUrl) {
-      throw new Error("DATABASE_URL não está definida")
-    }
-  } catch (error) {
-    console.log(error)
-
+  if (!dataBaseUrl) {
     return {
       error: true,
-      message: "Erro ao tentar conectar o banco de dados",
+      message: "Erro ao conectar no banco de dados",
       response: null,
     }
   }
@@ -30,7 +24,7 @@ export async function getTasks(listId: number): Promise<{
   if (result.error) {
     return {
       error: true,
-      message: "Não autorizado",
+      message: "Não Autorizado",
       response: null,
     }
   }
@@ -57,14 +51,15 @@ export async function getTasks(listId: number): Promise<{
 
     return {
       error: false,
-      message: "Sucesso ao pegar as tarefas da lista",
+      message: "Sucesso ao buscar as tarefas da lista",
       response,
     }
   } catch (error) {
-    console.log(error)
+    console.error(error)
+
     return {
       error: true,
-      message: "Erro ao tentar buscar tarefas da lista",
+      message: "Erro ao buscar as tarefas da lista",
       response: null,
     }
   }

@@ -11,25 +11,24 @@ export async function updateTaskName(
 ) {
   const dataBaseUrl = process.env.DATABASE_URL
 
-  try {
-    if (!dataBaseUrl) {
-      throw new Error("DATABASE_URL não está definida")
-    }
-  } catch (error) {
-    console.log(error)
+  if (!dataBaseUrl) {
     return {
       error: true,
-      message: "Erro ao tentar conectar o banco de dados",
+      message: "Erro ao conectar no banco de dados",
     }
   }
 
   const result = await getUser()
 
   if (result.error) {
-    return result
+    return {
+      error: true,
+      message: "Não Autorizado",
+    }
   }
 
   const userId = result?.user?.id
+
   if (!userId) {
     return {
       error: true,
@@ -44,14 +43,15 @@ export async function updateTaskName(
       await sql`
         UPDATE tasks
         SET title = ${newTaskName}
+
         WHERE id = ${task.id} AND list_id = ${listId} AND user_id = ${userId}
       `
     }
   } catch (error) {
-    console.log(error)
+    console.error(error)
 
-    return { error: true, message: "Erro ao tentar atualizar o nome" }
+    return { error: true, message: "Erro ao tentar atualizar o nome da tarefa" }
   }
 
-  return { error: false, message: "Nome atualizado com sucesso" }
+  return { error: false, message: "Nome da tarefa atualizado com sucesso" }
 }

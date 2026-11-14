@@ -56,7 +56,7 @@ function ProjectCard({ project }: ProjectCardProps) {
     e.preventDefault()
 
     try {
-      const result = await updateFavorite(project.favorite, project.id)
+      const result = await updateFavorite(favorite, project.id)
 
       if (result.error && result.message) {
         throw new Error(result.message)
