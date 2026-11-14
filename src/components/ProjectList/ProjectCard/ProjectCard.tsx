@@ -106,10 +106,14 @@ function ProjectCard({ project }: ProjectCardProps) {
       const completedListResultQtd = completedListResult?.response?.length
       if (listQtd) {
         setListQtd(listQtd)
+      } else {
+        setListQtd(0)
       }
 
       if (completedListResultQtd) {
         setCompletedListQtd(completedListResultQtd)
+      } else {
+        setCompletedListQtd(0)
       }
     }
 

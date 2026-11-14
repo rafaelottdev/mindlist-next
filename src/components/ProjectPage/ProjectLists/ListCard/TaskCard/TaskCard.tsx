@@ -14,9 +14,21 @@ interface TaskCardProps {
   task: taskType
   listId: number
   onUpdate: () => void
+  setCreateTaskMode: React.Dispatch<React.SetStateAction<boolean>>
+  setCloseEditTask: React.Dispatch<React.SetStateAction<boolean>>
+  closeEditTask: boolean
+  handleCompletedTask: () => void
 }
 
-function TaskCard({ task, listId, onUpdate }: TaskCardProps) {
+function TaskCard({
+  task,
+  listId,
+  onUpdate,
+  setCreateTaskMode,
+  setCloseEditTask,
+  closeEditTask,
+  handleCompletedTask,
+}: TaskCardProps) {
   const { notify } = useNotify()
   const [showMenu, setShowMenu] = useState<boolean>(false)
   const [completed, setCompleted] = useState<boolean>(
@@ -33,6 +45,7 @@ function TaskCard({ task, listId, onUpdate }: TaskCardProps) {
         throw new Error(result.message)
       } else {
         setCompleted((prev) => !prev)
+        handleCompletedTask()
       }
     } catch (error) {
       notify(error instanceof Error ? error.message : String(error))
@@ -60,7 +73,7 @@ function TaskCard({ task, listId, onUpdate }: TaskCardProps) {
 
   return (
     <>
-      {showEditForm ? (
+      {showEditForm && closeEditTask ? (
         <TaskEditForm
           task={task}
           listId={listId}
@@ -114,6 +127,8 @@ function TaskCard({ task, listId, onUpdate }: TaskCardProps) {
               onClick={(e) => {
                 e.stopPropagation()
                 setShowEditForm(true)
+                setCreateTaskMode(false)
+                setCloseEditTask(true)
               }}
             >
               <LuClipboardPen />

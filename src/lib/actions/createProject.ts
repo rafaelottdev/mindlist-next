@@ -18,20 +18,26 @@ export async function createProject(formData: FormData) {
     return {
       error: true,
       message: "Erro ao tentar conectar o banco de dados",
+      projectId: null,
     }
   }
 
   const result = await getUser()
 
   if (result.error) {
-    return result
+    return {
+      error: true,
+      message: "Não autorizado",
+      projectId: null,
+    }
   }
 
   const userId = result?.user?.id
   if (!userId)
     return {
       error: true,
-      message: "Usuario não encontrado, impossivel criar projeto",
+      message: "Usuario não encontrado",
+      projectId: null,
     }
 
   const name = formData.get("name")
@@ -47,23 +53,37 @@ export async function createProject(formData: FormData) {
   const projectList = await getProjects()
 
   if (projectList.error) {
-    return { error: true, message: "Não foi possivel criar o projeto" }
+    return {
+      error: true,
+      message: "Não foi possivel criar o projeto",
+      projectId: null,
+    }
   } else {
     if (projectList.response && projectList.response.length >= 2) {
-      return { error: true, message: "Apenas dois projetos são permitidos" }
+      return {
+        error: true,
+        message: "Apenas dois projetos são permitidos",
+        projectId: null,
+      }
     }
   }
 
   const sql = neon(dataBaseUrl)
   try {
-    await sql`
+    const [result] = await sql`
       INSERT INTO projects (user_id, status, image_url, name, deadline, priority, tags, favorite)
       VALUES (${userId}, 'pending', ${url}, ${name}, ${date}, ${priority}, ${tagList}, false)
+      RETURNING id
     `
+    const projectId = result.id
+
+    return { error: false, message: "Projeto criado com sucesso", projectId }
   } catch (error) {
     console.log(error)
-    return { error: true, message: "Não foi possivel criar o projeto" }
+    return {
+      error: true,
+      message: "Não foi possivel criar o projeto",
+      projectId: null,
+    }
   }
-
-  return { error: false, message: "Projeto criado com sucesso" }
 }

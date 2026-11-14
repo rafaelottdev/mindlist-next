@@ -81,11 +81,8 @@ function CreateProjectForm() {
       if (result?.error) {
         notify(result.message)
       } else {
-        router.refresh()
+        router.push(`/project/${result.projectId}`)
         notify(result.message)
-        setShowTagOptionList(false)
-        clearFields()
-        setShowForm(false)
       }
     } catch (error) {
       console.log(error)
