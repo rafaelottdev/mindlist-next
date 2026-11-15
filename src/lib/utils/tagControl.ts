@@ -1,7 +1,17 @@
+import type {
+  FieldArray,
+  FieldArrayPathByValue,
+  FieldValues,
+  UseFieldArrayAppend,
+  UseFieldArrayRemove,
+} from "react-hook-form"
 import type { TagType } from "@/types/TagType"
 
-export function addTag(
-  append: any,
+export function addTag<
+  T extends FieldValues,
+  TFieldArrayName extends FieldArrayPathByValue<T, TagType[]>,
+>(
+  append: UseFieldArrayAppend<T, TFieldArrayName>,
   timeoutRef: React.RefObject<ReturnType<typeof setTimeout> | null>,
   selectedTags: TagType[],
   setSelectedTags: React.Dispatch<React.SetStateAction<TagType[]>>,
@@ -16,7 +26,7 @@ export function addTag(
   if (selectedTags.length < 3) {
     if (!selectedTags.some((tag: TagType) => tag.id === id)) {
       setSelectedTags((prev: TagType[]) => [...prev, { id, name }])
-      append({ id: id, name: name })
+      append({ id, name } as FieldArray<T, TFieldArrayName>)
     } else {
       setTagError({ error: true, message: "Essa tag ja existe" })
 
@@ -38,7 +48,7 @@ export function addTag(
 export function deleteTag(
   selectedTags: TagType[],
   setSelectedTags: React.Dispatch<React.SetStateAction<TagType[]>>,
-  remove: any,
+  remove: UseFieldArrayRemove,
   id: number,
 ) {
   setSelectedTags((prev: TagType[]) =>
