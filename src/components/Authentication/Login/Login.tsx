@@ -1,6 +1,8 @@
+"use client"
+
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"
 import { HiLogout } from "react-icons/hi"
@@ -25,7 +27,8 @@ function Login({ isLogin, setIsLogin, handleAuthMessage }: LoginProps) {
     register,
     handleSubmit,
     formState: { errors },
-    setValues,
+    reset,
+    setFocus,
   } = useForm<FormLoginType>({
     resolver: zodResolver(formLoginSchema),
   })
@@ -57,12 +60,9 @@ function Login({ isLogin, setIsLogin, handleAuthMessage }: LoginProps) {
     }
   }
 
-  function clearFields() {
-    setValues({
-      email: "",
-      password: "",
-    })
-  }
+  useEffect(() => {
+    setFocus("email")
+  }, [setFocus])
 
   return (
     <div
@@ -132,7 +132,7 @@ function Login({ isLogin, setIsLogin, handleAuthMessage }: LoginProps) {
             className={styles["access-container__register-button"]}
             onClick={() => {
               setIsLogin(false)
-              clearFields()
+              reset()
             }}
           >
             <p>Cadastro</p>

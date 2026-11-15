@@ -4,19 +4,13 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useFieldArray, useForm } from "react-hook-form"
-import { FaXmark } from "react-icons/fa6"
-import CoverInput from "@/components/CoverInput/CoverInput"
-import Input from "@/components/Input/Input"
-import ButtonLoading from "@/components/loadings/ButtonLoading/ButtonLoading"
-import PriorityInput from "@/components/PriorityInput/PriorityInput"
-import Tags from "@/components/Tags/Tags"
+import ProjectForm from "@/components/ProjectForm/ProjectForm"
 import { useNotify } from "@/contexts/NotificationAlert/NotificationAlert"
 import { updateProject } from "@/lib/actions/updateProject"
 import { formEditProjectSchema } from "@/lib/schemas/formEditProjectSchema"
 import type { FormEditProjectType } from "@/types/FormEditProjectType"
 import type { ProjectListType } from "@/types/ProjectListType"
 import type { TagType } from "@/types/TagType"
-import styles from "./ProjectEditForm.module.sass"
 
 type ProjectEditFormProps = {
   project: ProjectListType
@@ -50,7 +44,6 @@ function ProjectEditForm({ project, setEditMode }: ProjectEditFormProps) {
   })
 
   async function onSubmit(projectData: FormEditProjectType) {
-    console.log(projectData.editProjectTags)
     try {
       setLoading(true)
 
@@ -62,34 +55,42 @@ function ProjectEditForm({ project, setEditMode }: ProjectEditFormProps) {
 
       const formData = new FormData()
 
-      if (newName) {
-        formData.append("newName", newName)
-      }
+      if (
+        newName ||
+        newDeadline ||
+        newImageFile ||
+        newPriority ||
+        newtagList.length > 0
+      ) {
+        if (newName) {
+          formData.append("newName", newName)
+        }
 
-      if (newDeadline) {
-        formData.append("newDeadline", newDeadline)
-      }
+        if (newDeadline) {
+          formData.append("newDeadline", newDeadline)
+        }
 
-      if (newImageFile) {
-        formData.append("newImageFile", newImageFile)
-      }
+        if (newImageFile) {
+          formData.append("newImageFile", newImageFile)
+        }
 
-      if (newPriority) {
-        formData.append("newPriority", newPriority)
-      }
+        if (newPriority) {
+          formData.append("newPriority", newPriority)
+        }
 
-      if (newtagList.length > 0) {
-        newtagList.map((tag) => formData.append("newTagList", tag.name))
-      }
+        if (newtagList.length > 0) {
+          newtagList.map((tag) => formData.append("newTagList", tag.name))
+        }
 
-      const result = await updateProject(formData, project)
+        const result = await updateProject(formData, project)
 
-      if (result?.error && result?.message) {
-        throw new Error(result?.message)
-      } else {
-        router.refresh()
-        notify(result.message)
-        setEditMode(false)
+        if (result?.error && result?.message) {
+          throw new Error(result?.message)
+        } else {
+          router.refresh()
+          notify(result.message)
+          setEditMode(false)
+        }
       }
     } catch (error) {
       console.log(error)
@@ -104,76 +105,36 @@ function ProjectEditForm({ project, setEditMode }: ProjectEditFormProps) {
     setFocus("editProjectName")
   }, [setFocus])
 
+  function closeForm() {
+    setEditMode(false)
+  }
+
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className={styles["editProject-form"]}
-    >
-      <div className={styles["editProject-form__name-date-container"]}>
-        <div>
-          <Input
-            inputId="editProjectName"
-            labelTitle="Editar Nome"
-            inputType="text"
-            registerName="editProjectName"
-            register={register}
-          />
-        </div>
-
-        <div>
-          <Input
-            inputId="editProjectDate"
-            labelTitle="Editar Data"
-            inputType="date"
-            registerName="editProjectDate"
-            register={register}
-          />
-        </div>
-      </div>
-
-      <CoverInput
-        registerName="editProjectCover"
-        title="Nova Capa"
-        register={register}
-        watch={watch}
-        errors={errors.editProjectCover}
-      />
-
-      <PriorityInput
-        registerName="editProjectPriority"
-        title="Editar Prioridade"
-        register={register}
-        errors={errors.editProjectPriority}
-      />
-
-      <Tags
-        showTagOptionList={showTagOptionList}
-        setShowTagOptionList={setShowTagOptionList}
-        selectedTags={selectedTags}
-        setSelectedTags={setSelectedTags}
-        title="Editar Tags"
-        append={append}
-        remove={remove}
-        errors={errors.editProjectTags}
-      />
-
-      <div className={styles["editProject-form__button-container"]}>
-        <button
-          type="submit"
-          className={styles["editProject-form__send-button"]}
-        >
-          {loading ? <ButtonLoading /> : <p>Editar Projeto</p>}
-        </button>
-
-        <button
-          type="button"
-          className={styles["editProject-form__clear-button"]}
-          onClick={() => setEditMode(false)}
-        >
-          <FaXmark />
-        </button>
-      </div>
-    </form>
+    <ProjectForm
+      handleSubmit={handleSubmit}
+      register={register}
+      errors={errors}
+      onSubmit={onSubmit}
+      watch={watch}
+      append={append}
+      remove={remove}
+      registerName="editProjectName"
+      registerDate="editProjectDate"
+      registerCover="editProjectCover"
+      registerPriority="editProjectPriority"
+      registerTag="editProjectTags"
+      handleCloseForm={closeForm}
+      showTagOptionList={showTagOptionList}
+      setShowTagOptionList={setShowTagOptionList}
+      selectedTags={selectedTags}
+      setSelectedTags={setSelectedTags}
+      loading={loading}
+      nameTitle="Editar Nome"
+      deadlineTitle="Editar Data"
+      coverTitle="Nova Capa"
+      priorityTitle="Editar Prioridade"
+      tagTitle="Editar Tags"
+    />
   )
 }
 

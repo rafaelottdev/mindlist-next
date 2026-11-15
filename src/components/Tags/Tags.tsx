@@ -1,5 +1,10 @@
 import { useRef, useState } from "react"
-import type { FieldError, FieldErrorsImpl, Merge } from "react-hook-form"
+import type {
+  FieldArrayPathByValue,
+  FieldValues,
+  UseFieldArrayAppend,
+  UseFieldArrayRemove,
+} from "react-hook-form"
 import { FaPlus, FaXmark } from "react-icons/fa6"
 import { addTag, deleteTag } from "@/lib/utils/tagControl"
 import type { TagType } from "@/types/TagType"
@@ -22,26 +27,24 @@ const tags = [
   { id: 13, name: "Pesquisa" },
 ]
 
-interface TagsProps {
+interface TagsProps<
+  T extends FieldValues,
+  TFieldArrayName extends FieldArrayPathByValue<T, TagType[]>,
+> {
   showTagOptionList: boolean
   setShowTagOptionList: React.Dispatch<React.SetStateAction<boolean>>
   selectedTags: TagType[]
   setSelectedTags: React.Dispatch<React.SetStateAction<TagType[]>>
   title: string
-  append: any
-  remove: any
-  errors:
-    | Merge<
-        FieldError,
-        (
-          | Merge<FieldError, FieldErrorsImpl<{ id: number; name: string }>>
-          | undefined
-        )[]
-      >
-    | undefined
+  append: UseFieldArrayAppend<T, TFieldArrayName>
+  remove: UseFieldArrayRemove
+  errors: string
 }
 
-function Tags({
+function Tags<
+  T extends FieldValues,
+  TFieldArrayName extends FieldArrayPathByValue<T, TagType[]>,
+>({
   showTagOptionList,
   setShowTagOptionList,
   selectedTags,
@@ -50,7 +53,7 @@ function Tags({
   append,
   remove,
   errors,
-}: TagsProps) {
+}: TagsProps<T, TFieldArrayName>) {
   const [tagError, setTagError] = useState<{ error: boolean; message: string }>(
     { error: false, message: "" },
   )
@@ -125,7 +128,7 @@ function Tags({
       </div>
 
       {errors ? (
-        <p className={styles["input-error"]}>{errors.message}</p>
+        <p className={styles["input-error"]}>{errors}</p>
       ) : tagError.error ? (
         <p className={styles["input-error"]}>{tagError.message}</p>
       ) : (

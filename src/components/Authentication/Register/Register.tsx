@@ -1,3 +1,5 @@
+"use client"
+
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -26,7 +28,7 @@ function Register({ isLogin, setIsLogin, handleAuthMessage }: RegisterProps) {
     register,
     handleSubmit,
     formState: { errors },
-    setValues,
+    reset,
   } = useForm<FormRegisterType>({
     resolver: zodResolver(formRegisterSchema),
   })
@@ -56,14 +58,6 @@ function Register({ isLogin, setIsLogin, handleAuthMessage }: RegisterProps) {
     if (shouldRedirect) {
       router.push("/")
     }
-  }
-
-  function clearFields() {
-    setValues({
-      name: "",
-      email: "",
-      password: "",
-    })
   }
 
   return (
@@ -158,7 +152,7 @@ function Register({ isLogin, setIsLogin, handleAuthMessage }: RegisterProps) {
             `}
             onClick={() => {
               setIsLogin(true)
-              clearFields()
+              reset()
             }}
           >
             <HiLogout />

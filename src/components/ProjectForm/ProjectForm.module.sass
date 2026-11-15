@@ -1,15 +1,13 @@
 @use "@/styles/abstracts/variables" as *
 @use "@/styles/abstracts/mixins" as *
   
-.editProject-form
+.project-form
   width: 280px
   height: 370px
 
   padding: 0 10px
-
   position: relative
   overflow: hidden
-  border-radius: 10px
 
   display: flex
   flex-direction: column
@@ -21,22 +19,23 @@
   color: white
   letter-spacing: .3px
 
+  border-radius: 10px
   background-image: url("/img/home/project-background.png")
   background-repeat: no-repeat
   background-position: center
   background-size: cover
-
-.editProject-form__name-date-container
+  
+.project-form__name-date-container
   display: flex
   justify-content: space-between
   gap: 5px
 
-.editProject-form__button-container
+.project-form__form-button-container
   margin-top: 10px
   display: flex
   justify-content: space-between
 
-.editProject-form__send-button
+.project-form__send-button
   width: 100px
   height: 30px
 
@@ -58,7 +57,7 @@
     border-color: $blue-400
     border-top-color: transparent
 
-.editProject-form__clear-button
+.project-form__clear-button
   width: 30px
   height: 30px
   padding-top: 4px

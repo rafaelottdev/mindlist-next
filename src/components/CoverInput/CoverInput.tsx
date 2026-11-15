@@ -5,6 +5,7 @@ import type {
   FieldPath,
   FieldValues,
   UseFormRegister,
+  UseFormWatch,
 } from "react-hook-form"
 import styles from "./CoverInput.module.sass"
 
@@ -12,7 +13,7 @@ interface CoverInputProps<T extends FieldValues> {
   registerName: FieldPath<T>
   title: string
   register: UseFormRegister<T>
-  watch: any
+  watch: UseFormWatch<T>
   errors: FieldError | undefined
 }
 

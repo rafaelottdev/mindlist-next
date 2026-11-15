@@ -4,17 +4,12 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useFieldArray, useForm } from "react-hook-form"
-import { FaXmark } from "react-icons/fa6"
 import { useNotify } from "@/contexts/NotificationAlert/NotificationAlert"
 import { createProject } from "@/lib/actions/createProject"
 import { formCreateProjectSchema } from "@/lib/schemas/formCreateProjectSchema"
 import type { FormCreateProjectType } from "@/types/FormCreateProjectType"
 import type { TagType } from "@/types/TagType"
-import CoverInput from "../CoverInput/CoverInput"
-import Input from "../Input/Input"
-import ButtonLoading from "../loadings/ButtonLoading/ButtonLoading"
-import PriorityInput from "../PriorityInput/PriorityInput"
-import Tags from "../Tags/Tags"
+import ProjectForm from "../ProjectForm/ProjectForm"
 import styles from "./CreateProjectForm.module.sass"
 import FormCover from "./FormCover/FormCover"
 
@@ -109,87 +104,31 @@ function CreateProjectForm() {
         setFocus={setFocus}
       />
 
-      <form
-        className={styles["form-container__form"]}
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <div className={styles["form-container__name-date-container"]}>
-          <div>
-            <Input
-              inputId="projectName"
-              labelTitle="Nome do Projeto"
-              inputType="text"
-              registerName="projectName"
-              register={register}
-            />
-
-            {errors.projectName && (
-              <p className={styles["input-error"]}>
-                {errors.projectName.message}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <Input
-              inputId="projectDeadline"
-              labelTitle="Data Limite"
-              inputType="date"
-              registerName="projectDate"
-              register={register}
-            />
-
-            {errors.projectDate && (
-              <p className={styles["input-error"]}>
-                {errors.projectDate.message}
-              </p>
-            )}
-          </div>
-        </div>
-
-        <CoverInput
-          registerName="projectCover"
-          title="Capa"
-          register={register}
-          watch={watch}
-          errors={errors.projectCover}
-        />
-
-        <PriorityInput
-          registerName="projectPriority"
-          title="Prioridade"
-          register={register}
-          errors={errors.projectPriority}
-        />
-
-        <Tags
-          showTagOptionList={showTagOptionList}
-          setShowTagOptionList={setShowTagOptionList}
-          selectedTags={selectedTags}
-          setSelectedTags={setSelectedTags}
-          title="Tags"
-          append={append}
-          remove={remove}
-          errors={errors.projectTags}
-        />
-
-        <div className={styles["form-container__form-button-container"]}>
-          <button
-            type="submit"
-            className={styles["form-container__send-button"]}
-          >
-            {loading ? <ButtonLoading /> : <p>Criar Projeto</p>}
-          </button>
-
-          <button
-            type="button"
-            className={styles["form-container__clear-button"]}
-            onClick={() => clearFields()}
-          >
-            <FaXmark />
-          </button>
-        </div>
-      </form>
+      <ProjectForm
+        handleSubmit={handleSubmit}
+        register={register}
+        errors={errors}
+        onSubmit={onSubmit}
+        watch={watch}
+        append={append}
+        remove={remove}
+        registerName="projectName"
+        registerDate="projectDate"
+        registerCover="projectCover"
+        registerPriority="projectPriority"
+        registerTag="projectTags"
+        handleCloseForm={clearFields}
+        showTagOptionList={showTagOptionList}
+        setShowTagOptionList={setShowTagOptionList}
+        selectedTags={selectedTags}
+        setSelectedTags={setSelectedTags}
+        loading={loading}
+        nameTitle="Nome do Projeto"
+        deadlineTitle="Data Limite"
+        coverTitle="Capa"
+        priorityTitle="Prioridade"
+        tagTitle="Tags"
+      />
     </div>
   )
 }
