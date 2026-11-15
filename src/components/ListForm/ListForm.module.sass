@@ -1,16 +1,18 @@
 @use "@/styles/abstracts/variables" as *
 @use "@/styles/abstracts/mixins" as *
-
+  
 .list-form
   width: 350px
+  min-width: 350px
   height: 130px
 
   @include flex-center
   gap: 20px
-  
+  overflow: hidden
+
   font-family: $baloo-regular
   letter-spacing: .3px
-  overflow: hidden
+  
   border-radius: 10px
   color: white
   background-color: $blue-400
