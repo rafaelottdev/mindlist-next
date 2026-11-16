@@ -1,7 +1,6 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import ListForm from "@/components/ListForm/ListForm"
@@ -13,12 +12,13 @@ import type { ListType } from "@/types/ListType"
 
 function ListEditForm({
   list,
+  setLists,
   setEditMode,
 }: {
   list: ListType
+  setLists: React.Dispatch<React.SetStateAction<ListType[]>>
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>
 }) {
-  const router = useRouter()
   const { notify } = useNotify()
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -42,7 +42,17 @@ function ListEditForm({
         if (result.error) {
           notify(result.message)
         } else {
-          router.refresh()
+          setLists((prev) =>
+            prev.map((item) => {
+              return item.id === list.id
+                ? {
+                    ...item,
+                    title: formData.editListName || item.title,
+                    priority: formData.editListPriority ?? item.priority,
+                  }
+                : item
+            }),
+          )
           notify(result.message)
           reset()
           setEditMode(false)

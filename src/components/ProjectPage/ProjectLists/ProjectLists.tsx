@@ -4,16 +4,17 @@ import styles from "./ProjectLists.module.sass"
 
 interface ProjectListsProps {
   lists: ListType[]
-  handleList: () => void
+  setLists: React.Dispatch<React.SetStateAction<ListType[]>>
+  projectId: number
 }
 
-function ProjectLists({ lists, handleList }: ProjectListsProps) {
+function ProjectLists({ lists, setLists, projectId }: ProjectListsProps) {
   return (
     <ul className={styles.list}>
       {lists.map((list: ListType) => {
         return (
           <li key={list.id}>
-            <ListCard list={list} handleList={handleList} />
+            <ListCard list={list} setLists={setLists} projectId={projectId} />
           </li>
         )
       })}

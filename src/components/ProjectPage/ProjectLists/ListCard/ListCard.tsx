@@ -1,6 +1,5 @@
 "use client"
 
-import { useRouter } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
 import { FaPlus } from "react-icons/fa6"
 import { FiTrash } from "react-icons/fi"
@@ -15,8 +14,8 @@ import ButtonLoading from "@/components/loadings/ButtonLoading/ButtonLoading"
 import { useConfirm } from "@/contexts/ConfirmAlert/ConfirmAlert"
 import { useNotify } from "@/contexts/NotificationAlert/NotificationAlert"
 import { deleteList } from "@/lib/actions/deleteList"
-import { getCompletedTask } from "@/lib/actions/getCompletedTask"
 import { getTasks } from "@/lib/actions/getTasks"
+import { handleCompletedTask } from "@/lib/utils/handleCompletedTask"
 import type { ListType } from "@/types/ListType"
 import type { taskType } from "@/types/taskType"
 import styles from "./ListCard.module.sass"
@@ -25,11 +24,11 @@ import TaskCard from "./TaskCard/TaskCard"
 
 interface ListCardProps {
   list: ListType
-  handleList: () => void
+  setLists: React.Dispatch<React.SetStateAction<ListType[]>>
+  projectId: number
 }
 
-function ListCard({ list, handleList }: ListCardProps) {
-  const router = useRouter()
+function ListCard({ list, setLists, projectId }: ListCardProps) {
   const { notify } = useNotify()
   const { confirm } = useConfirm()
   const [editMode, setEditMode] = useState<boolean>(false)
@@ -37,6 +36,7 @@ function ListCard({ list, handleList }: ListCardProps) {
   const [closeEditTask, setCloseEditTask] = useState<boolean>(true)
   const [deleteLoading, setDeleteLoading] = useState<boolean>(false)
   const [taskList, setTaskList] = useState<taskType[] | null>(null)
+  const [taskListQtd, setTaskListQtd] = useState<number>(0)
   const [completedTaskQtd, setCompletedTaskQtd] = useState<number>(0)
 
   async function handleDeleteList() {
@@ -51,9 +51,8 @@ function ListCard({ list, handleList }: ListCardProps) {
         if (result.error && result.message) {
           throw new Error(result.message)
         } else {
+          setLists((prev) => prev.filter((item) => item.id !== list.id))
           notify(result.message)
-          handleList()
-          router.refresh()
         }
       }
     } catch (error) {
@@ -64,17 +63,6 @@ function ListCard({ list, handleList }: ListCardProps) {
       setDeleteLoading(false)
     }
   }
-
-  const handleCompletedTask = useCallback(async () => {
-    const completedTaskResult = await getCompletedTask(list.id)
-    const completedTaskResultQtd = completedTaskResult?.response?.length
-
-    if (completedTaskResultQtd) {
-      setCompletedTaskQtd(completedTaskResultQtd)
-    } else {
-      setCompletedTaskQtd(0)
-    }
-  }, [list.id])
 
   const handleTaskList = useCallback(async () => {
     const result = await getTasks(list.id)
@@ -90,13 +78,23 @@ function ListCard({ list, handleList }: ListCardProps) {
 
   useEffect(() => {
     handleTaskList()
-    handleCompletedTask()
-  }, [handleTaskList, handleCompletedTask])
+    handleCompletedTask(
+      list.id,
+      projectId,
+      setTaskListQtd,
+      setCompletedTaskQtd,
+      setLists,
+    )
+  }, [handleTaskList, list.id, projectId, setLists])
 
   return (
     <>
       {editMode ? (
-        <ListEditForm list={list} setEditMode={setEditMode} />
+        <ListEditForm
+          list={list}
+          setLists={setLists}
+          setEditMode={setEditMode}
+        />
       ) : (
         <div className={styles["list-card"]}>
           <div className={styles["list-card__info-top"]}>
@@ -115,7 +113,7 @@ function ListCard({ list, handleList }: ListCardProps) {
             </div>
 
             <p className={styles["list-card__task-count"]}>
-              {completedTaskQtd} de {taskList?.length}
+              {completedTaskQtd} de {taskListQtd}
             </p>
           </div>
 
@@ -126,11 +124,14 @@ function ListCard({ list, handleList }: ListCardProps) {
                   <TaskCard
                     task={task}
                     listId={list.id}
+                    setLists={setLists}
                     onUpdate={handleTaskList}
                     setCreateTaskMode={setCreateTaskMode}
                     setCloseEditTask={setCloseEditTask}
                     closeEditTask={closeEditTask}
-                    handleCompletedTask={handleCompletedTask}
+                    setTaskListQtd={setTaskListQtd}
+                    setCompletedTaskQtd={setCompletedTaskQtd}
+                    projectId={projectId}
                   />
                 </li>
               ))}
@@ -139,8 +140,12 @@ function ListCard({ list, handleList }: ListCardProps) {
             {createTaskMode ? (
               <CreateTaskForm
                 listId={list.id}
+                projectId={projectId}
                 setCreateTaskMode={setCreateTaskMode}
                 onCreated={handleTaskList}
+                setTaskListQtd={setTaskListQtd}
+                setCompletedTaskQtd={setCompletedTaskQtd}
+                setLists={setLists}
               />
             ) : (
               <button
@@ -160,7 +165,11 @@ function ListCard({ list, handleList }: ListCardProps) {
 
           <div className={styles["list-card__info-bottom"]}>
             <div className={styles["list-card__progress-task-bar"]}>
-              <div></div>
+              <div
+                style={{
+                  width: `${completedTaskQtd === 0 && taskListQtd === 0 ? 0 : (completedTaskQtd / taskListQtd) * 100}%`,
+                }}
+              ></div>
             </div>
 
             <div className={styles["list-card__edit-container"]}>
