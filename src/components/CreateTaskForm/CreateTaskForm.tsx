@@ -7,20 +7,30 @@ import { FaXmark } from "react-icons/fa6"
 import { useNotify } from "@/contexts/NotificationAlert/NotificationAlert"
 import { createTask } from "@/lib/actions/createTask"
 import { formCreateTaskSchema } from "@/lib/schemas/formCreateTaskSchema"
+import { handleCompletedTask } from "@/lib/utils/handleCompletedTask"
 import type { formCreateTaskType } from "@/types/FormCreateTaskType"
+import type { ListType } from "@/types/ListType"
 import ButtonLoading from "../loadings/ButtonLoading/ButtonLoading"
 import styles from "./CreateTaskForm.module.sass"
 
 interface CreateTaskFormProps {
   listId: number
+  projectId: number
   setCreateTaskMode: React.Dispatch<React.SetStateAction<boolean>>
   onCreated: () => void
+  setTaskListQtd: React.Dispatch<React.SetStateAction<number>>
+  setCompletedTaskQtd: React.Dispatch<React.SetStateAction<number>>
+  setLists: React.Dispatch<React.SetStateAction<ListType[]>>
 }
 
 function CreateTaskForm({
   listId,
+  projectId,
   setCreateTaskMode,
   onCreated,
+  setTaskListQtd,
+  setCompletedTaskQtd,
+  setLists,
 }: CreateTaskFormProps) {
   const { notify } = useNotify()
   const [loading, setLoading] = useState<boolean>(false)
@@ -43,9 +53,16 @@ function CreateTaskForm({
       if (result.error) {
         notify(result.message)
       } else {
-        notify(result.message)
-        reset()
         onCreated()
+        reset()
+        handleCompletedTask(
+          listId,
+          projectId,
+          setTaskListQtd,
+          setCompletedTaskQtd,
+          setLists,
+        )
+        notify(result.message)
       }
     } catch (error) {
       console.log(error)

@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { FaCheck, FaRegCircle, FaRegClock } from "react-icons/fa6"
 import { PiStarBold, PiStarFill } from "react-icons/pi"
 import {
@@ -11,22 +11,16 @@ import {
 } from "react-icons/ri"
 import { useNotify } from "@/contexts/NotificationAlert/NotificationAlert"
 import { updateFavorite } from "@/lib/actions/updateFavorite"
+import type { ListType } from "@/types/ListType"
 import type { ProjectListType } from "@/types/ProjectListType"
 import styles from "./ProjectInfoBar.module.sass"
 
 interface ProjectInfoBarProps {
   projectData: ProjectListType
-  handleList: () => void
-  listQtd: number
-  completedListQtd: number
+  lists: ListType[]
 }
 
-function ProjectInfoBar({
-  projectData,
-  handleList,
-  listQtd,
-  completedListQtd,
-}: ProjectInfoBarProps) {
+function ProjectInfoBar({ projectData, lists }: ProjectInfoBarProps) {
   const router = useRouter()
   const { notify } = useNotify()
   const [favorite, setFavorite] = useState<boolean>(projectData.favorite)
@@ -59,9 +53,10 @@ function ProjectInfoBar({
     }
   }
 
-  useEffect(() => {
-    handleList()
-  }, [handleList])
+  const listQty = lists.length
+  const completedListQty = lists.filter(
+    (list) => list.status === "completed",
+  ).length
 
   return (
     <div className={styles["project-bar"]}>
@@ -120,13 +115,13 @@ function ProjectInfoBar({
           <div className={styles["project-bar__task-bar"]}>
             <div
               style={{
-                width: `${completedListQtd === 0 && listQtd === 0 ? 0 : (completedListQtd / listQtd) * 100}%`,
+                width: `${completedListQty === 0 && listQty === 0 ? 0 : (completedListQty / listQty) * 100}%`,
               }}
             ></div>
           </div>
 
           <p className={styles["project-bar__task-text"]}>
-            {completedListQtd} de {listQtd}
+            {completedListQty} de {listQty}
           </p>
         </div>
       </div>

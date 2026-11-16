@@ -17,9 +17,8 @@ import ButtonLoading from "@/components/loadings/ButtonLoading/ButtonLoading"
 import { useConfirm } from "@/contexts/ConfirmAlert/ConfirmAlert"
 import { useNotify } from "@/contexts/NotificationAlert/NotificationAlert"
 import { deleteProject } from "@/lib/actions/deleteProject"
-import { getCompletedList } from "@/lib/actions/getCompletedList"
-import { getLists } from "@/lib/actions/getLists"
 import { updateFavorite } from "@/lib/actions/updateFavorite"
+import { handleCompletedList } from "@/lib/utils/handleCompletedList"
 import type { ProjectListType } from "@/types/ProjectListType"
 import styles from "./ProjectCard.module.sass"
 import ProjectEditForm from "./ProjectEditForm/ProjectEditForm"
@@ -98,26 +97,7 @@ function ProjectCard({ project }: ProjectCardProps) {
   }
 
   useEffect(() => {
-    async function handleList() {
-      const listResult = await getLists(project.id)
-      const completedListResult = await getCompletedList(project.id)
-
-      const listQtd = listResult?.response?.length
-      const completedListResultQtd = completedListResult?.response?.length
-      if (listQtd) {
-        setListQtd(listQtd)
-      } else {
-        setListQtd(0)
-      }
-
-      if (completedListResultQtd) {
-        setCompletedListQtd(completedListResultQtd)
-      } else {
-        setCompletedListQtd(0)
-      }
-    }
-
-    handleList()
+    handleCompletedList(project.id, setListQtd, setCompletedListQtd)
   }, [project.id])
 
   return (

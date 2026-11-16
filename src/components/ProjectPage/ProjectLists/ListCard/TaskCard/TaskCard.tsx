@@ -6,6 +6,8 @@ import ButtonLoading from "@/components/loadings/ButtonLoading/ButtonLoading"
 import { useNotify } from "@/contexts/NotificationAlert/NotificationAlert"
 import { deleteTask } from "@/lib/actions/deleteTask"
 import { updateTaskStatus } from "@/lib/actions/updateTaskStatus"
+import { handleCompletedTask } from "@/lib/utils/handleCompletedTask"
+import type { ListType } from "@/types/ListType"
 import type { taskType } from "@/types/taskType"
 import styles from "./TaskCard.module.sass"
 import TaskEditForm from "./TaskEditForm/TaskEditForm"
@@ -13,21 +15,27 @@ import TaskEditForm from "./TaskEditForm/TaskEditForm"
 interface TaskCardProps {
   task: taskType
   listId: number
+  setLists: React.Dispatch<React.SetStateAction<ListType[]>>
   onUpdate: () => void
   setCreateTaskMode: React.Dispatch<React.SetStateAction<boolean>>
   setCloseEditTask: React.Dispatch<React.SetStateAction<boolean>>
   closeEditTask: boolean
-  handleCompletedTask: () => void
+  setTaskListQtd: React.Dispatch<React.SetStateAction<number>>
+  setCompletedTaskQtd: React.Dispatch<React.SetStateAction<number>>
+  projectId: number
 }
 
 function TaskCard({
   task,
   listId,
+  setLists,
   onUpdate,
   setCreateTaskMode,
   setCloseEditTask,
   closeEditTask,
-  handleCompletedTask,
+  setTaskListQtd,
+  setCompletedTaskQtd,
+  projectId,
 }: TaskCardProps) {
   const { notify } = useNotify()
   const [showMenu, setShowMenu] = useState<boolean>(false)
@@ -45,7 +53,13 @@ function TaskCard({
         throw new Error(result.message)
       } else {
         setCompleted((prev) => !prev)
-        handleCompletedTask()
+        handleCompletedTask(
+          listId,
+          projectId,
+          setTaskListQtd,
+          setCompletedTaskQtd,
+          setLists,
+        )
       }
     } catch (error) {
       notify(error instanceof Error ? error.message : String(error))
@@ -61,6 +75,13 @@ function TaskCard({
         throw new Error(result.message)
       } else {
         onUpdate()
+        handleCompletedTask(
+          listId,
+          projectId,
+          setTaskListQtd,
+          setCompletedTaskQtd,
+          setLists,
+        )
       }
     } catch (error) {
       console.log(error)

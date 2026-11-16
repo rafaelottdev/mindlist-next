@@ -1,13 +1,13 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { useNotify } from "@/contexts/NotificationAlert/NotificationAlert"
 import { createList } from "@/lib/actions/createList"
 import { formCreateListSchema } from "@/lib/schemas/formCreateListSchema"
 import type { FormCreateListType } from "@/types/FormCreateListType"
+import type { ListType } from "@/types/ListType"
 import type { ProjectListType } from "@/types/ProjectListType"
 import ListForm from "../ListForm/ListForm"
 import CreateListCover from "./CreateListCover/CreateListCover"
@@ -15,11 +15,10 @@ import styles from "./CreateListForm.module.sass"
 
 interface CreateListFormProps {
   projectData: ProjectListType
-  handleList: () => void
+  setLists: React.Dispatch<React.SetStateAction<ListType[]>>
 }
 
-function CreateListForm({ projectData, handleList }: CreateListFormProps) {
-  const router = useRouter()
+function CreateListForm({ projectData, setLists }: CreateListFormProps) {
   const { notify } = useNotify()
   const [showForm, setShowForm] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
@@ -42,10 +41,9 @@ function CreateListForm({ projectData, handleList }: CreateListFormProps) {
       if (result.error) {
         notify(result.message)
       } else {
-        router.refresh()
+        setLists((prev) => [...prev, ...(result.response ?? [])])
         reset()
         setShowForm(false)
-        handleList()
         notify(result.message)
       }
     } catch (error) {
