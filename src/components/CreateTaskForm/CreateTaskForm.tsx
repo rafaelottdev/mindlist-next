@@ -18,8 +18,8 @@ interface CreateTaskFormProps {
   projectId: number
   setCreateTaskMode: React.Dispatch<React.SetStateAction<boolean>>
   onCreated: () => void
-  setTaskListQtd: React.Dispatch<React.SetStateAction<number>>
-  setCompletedTaskQtd: React.Dispatch<React.SetStateAction<number>>
+  setTaskListQty: React.Dispatch<React.SetStateAction<number>>
+  setCompletedTaskQty: React.Dispatch<React.SetStateAction<number>>
   setLists: React.Dispatch<React.SetStateAction<ListType[]>>
 }
 
@@ -28,8 +28,8 @@ function CreateTaskForm({
   projectId,
   setCreateTaskMode,
   onCreated,
-  setTaskListQtd,
-  setCompletedTaskQtd,
+  setTaskListQty,
+  setCompletedTaskQty,
   setLists,
 }: CreateTaskFormProps) {
   const { notify } = useNotify()
@@ -58,8 +58,8 @@ function CreateTaskForm({
         handleCompletedTask(
           listId,
           projectId,
-          setTaskListQtd,
-          setCompletedTaskQtd,
+          setTaskListQty,
+          setCompletedTaskQty,
           setLists,
         )
         notify(result.message)

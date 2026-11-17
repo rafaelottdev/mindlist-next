@@ -6,25 +6,25 @@ import { updateListStatus } from "../actions/updateListStatus"
 export async function handleCompletedTask(
   listId: number,
   projectId: number,
-  setTaskListQtd: React.Dispatch<React.SetStateAction<number>>,
-  setCompletedTaskQtd: React.Dispatch<React.SetStateAction<number>>,
+  setTaskListQty: React.Dispatch<React.SetStateAction<number>>,
+  setCompletedTaskQty: React.Dispatch<React.SetStateAction<number>>,
   setLists: React.Dispatch<React.SetStateAction<ListType[]>>,
 ) {
   const taskResult = await getTasks(listId)
   const completedTaskResult = await getCompletedTask(listId)
 
-  const taskQtd = taskResult?.response?.length ?? 0
-  const completedTaskQtd = completedTaskResult?.response?.length ?? 0
+  const taskQty = taskResult?.response?.length ?? 0
+  const completedTaskQty = completedTaskResult?.response?.length ?? 0
 
-  if (taskQtd > 0) {
-    await updateListStatus(completedTaskQtd === taskQtd, listId, projectId)
+  if (taskQty > 0) {
+    await updateListStatus(completedTaskQty === taskQty, listId, projectId)
 
     setLists((prev: ListType[]) =>
       prev.map((item: ListType) => {
         return item.id === listId
           ? {
               ...item,
-              status: completedTaskQtd === taskQtd ? "completed" : "pending",
+              status: completedTaskQty === taskQty ? "completed" : "pending",
             }
           : item
       }),
@@ -44,6 +44,6 @@ export async function handleCompletedTask(
     )
   }
 
-  setTaskListQtd(taskQtd)
-  setCompletedTaskQtd(completedTaskQtd)
+  setTaskListQty(taskQty)
+  setCompletedTaskQty(completedTaskQty)
 }

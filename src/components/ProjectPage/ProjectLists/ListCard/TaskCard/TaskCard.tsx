@@ -20,8 +20,8 @@ interface TaskCardProps {
   setCreateTaskMode: React.Dispatch<React.SetStateAction<boolean>>
   setCloseEditTask: React.Dispatch<React.SetStateAction<boolean>>
   closeEditTask: boolean
-  setTaskListQtd: React.Dispatch<React.SetStateAction<number>>
-  setCompletedTaskQtd: React.Dispatch<React.SetStateAction<number>>
+  setTaskListQty: React.Dispatch<React.SetStateAction<number>>
+  setCompletedTaskQty: React.Dispatch<React.SetStateAction<number>>
   projectId: number
 }
 
@@ -33,8 +33,8 @@ function TaskCard({
   setCreateTaskMode,
   setCloseEditTask,
   closeEditTask,
-  setTaskListQtd,
-  setCompletedTaskQtd,
+  setTaskListQty,
+  setCompletedTaskQty,
   projectId,
 }: TaskCardProps) {
   const { notify } = useNotify()
@@ -56,8 +56,8 @@ function TaskCard({
         handleCompletedTask(
           listId,
           projectId,
-          setTaskListQtd,
-          setCompletedTaskQtd,
+          setTaskListQty,
+          setCompletedTaskQty,
           setLists,
         )
       }
@@ -78,8 +78,8 @@ function TaskCard({
         handleCompletedTask(
           listId,
           projectId,
-          setTaskListQtd,
-          setCompletedTaskQtd,
+          setTaskListQty,
+          setCompletedTaskQty,
           setLists,
         )
       }

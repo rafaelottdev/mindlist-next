@@ -36,8 +36,8 @@ function ListCard({ list, setLists, projectId }: ListCardProps) {
   const [closeEditTask, setCloseEditTask] = useState<boolean>(true)
   const [deleteLoading, setDeleteLoading] = useState<boolean>(false)
   const [taskList, setTaskList] = useState<taskType[] | null>(null)
-  const [taskListQtd, setTaskListQtd] = useState<number>(0)
-  const [completedTaskQtd, setCompletedTaskQtd] = useState<number>(0)
+  const [taskListQty, setTaskListQty] = useState<number>(0)
+  const [completedTaskQty, setCompletedTaskQty] = useState<number>(0)
 
   async function handleDeleteList() {
     const approve = await confirm("Deseja excluir a lista")
@@ -81,8 +81,8 @@ function ListCard({ list, setLists, projectId }: ListCardProps) {
     handleCompletedTask(
       list.id,
       projectId,
-      setTaskListQtd,
-      setCompletedTaskQtd,
+      setTaskListQty,
+      setCompletedTaskQty,
       setLists,
     )
   }, [handleTaskList, list.id, projectId, setLists])
@@ -113,7 +113,7 @@ function ListCard({ list, setLists, projectId }: ListCardProps) {
             </div>
 
             <p className={styles["list-card__task-count"]}>
-              {completedTaskQtd} de {taskListQtd}
+              {completedTaskQty} de {taskListQty}
             </p>
           </div>
 
@@ -129,8 +129,8 @@ function ListCard({ list, setLists, projectId }: ListCardProps) {
                     setCreateTaskMode={setCreateTaskMode}
                     setCloseEditTask={setCloseEditTask}
                     closeEditTask={closeEditTask}
-                    setTaskListQtd={setTaskListQtd}
-                    setCompletedTaskQtd={setCompletedTaskQtd}
+                    setTaskListQty={setTaskListQty}
+                    setCompletedTaskQty={setCompletedTaskQty}
                     projectId={projectId}
                   />
                 </li>
@@ -143,8 +143,8 @@ function ListCard({ list, setLists, projectId }: ListCardProps) {
                 projectId={projectId}
                 setCreateTaskMode={setCreateTaskMode}
                 onCreated={handleTaskList}
-                setTaskListQtd={setTaskListQtd}
-                setCompletedTaskQtd={setCompletedTaskQtd}
+                setTaskListQty={setTaskListQty}
+                setCompletedTaskQty={setCompletedTaskQty}
                 setLists={setLists}
               />
             ) : (
@@ -167,7 +167,7 @@ function ListCard({ list, setLists, projectId }: ListCardProps) {
             <div className={styles["list-card__progress-task-bar"]}>
               <div
                 style={{
-                  width: `${completedTaskQtd === 0 && taskListQtd === 0 ? 0 : (completedTaskQtd / taskListQtd) * 100}%`,
+                  width: `${completedTaskQty === 0 && taskListQty === 0 ? 0 : (completedTaskQty / taskListQty) * 100}%`,
                 }}
               ></div>
             </div>
