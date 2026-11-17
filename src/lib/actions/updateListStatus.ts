@@ -42,7 +42,7 @@ export async function updateListStatus(
   try {
     await sql`
       UPDATE lists
-      SET status = ${!completed ? "pending" : "completed"}
+      SET status = ${completed ? "completed" : "pending"}
 
       WHERE id = ${listId} AND project_id = ${projectId} AND user_id = ${userId}
     `

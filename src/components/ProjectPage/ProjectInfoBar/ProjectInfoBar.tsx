@@ -1,6 +1,5 @@
 "use client"
 
-import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { FaCheck, FaRegCircle, FaRegClock } from "react-icons/fa6"
 import { PiStarBold, PiStarFill } from "react-icons/pi"
@@ -21,9 +20,9 @@ interface ProjectInfoBarProps {
 }
 
 function ProjectInfoBar({ projectData, lists }: ProjectInfoBarProps) {
-  const router = useRouter()
   const { notify } = useNotify()
   const [favorite, setFavorite] = useState<boolean>(projectData.favorite)
+  const [isUpdating, setIsUpdating] = useState<boolean>(false)
 
   const newDeadline = new Date(projectData.deadline)
     .toLocaleDateString("pt-BR", {
@@ -37,19 +36,24 @@ function ProjectInfoBar({ projectData, lists }: ProjectInfoBarProps) {
   })
 
   async function handleFavorite() {
+    if (isUpdating) return
+
+    setIsUpdating(true)
+
     try {
-      const result = await updateFavorite(projectData.favorite, projectData.id)
+      const result = await updateFavorite(favorite, projectData.id)
 
       if (result.error && result.message) {
         throw new Error(result.message)
       } else {
         setFavorite((prev) => !prev)
-        router.refresh()
         notify(result.message)
       }
     } catch (error) {
       console.log(error)
       notify(error instanceof Error ? error.message : String(error))
+    } finally {
+      setIsUpdating(false)
     }
   }
 
@@ -81,7 +85,7 @@ function ProjectInfoBar({ projectData, lists }: ProjectInfoBarProps) {
           <li
             className={`
               ${styles["project-bar__status"]}
-              ${projectData.status === "pending" ? styles["project-card__status--current"] : ""}
+              ${listQty === completedListQty ? "" : styles["project-card__status--current"]}
             `}
           >
             <FaRegCircle />
@@ -90,7 +94,7 @@ function ProjectInfoBar({ projectData, lists }: ProjectInfoBarProps) {
           <li
             className={`
               ${styles["project-bar__status"]}
-              ${projectData.status === "completed" ? styles["project-card__status--current"] : ""}
+              ${listQty === completedListQty ? styles["project-card__status--current"] : ""}
             `}
           >
             <FaCheck />
@@ -131,6 +135,7 @@ function ProjectInfoBar({ projectData, lists }: ProjectInfoBarProps) {
           type="button"
           className={` ${styles["project-bar__favorite-button"]}`}
           onClick={handleFavorite}
+          disabled={isUpdating}
         >
           {favorite ? <PiStarFill /> : <PiStarBold />}
         </button>

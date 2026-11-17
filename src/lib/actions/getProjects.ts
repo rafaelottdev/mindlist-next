@@ -45,7 +45,7 @@ export async function getProjects(): Promise<{
     const response = (await sql`
       SELECT * FROM projects
 
-      WHERE user_id = ${userId}
+      WHERE user_id = ${userId} AND status = 'pending'
       ORDER BY position ASC, created_at ASC, id
     `) as ProjectListType[]
 

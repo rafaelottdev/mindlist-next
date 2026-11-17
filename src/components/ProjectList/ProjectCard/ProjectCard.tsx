@@ -32,10 +32,11 @@ function ProjectCard({ project }: ProjectCardProps) {
   const { notify } = useNotify()
   const { confirm } = useConfirm()
   const [favorite, setFavorite] = useState<boolean>(project.favorite)
+  const [isUpdating, setIsUpdating] = useState<boolean>(false)
   const [editMode, setEditMode] = useState<boolean>(false)
   const [deleteLoading, setDeleteLoading] = useState<boolean>(false)
-  const [listQtd, setListQtd] = useState<number>(0)
-  const [completedListQtd, setCompletedListQtd] = useState<number>(0)
+  const [listQty, setListQty] = useState<number>(0)
+  const [completedListQty, setCompletedListQty] = useState<number>(0)
 
   const newDeadline = new Date(project.deadline)
     .toLocaleDateString("pt-BR", {
@@ -54,6 +55,10 @@ function ProjectCard({ project }: ProjectCardProps) {
   ) {
     e.preventDefault()
 
+    if (isUpdating) return
+
+    setIsUpdating(true)
+
     try {
       const result = await updateFavorite(favorite, project.id)
 
@@ -65,6 +70,8 @@ function ProjectCard({ project }: ProjectCardProps) {
       }
     } catch (error) {
       notify(error instanceof Error ? error.message : String(error))
+    } finally {
+      setIsUpdating(false)
     }
   }
 
@@ -97,7 +104,7 @@ function ProjectCard({ project }: ProjectCardProps) {
   }
 
   useEffect(() => {
-    handleCompletedList(project.id, setListQtd, setCompletedListQtd)
+    handleCompletedList(project.id, setListQty, setCompletedListQty)
   }, [project.id])
 
   return (
@@ -159,6 +166,7 @@ function ProjectCard({ project }: ProjectCardProps) {
                       ${styles["project-card__favorite-button"]}
                     `}
                     onClick={(e) => handleFavorite(e)}
+                    disabled={isUpdating}
                   >
                     {favorite ? <PiStarFill /> : <PiStarBold />}
                   </button>
@@ -219,7 +227,7 @@ function ProjectCard({ project }: ProjectCardProps) {
                   <li
                     className={`
                       ${styles["project-card__status"]}
-                      ${project.status === "pending" ? styles["project-card__status--current"] : ""}
+                      ${listQty === completedListQty ? "" : styles["project-card__status--current"]}
                     `}
                   >
                     <FaRegCircle />
@@ -228,7 +236,7 @@ function ProjectCard({ project }: ProjectCardProps) {
                   <li
                     className={`
                       ${styles["project-card__status"]}
-                      ${project.status === "completed" ? styles["project-card__status--current"] : ""}
+                      ${listQty === completedListQty ? styles["project-card__status--current"] : ""}
                     `}
                   >
                     <FaCheck />
@@ -241,13 +249,13 @@ function ProjectCard({ project }: ProjectCardProps) {
                   <div className={styles["project-card__completed-task-bar"]}>
                     <div
                       style={{
-                        width: `${(completedListQtd / listQtd) * 100}%`,
+                        width: `${(completedListQty / listQty) * 100}%`,
                       }}
                     ></div>
                   </div>
 
                   <p className={styles["project-card__completed-task-text"]}>
-                    {completedListQtd} de {listQtd} Listas Concluidas
+                    {completedListQty} de {listQty} Listas Concluidas
                   </p>
                 </div>
               </div>
