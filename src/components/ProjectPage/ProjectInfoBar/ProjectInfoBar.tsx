@@ -85,7 +85,7 @@ function ProjectInfoBar({ projectData, lists }: ProjectInfoBarProps) {
           <li
             className={`
               ${styles["project-bar__status"]}
-              ${listQty === completedListQty ? "" : styles["project-card__status--current"]}
+              ${listQty > 0 && listQty === completedListQty ? "" : styles["project-card__status--current"]}
             `}
           >
             <FaRegCircle />
@@ -94,7 +94,7 @@ function ProjectInfoBar({ projectData, lists }: ProjectInfoBarProps) {
           <li
             className={`
               ${styles["project-bar__status"]}
-              ${listQty === completedListQty ? styles["project-card__status--current"] : ""}
+              ${listQty > 0 && listQty === completedListQty ? styles["project-card__status--current"] : ""}
             `}
           >
             <FaCheck />

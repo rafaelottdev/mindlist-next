@@ -89,11 +89,11 @@ function ProjectCard({ project }: ProjectCardProps) {
 
         if (result.error && result.message) {
           throw new Error(result.message)
-        } else {
-          notify(result.message)
-
-          router.refresh()
         }
+
+        notify(result.message)
+
+        router.refresh()
       }
     } catch (error) {
       setDeleteLoading(false)
@@ -227,7 +227,7 @@ function ProjectCard({ project }: ProjectCardProps) {
                   <li
                     className={`
                       ${styles["project-card__status"]}
-                      ${listQty === completedListQty ? "" : styles["project-card__status--current"]}
+                      ${listQty > 0 && listQty === completedListQty ? "" : styles["project-card__status--current"]}
                     `}
                   >
                     <FaRegCircle />
@@ -236,7 +236,7 @@ function ProjectCard({ project }: ProjectCardProps) {
                   <li
                     className={`
                       ${styles["project-card__status"]}
-                      ${listQty === completedListQty ? styles["project-card__status--current"] : ""}
+                      ${listQty > 0 && listQty === completedListQty ? styles["project-card__status--current"] : ""}
                     `}
                   >
                     <FaCheck />

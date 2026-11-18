@@ -14,7 +14,12 @@ function ProjectLists({ lists, setLists, projectId }: ProjectListsProps) {
       {lists.map((list: ListType) => {
         return (
           <li key={list.id}>
-            <ListCard list={list} setLists={setLists} projectId={projectId} />
+            <ListCard
+              list={list}
+              lists={lists}
+              setLists={setLists}
+              projectId={projectId}
+            />
           </li>
         )
       })}

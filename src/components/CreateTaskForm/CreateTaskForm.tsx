@@ -20,6 +20,7 @@ interface CreateTaskFormProps {
   onCreated: () => void
   setTaskListQty: React.Dispatch<React.SetStateAction<number>>
   setCompletedTaskQty: React.Dispatch<React.SetStateAction<number>>
+  lists: ListType[]
   setLists: React.Dispatch<React.SetStateAction<ListType[]>>
 }
 
@@ -30,6 +31,7 @@ function CreateTaskForm({
   onCreated,
   setTaskListQty,
   setCompletedTaskQty,
+  lists,
   setLists,
 }: CreateTaskFormProps) {
   const { notify } = useNotify()
@@ -46,8 +48,9 @@ function CreateTaskForm({
   })
 
   async function onSubmit(formData: formCreateTaskType) {
+    setLoading(true)
+
     try {
-      setLoading(true)
       const result = await createTask(formData, listId)
 
       if (result.error) {
@@ -55,14 +58,18 @@ function CreateTaskForm({
       } else {
         onCreated()
         reset()
-        handleCompletedTask(
+        void handleCompletedTask(
           listId,
           projectId,
           setTaskListQty,
           setCompletedTaskQty,
+          lists,
           setLists,
-        )
-        notify(result.message)
+        ).catch((error) => {
+          console.error(error)
+          setLoading(false)
+          notify("Erro ao atualizar o status da lista")
+        })
       }
     } catch (error) {
       console.log(error)
