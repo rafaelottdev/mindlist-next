@@ -7,7 +7,7 @@ function Header() {
   return (
     <header className={styles.header}>
       <div className={styles["header__logo-container"]}>
-        <Link href="/" className={styles["header__logo-link"]}>
+        <Link href="/" prefetch={false} className={styles["header__logo-link"]}>
           <div className={styles["header__logo-wrapper"]}>
             <Image
               src="/img/header/logo.png"

@@ -15,6 +15,7 @@ import TaskEditForm from "./TaskEditForm/TaskEditForm"
 interface TaskCardProps {
   task: taskType
   listId: number
+  lists: ListType[]
   setLists: React.Dispatch<React.SetStateAction<ListType[]>>
   onUpdate: () => void
   setCreateTaskMode: React.Dispatch<React.SetStateAction<boolean>>
@@ -28,6 +29,7 @@ interface TaskCardProps {
 function TaskCard({
   task,
   listId,
+  lists,
   setLists,
   onUpdate,
   setCreateTaskMode,
@@ -51,16 +53,17 @@ function TaskCard({
 
       if (result.error && result.message) {
         throw new Error(result.message)
-      } else {
-        setCompleted((prev) => !prev)
-        handleCompletedTask(
-          listId,
-          projectId,
-          setTaskListQty,
-          setCompletedTaskQty,
-          setLists,
-        )
       }
+
+      setCompleted((prev) => !prev)
+      await handleCompletedTask(
+        listId,
+        projectId,
+        setTaskListQty,
+        setCompletedTaskQty,
+        lists,
+        setLists,
+      )
     } catch (error) {
       notify(error instanceof Error ? error.message : String(error))
     }
@@ -73,16 +76,17 @@ function TaskCard({
 
       if (result.error && result.message) {
         throw new Error(result.message)
-      } else {
-        onUpdate()
-        handleCompletedTask(
-          listId,
-          projectId,
-          setTaskListQty,
-          setCompletedTaskQty,
-          setLists,
-        )
       }
+
+      onUpdate()
+      await handleCompletedTask(
+        listId,
+        projectId,
+        setTaskListQty,
+        setCompletedTaskQty,
+        lists,
+        setLists,
+      )
     } catch (error) {
       console.log(error)
       notify(error instanceof Error ? error.message : String(error))

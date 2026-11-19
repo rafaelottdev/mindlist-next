@@ -15,7 +15,7 @@ import { useConfirm } from "@/contexts/ConfirmAlert/ConfirmAlert"
 import { useNotify } from "@/contexts/NotificationAlert/NotificationAlert"
 import { deleteList } from "@/lib/actions/deleteList"
 import { getTasks } from "@/lib/actions/getTasks"
-import { handleCompletedTask } from "@/lib/utils/handleCompletedTask"
+import { updateProjectStatus } from "@/lib/actions/updateProjectStatus"
 import type { ListType } from "@/types/ListType"
 import type { taskType } from "@/types/taskType"
 import styles from "./ListCard.module.sass"
@@ -24,11 +24,12 @@ import TaskCard from "./TaskCard/TaskCard"
 
 interface ListCardProps {
   list: ListType
+  lists: ListType[]
   setLists: React.Dispatch<React.SetStateAction<ListType[]>>
   projectId: number
 }
 
-function ListCard({ list, setLists, projectId }: ListCardProps) {
+function ListCard({ list, lists, setLists, projectId }: ListCardProps) {
   const { notify } = useNotify()
   const { confirm } = useConfirm()
   const [editMode, setEditMode] = useState<boolean>(false)
@@ -50,10 +51,23 @@ function ListCard({ list, setLists, projectId }: ListCardProps) {
 
         if (result.error && result.message) {
           throw new Error(result.message)
-        } else {
-          setLists((prev) => prev.filter((item) => item.id !== list.id))
-          notify(result.message)
         }
+
+        const updatedLists = lists.filter((item) => item.id !== list.id)
+
+        setLists(updatedLists)
+
+        const listQty = updatedLists.length
+        const completedListQty = updatedLists.filter(
+          (list) => list.status === "completed",
+        ).length
+
+        await updateProjectStatus(
+          listQty > 0 && listQty === completedListQty,
+          projectId,
+        )
+
+        notify(result.message)
       }
     } catch (error) {
       console.log(error)
@@ -78,14 +92,7 @@ function ListCard({ list, setLists, projectId }: ListCardProps) {
 
   useEffect(() => {
     handleTaskList()
-    handleCompletedTask(
-      list.id,
-      projectId,
-      setTaskListQty,
-      setCompletedTaskQty,
-      setLists,
-    )
-  }, [handleTaskList, list.id, projectId, setLists])
+  }, [handleTaskList])
 
   return (
     <>
@@ -124,6 +131,7 @@ function ListCard({ list, setLists, projectId }: ListCardProps) {
                   <TaskCard
                     task={task}
                     listId={list.id}
+                    lists={lists}
                     setLists={setLists}
                     onUpdate={handleTaskList}
                     setCreateTaskMode={setCreateTaskMode}
@@ -145,6 +153,7 @@ function ListCard({ list, setLists, projectId }: ListCardProps) {
                 onCreated={handleTaskList}
                 setTaskListQty={setTaskListQty}
                 setCompletedTaskQty={setCompletedTaskQty}
+                lists={lists}
                 setLists={setLists}
               />
             ) : (

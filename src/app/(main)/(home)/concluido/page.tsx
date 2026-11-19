@@ -3,7 +3,6 @@ import { getCompletedProjects } from "@/lib/actions/getCompletedProjects"
 
 async function concluido() {
   const completedProjectsResponse = await getCompletedProjects()
-  console.log(completedProjectsResponse)
 
   return (
     <>

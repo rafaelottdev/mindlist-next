@@ -1,6 +1,7 @@
 "use server"
 
 import { neon } from "@neondatabase/serverless"
+import { revalidatePath } from "next/cache"
 import { getUser } from "./getUser"
 
 export async function updateProjectStatus(
@@ -45,6 +46,9 @@ export async function updateProjectStatus(
 
       WHERE id = ${projectId} AND user_id = ${userId}
     `
+
+    revalidatePath("/")
+    revalidatePath("/concluido")
 
     return {
       error: false,
