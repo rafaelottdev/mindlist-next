@@ -53,7 +53,6 @@ export const formCreateProjectSchema = z.object({
         message: "A data deve ser futura",
       },
     ),
-
   projectCover: z
     .custom<FileList>(
       (value) => typeof FileList !== "undefined" && value instanceof FileList,

@@ -6,7 +6,7 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io"
 import { moveLeftSlide, moveRightSlide } from "@/lib/utils/moveSlide"
 import styles from "./Nav.module.sass"
 
-const urlList = ["/", "/concluido", "/atrasado", "/favorito", "/pomodoro"]
+const urlList = ["/", "/concluido", "/atrasado", "/favorito"]
 const moveSize: number = 300
 const visibleItems = 3
 
@@ -82,18 +82,6 @@ function Nav() {
               `}
             >
               Favorito
-            </Link>
-          </li>
-
-          <li className={styles["nav-container__item"]}>
-            <Link
-              href="/pomodoro"
-              className={`
-                ${styles["nav-container__link"]}
-                ${pathName === "/pomodoro" ? styles["nav-container__link--selected"] : styles["nav-container__link--deselected"]}
-              `}
-            >
-              Pomodoro
             </Link>
           </li>
         </ul>
