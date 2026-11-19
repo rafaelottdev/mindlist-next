@@ -1,6 +1,6 @@
 import ProjectList from "@/components/ProjectList/ProjectList"
 import { getCompletedProjects } from "@/lib/actions/getCompletedProjects"
-import styles from "./page.module.sass"
+import styles from "../pages.module.sass"
 
 async function concluido() {
   const completedProjectsResponse = await getCompletedProjects()
@@ -20,7 +20,7 @@ async function concluido() {
       completedProjectsResponse?.response?.length > 0 ? (
         <ProjectList projectResponse={completedProjectsResponse} />
       ) : (
-        <div className={styles["project-list-container_message-contianer"]}>
+        <div className={styles["project-list-container_message-container"]}>
           <p>Nenhum projeto concluido</p>
         </div>
       )}

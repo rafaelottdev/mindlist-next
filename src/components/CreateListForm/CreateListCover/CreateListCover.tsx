@@ -4,21 +4,15 @@ import type { FormCreateListType } from "@/types/FormCreateListType"
 import styles from "./CreateListCover.module.sass"
 
 interface CreateListCoverProps {
-  showForm: boolean
   setShowForm: React.Dispatch<React.SetStateAction<boolean>>
   setFocus: UseFormSetFocus<FormCreateListType>
 }
 
-function CreateListCover({
-  showForm,
-  setShowForm,
-  setFocus,
-}: CreateListCoverProps) {
+function CreateListCover({ setShowForm, setFocus }: CreateListCoverProps) {
   return (
     <div
       className={`
         ${styles["create-list-cover"]}
-        ${showForm && styles["form-cover--hide"]}
       `}
     >
       <button

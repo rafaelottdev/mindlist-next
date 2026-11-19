@@ -1,7 +1,7 @@
 import CreateProjectForm from "@/components/CreateProjectForm/CreateProjectForm"
 import ProjectList from "@/components/ProjectList/ProjectList"
 import { getPendingProjects } from "@/lib/actions/getPendingProjects"
-import styles from "./page.module.sass"
+import styles from "./pages.module.sass"
 
 export default async function page() {
   const projectResponse = await getPendingProjects()
