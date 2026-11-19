@@ -73,11 +73,8 @@ function CreateListForm({ projectData, setLists }: CreateListFormProps) {
           submitText="Criar"
         />
       ) : (
-      <CreateListCover
-        setShowForm={setShowForm}
-        setFocus={setFocus}
-      />
-      )}      
+        <CreateListCover setShowForm={setShowForm} setFocus={setFocus} />
+      )}
     </div>
   )
 }
