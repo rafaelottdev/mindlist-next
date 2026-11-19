@@ -1,10 +1,10 @@
 import CreateProjectForm from "@/components/CreateProjectForm/CreateProjectForm"
 import ProjectList from "@/components/ProjectList/ProjectList"
-import { getProjects } from "@/lib/actions/getProjects"
+import { getPendingProjects } from "@/lib/actions/getPendingProjects"
 import styles from "./page.module.sass"
 
 export default async function page() {
-  const projectResponse = await getProjects()
+  const projectResponse = await getPendingProjects()
   const projectQtde = projectResponse?.response?.length
 
   return (
