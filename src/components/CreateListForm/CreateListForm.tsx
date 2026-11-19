@@ -57,26 +57,27 @@ function CreateListForm({ projectData, setLists }: CreateListFormProps) {
 
   return (
     <div className={styles["create-list"]}>
+      {showForm ? (
+        <ListForm<FormCreateListType>
+          handleSubmit={handleSubmit}
+          register={register}
+          reset={reset}
+          errors={errors}
+          onSubmit={onSubmit}
+          registerName="listName"
+          registerPriority="listPriority"
+          setShow={setShowForm}
+          loading={loading}
+          nameTitle="Nome da Lista"
+          priorityTitle="Prioridade"
+          submitText="Criar"
+        />
+      ) : (
       <CreateListCover
-        showForm={showForm}
         setShowForm={setShowForm}
         setFocus={setFocus}
       />
-
-      <ListForm<FormCreateListType>
-        handleSubmit={handleSubmit}
-        register={register}
-        reset={reset}
-        errors={errors}
-        onSubmit={onSubmit}
-        registerName="listName"
-        registerPriority="listPriority"
-        setShow={setShowForm}
-        loading={loading}
-        nameTitle="Nome da Lista"
-        priorityTitle="Prioridade"
-        submitText="Criar"
-      />
+      )}      
     </div>
   )
 }

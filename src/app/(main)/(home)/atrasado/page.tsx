@@ -1,6 +1,6 @@
 import ProjectList from "@/components/ProjectList/ProjectList"
 import { getOverdueProjects } from "@/lib/actions/getOverdueProjects"
-import styles from "./page.module.sass"
+import styles from "../pages.module.sass"
 
 async function atrasado() {
   const overdueProjectsResponse = await getOverdueProjects()
@@ -20,7 +20,7 @@ async function atrasado() {
       overdueProjectsResponse?.response?.length > 0 ? (
         <ProjectList projectResponse={overdueProjectsResponse} />
       ) : (
-        <div className={styles["project-list-container_message-contianer"]}>
+        <div className={styles["project-list-container_message-container"]}>
           <p>Nenhum projeto atrasado</p>
         </div>
       )}
