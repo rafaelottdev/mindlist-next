@@ -45,12 +45,18 @@
   border: 1px solid $primary-color
   border-radius: 30px
 
+  @include mobile("tablet")
+    padding: 20px
+
 .auth-section__container
   width: 1000px
   height: 450px
   position: relative
 
   display: flex
+
+  @include mobile("tablet")
+    width: 350px
 
 .auth-section__wrapp-cover
   width: 650px
@@ -64,6 +70,9 @@
   overflow: hidden
 
   transition: .5s
+
+  @include mobile("tablet")
+    display: none
 
   img
     width: 100%

@@ -17,6 +17,9 @@
 
   transition: .3s
 
+  @include mobile("tablet")
+    border-radius: 20px
+
 .access-container--register
   z-index: 0
 
@@ -140,6 +143,10 @@
   left: 650px
   z-index: 0
   border-radius: 0 20px 20px 0
+
+  @include mobile("tablet")
+    left: 0px
+    border-radius: 20px
 
 .error-form
   font-family: $baloo-regular
