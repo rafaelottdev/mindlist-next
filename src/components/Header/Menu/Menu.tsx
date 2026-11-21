@@ -115,8 +115,7 @@ function Menu() {
       </button>
 
       <ul
-        className={styles["menu__profile-options"]}
-        style={{ height: `${showMenu ? "115px" : "0px"}` }}
+        className={`${styles["menu__profile-options"]} ${showMenu ? styles["show-menu"] : ""}`}
       >
         <li className={styles["menu__profile-item"]}>
           <button

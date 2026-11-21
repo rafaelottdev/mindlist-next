@@ -8,6 +8,12 @@
   gap: 0
   overflow: hidden
 
+  @include mobile("tablet")
+    width: 100%
+    padding: 0 35px 0 35px
+    overflow-x: auto
+    overflow-y: hidden
+
 .project-list-container--gap
   gap: 20px
 
@@ -22,3 +28,8 @@
     font-family: $baloo-semibold
     font-size: 21px
     color: #2640ead3
+
+.project-list-container--center
+  @include mobile("tablet")
+    justify-content: center
+    padding: 0 0 0 0

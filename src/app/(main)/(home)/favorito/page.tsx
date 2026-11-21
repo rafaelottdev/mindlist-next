@@ -14,6 +14,7 @@ async function favorito() {
           favoriteProjectsResponse?.response.length > 0 &&
           `${styles["project-list-container--gap"]}`
         }
+        ${favoriteProjectsResponse?.response?.length === 1 ? styles["project-list-container--center"] : ""}
       `}
     >
       {favoriteProjectsResponse?.response &&

@@ -14,6 +14,7 @@ async function concluido() {
           completedProjectsResponse?.response.length > 0 &&
           `${styles["project-list-container--gap"]}`
         }
+        ${completedProjectsResponse?.response?.length === 1 ? styles["project-list-container--center"] : ""}
       `}
     >
       {completedProjectsResponse?.response &&

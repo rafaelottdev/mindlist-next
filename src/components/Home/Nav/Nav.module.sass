@@ -5,6 +5,11 @@
   @include flex-center
   gap: 80px
 
+  @include mobile("tablet")
+    width: 350px
+    margin: 0 auto
+    gap: 0
+
 .nav-container__nav-button
   width: 35px
   height: 35px
@@ -18,6 +23,9 @@
     color: $blue-100
     font-size: 32px
 
+    @include mobile("tablet")
+      font-size: 39px
+
 .nav-container__nav-button--color
   svg
     color: #2640ea68
@@ -28,6 +36,9 @@
 
   position: relative
   overflow: hidden
+
+  @include mobile("tablet")
+    width: 230px
 
 .nav-container__list
   width: max-content
@@ -40,6 +51,9 @@
 
   transition: .5s
 
+  @include mobile("tablet")
+    gap: 10px
+
 .nav-container__link
   width: 150px
 
@@ -48,6 +62,10 @@
   font-size: 27px
   font-family: $baloo-extrabold
   letter-spacing: .3px
+
+  @include mobile("tablet")
+    width: 230px
+    font-size: 24px
 
 // interativo
 
