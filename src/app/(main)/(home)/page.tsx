@@ -12,6 +12,7 @@ export default async function page() {
       className={`
         ${styles["project-list-container"]}
         ${projectQtde && projectQtde > 0 && `${styles["project-list-container--gap"]}`}
+        ${projectQtde === 0 ? styles["project-list-container--center"] : ""}
       `}
     >
       <ProjectList projectResponse={projectResponse} />

@@ -1,10 +1,13 @@
 @use "@/styles/abstracts/variables" as *
+@use "@/styles/abstracts/mixins" as *
   
 .slogan
-  // padding-bottom: 50px
   padding-bottom: 20px
   display: flex
   align-items: flex-end
+
+  @include mobile("tablet")
+    display: none
   
 .slogan__text
   display: flex

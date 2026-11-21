@@ -1,3 +1,5 @@
+@use "@/styles/abstracts/mixins" as *
+  
 .header
   width: 100vw
   height: 130px
@@ -11,6 +13,10 @@
 
   z-index: 10
 
+  @include mobile("tablet")
+    height: 100px
+    padding: 50px 25px 0 25px
+
   button
     cursor: pointer
 
@@ -18,3 +24,21 @@
   display: flex
   align-items: center
   gap: 10px
+  
+  @include mobile("tablet")
+    gap: 5px
+
+.header__logo-wrapper
+  display: flex
+  align-items: center
+
+  img
+    @include mobile("tablet")
+      width: 30px
+      height: 30px
+
+.header__logo-title
+  img
+    @include mobile("tablet")
+      width: 120px
+      height: 26px

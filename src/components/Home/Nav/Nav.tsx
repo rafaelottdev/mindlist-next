@@ -2,17 +2,36 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io"
 import { moveLeftSlide, moveRightSlide } from "@/lib/utils/moveSlide"
 import styles from "./Nav.module.sass"
 
 const urlList = ["/", "/concluido", "/atrasado", "/favorito"]
-const moveSize: number = 300
-const visibleItems = 3
+const breakpoint = 768
+const desktop = { visibleItems: 3, moveSize: 300 }
+const mobile = { visibleItems: 1, moveSize: 240 }
 
 function Nav() {
   const router = useRouter()
   const pathName: string = usePathname()
+
+  const [moveSize, setMoveSize] = useState<number>(desktop.moveSize)
+  const [visibleItems, setVisibleItems] = useState<number>(desktop.visibleItems)
+
+  useEffect(() => {
+    function updateLayout() {
+      const layout = window.innerWidth > breakpoint ? desktop : mobile
+
+      setMoveSize(layout.moveSize)
+      setVisibleItems(layout.visibleItems)
+    }
+
+    updateLayout()
+
+    window.addEventListener("resize", updateLayout)
+    return () => window.removeEventListener("resize", updateLayout)
+  }, [])
 
   const currentIndex: number = Math.max(urlList.indexOf(pathName), 0)
   const page = Math.floor(currentIndex / visibleItems)

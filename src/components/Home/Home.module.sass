@@ -12,6 +12,27 @@
 .home__page-container
   padding-top: 100px
 
+  @include mobile("tablet")
+    width: 100vw
+    min-width: 0
+    padding-top: 50px
+
 .home__page
   padding-top: 25px
   @include flex-center
+
+  @include mobile("tablet")
+    width: 100%
+    min-width: 0
+    
+
+    display: flex
+    align-items: center
+    justify-content: flex-start
+
+    overflow-x: auto
+    overflow-y: hidden
+    flex-wrap: nowrap
+
+    > *
+      flex-shrink: 0

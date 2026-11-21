@@ -14,6 +14,7 @@ async function atrasado() {
           overdueProjectsResponse?.response.length > 0 &&
           `${styles["project-list-container--gap"]}`
         }
+        ${overdueProjectsResponse?.response?.length === 1 ? styles["project-list-container--center"] : ""}
       `}
     >
       {overdueProjectsResponse?.response &&
