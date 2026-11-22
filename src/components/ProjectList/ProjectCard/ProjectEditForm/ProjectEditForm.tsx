@@ -134,6 +134,7 @@ function ProjectEditForm({ project, setEditMode }: ProjectEditFormProps) {
       coverTitle="Nova Capa"
       priorityTitle="Editar Prioridade"
       tagTitle="Editar Tags"
+      sendBtnText="Editar Projeto"
     />
   )
 }
