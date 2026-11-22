@@ -4,7 +4,7 @@ export const formEditProjectSchema = z.object({
   editProjectName: z
     .string()
     .refine((name) => !name || name.length >= 2, "Nome muito curto")
-    .refine((name) => !name || name.length <= 30, "Nome muito grande")
+    .refine((name) => !name || name.length <= 15, "Nome muito grande")
     .refine((name) => !name || /\S/.test(name), "Não deve estar vazio")
     .transform((name) =>
       name

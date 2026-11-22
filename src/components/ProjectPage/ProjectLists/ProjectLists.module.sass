@@ -1,4 +1,9 @@
+@use "@/styles/abstracts/mixins" as *
+
 .list
   padding-left: 100px
   display: flex
   gap: 15px
+
+  @include mobile("tablet")
+    padding-left: 10px

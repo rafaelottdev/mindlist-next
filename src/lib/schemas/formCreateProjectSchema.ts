@@ -4,7 +4,7 @@ export const formCreateProjectSchema = z.object({
   projectName: z
     .string()
     .min(2, "Nome muito curto")
-    .max(30, "Nome muito grande")
+    .max(15, "Nome muito grande")
     .regex(/\S/, "Não deve estar vazio")
     .transform((name) =>
       name
