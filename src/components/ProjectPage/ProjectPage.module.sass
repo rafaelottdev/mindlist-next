@@ -1,4 +1,5 @@
 @use "@/styles/abstracts/variables" as *
+@use "@/styles/abstracts/mixins" as *
   
 .project-page-container
   width: 100vw
@@ -7,6 +8,9 @@
 
   position: relative
   overflow: hidden
+
+  @include mobile("tablet")
+    height: 100dvh
 
 .project-page-container__lists
   width: 100%
@@ -20,6 +24,9 @@
   overflow-x: auto
   overflow-y: hidden
   z-index: 1
+
+  @include mobile("tablet")
+    padding-right: 10px
 
   &::-webkit-scrollbar
     width: 100%

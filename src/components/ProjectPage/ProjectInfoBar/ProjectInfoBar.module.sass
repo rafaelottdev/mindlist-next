@@ -28,6 +28,10 @@
   -webkit-backdrop-filter: blur(10px)
   backdrop-filter: blur(10px)
 
+  @include mobile("tablet")
+    min-width: 350px
+    gap: 15px
+
 .project-bar__title-priority-container
   height: 100%
   padding-right: 15px
@@ -38,14 +42,24 @@
 
   border-right: 1px solid #ffffff9d
 
+  @include mobile("tablet")
+    padding-right: 10px
+    gap: 10px
+
 .project-bar__title
   font-size: 16px
+
+  @include mobile("tablet")
+    font-size: 14px
 
 .project-bar__priority
   @include flex-center
 
   svg
     font-size: 16px
+
+    @include mobile("tablet")
+      font-size: 14px
 
 .project-bar__general-info
   display: flex
@@ -56,6 +70,9 @@
   display: flex
   align-items: center
   gap: 5px
+
+  @include mobile("tablet")
+    display: none
 
 .project-bar__status
   width: 17px
@@ -80,12 +97,26 @@
   border: 1px solid rgba(190, 200, 255, 0.22)
   background-color: rgba(255, 255, 255, 0.06)
 
+  @include mobile("tablet")
+    padding: 0 5px
+    gap: 5px
+
+  svg
+    @include mobile("tablet")
+      font-size: 12px
+
 .project-bar__deadline
   font-size: 13px
+
+  @include mobile("tablet")
+    font-size: 12px
 
 .project-bar__tag-list
   display: flex
   gap: 5px
+
+  @include mobile("tablet")
+    display: none
 
 .project-bar__tag-item
   height: 30px
@@ -100,6 +131,9 @@
 
 .project-bar__task-bar-container
   margin-top: 20px
+
+  @include mobile("tablet")
+    display: none
 
 .project-bar__task-bar
   width: 135px
