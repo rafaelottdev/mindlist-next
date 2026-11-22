@@ -1,22 +1,5 @@
 import { z } from "zod"
 
-const getImageDimensions = (
-  file: File,
-): Promise<{ width: number; height: number }> => {
-  return new Promise((resolve) => {
-    const img = new Image()
-    img.src = URL.createObjectURL(file)
-    img.onload = () => {
-      resolve({ width: img.width, height: img.height })
-      URL.revokeObjectURL(img.src)
-    }
-    img.onerror = () => {
-      resolve({ width: 0, height: 0 })
-      URL.revokeObjectURL(img.src)
-    }
-  })
-}
-
 export const formCreateProjectSchema = z.object({
   projectName: z
     .string()
@@ -73,21 +56,7 @@ export const formCreateProjectSchema = z.object({
           file.type,
         )
       )
-    }, "Formato da imagem invalido")
-    .refine(
-      async (files) => {
-        const file = files?.item(0)
-        if (file) {
-          const { width, height } = await getImageDimensions(file)
-          return width >= 1200 && height >= 600
-        }
-
-        return true
-      },
-      {
-        message: "A imagem deve ser maior",
-      },
-    ),
+    }, "Formato da imagem invalido"),
 
   projectPriority: z.enum(["low", "medium", "high"], "Valor Invalido"),
 
