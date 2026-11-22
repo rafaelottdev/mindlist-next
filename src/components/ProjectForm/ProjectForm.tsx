@@ -49,6 +49,7 @@ interface ProjectFormProps<
   coverTitle: string
   priorityTitle: string
   tagTitle: string
+  sendBtnText: string
 }
 
 function ProjectForm<
@@ -78,6 +79,7 @@ function ProjectForm<
   coverTitle,
   priorityTitle,
   tagTitle,
+  sendBtnText,
 }: ProjectFormProps<T, TFieldArrayName>) {
   return (
     <form className={styles["project-form"]} onSubmit={handleSubmit(onSubmit)}>
@@ -143,7 +145,7 @@ function ProjectForm<
 
       <div className={styles["project-form__form-button-container"]}>
         <button type="submit" className={styles["project-form__send-button"]}>
-          {loading ? <ButtonLoading /> : <p>Criar Projeto</p>}
+          {loading ? <ButtonLoading /> : <p>{sendBtnText}</p>}
         </button>
 
         <button

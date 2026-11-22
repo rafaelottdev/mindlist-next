@@ -128,6 +128,7 @@ function CreateProjectForm() {
         coverTitle="Capa"
         priorityTitle="Prioridade"
         tagTitle="Tags"
+        sendBtnText="Criar Projeto"
       />
     </div>
   )
