@@ -51,7 +51,9 @@ function ProjectPage({ resultProject, resultLists }: ProjectPageProps) {
     <div className={styles["project-page-container"]}>
       <ProjectBackground src={projectData.image_url} />
 
-      <section className={styles["project-page-container__lists"]}>
+      <section
+        className={`${styles["project-page-container__lists"]} ${lists.length === 0 ? styles["project-page-container__lists--position"] : ""}`}
+      >
         <ProjectLists
           lists={lists}
           setLists={setLists}

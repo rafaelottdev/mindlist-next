@@ -10,7 +10,9 @@ interface ProjectListsProps {
 
 function ProjectLists({ lists, setLists, projectId }: ProjectListsProps) {
   return (
-    <ul className={styles.list}>
+    <ul
+      className={`${styles.list} ${lists.length === 0 ? styles["list--padding"] : ""}`}
+    >
       {lists.map((list: ListType) => {
         return (
           <li key={list.id}>
